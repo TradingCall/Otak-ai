@@ -418,124 +418,309 @@
         const audio = document.getElementById('bgm');
         let clickCount = 0;
 
-        // Memutar lagu
-        function toggleMusic() {
-            if (musicPlaying) {
-                audio.pause();
-                document.getElementById('music-btn').innerText = '🎵';
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GACOR HUNTER - Active Momentum Engine</title>
+    <style>
+        :root { --bg: #0f172a; --panel: #1e293b; --text: #e2e8f0; --accent: #38bdf8; --buy: #22c55e; --wait: #eab308; --watch: #0ea5e9; --skip: #ef4444; }
+        body { font-family: 'Consolas', 'Courier New', monospace; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; line-height: 1.5; }
+        .container { max-width: 850px; margin: auto; }
+        h1 { color: var(--accent); text-align: center; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
+        p.subtitle { text-align: center; color: #94a3b8; font-size: 14px; margin-bottom: 30px; }
+        
+        .search-box { display: flex; gap: 10px; margin-bottom: 30px; background: var(--panel); padding: 15px; border-radius: 8px; border: 1px solid #334155; }
+        input { flex: 1; padding: 12px; background: #0f172a; border: 1px solid #475569; color: white; font-family: inherit; font-size: 16px; border-radius: 4px; text-transform: uppercase; }
+        input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2); }
+        button { padding: 12px 25px; background: var(--accent); color: #0f172a; font-weight: bold; font-family: inherit; font-size: 16px; border: none; border-radius: 4px; cursor: pointer; transition: 0.2s; }
+        button:hover { background: #0284c7; color: white; }
+
+        .terminal-box { background: var(--panel); border: 1px solid #334155; padding: 20px; border-radius: 8px; display: none; margin-bottom: 20px; font-size: 14px; white-space: pre-wrap; word-wrap: break-word; }
+        .terminal-header { border-bottom: 1px dashed #475569; padding-bottom: 10px; margin-bottom: 15px; color: var(--accent); font-weight: bold; }
+        
+        .status-badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-weight: bold; color: #fff; margin-left: 10px; }
+        .BUY { background-color: var(--buy); } .WAIT { background-color: var(--wait); color: #000; } .WATCH { background-color: var(--watch); } .SKIP { background-color: var(--skip); }
+
+        .loading { text-align: center; color: var(--accent); font-style: italic; display: none; padding: 20px; }
+        .error { background: rgba(239, 68, 68, 0.1); color: #f87171; border: 1px solid #ef4444; padding: 15px; border-radius: 4px; display: none; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🎯 GACOR HUNTER</h1>
+    <p class="subtitle">AI Stock Scanning & Decision Engine — IDX (Active Momentum)</p>
+    
+    <div class="search-box">
+        <input type="text" id="tickerInput" placeholder="Masukkan Kode Saham (Cth: BBCA, PANI, CUAN)" onkeypress="if(event.key === 'Enter') analyzeGacor()">
+        <button onclick="analyzeGacor()">SCAN TARGET</button>
+    </div>
+    
+    <div id="loading" class="loading">> SYSTEM SCANNING: INITIALIZING ALGORITHMS...</div>
+    <div id="error" class="error"></div>
+    
+    <div id="resultBox" class="terminal-box"></div>
+</div>
+
+<script>
+    // --- HELPER FUNCTIONS (MATH & INDICATORS) ---
+    const calcSMA = (data, window) => {
+        if(data.length < window) return 0;
+        let sum = 0; for(let i = data.length - window; i < data.length; i++) sum += data[i];
+        return sum / window;
+    };
+
+    const calcEMA = (data, window) => {
+        if(data.length < window) return 0;
+        let k = 2 / (window + 1);
+        let ema = data[0];
+        for(let i = 1; i < data.length; i++) ema = (data[i] * k) + (ema * (1 - k));
+        return ema;
+    };
+
+    const calcRSI = (closes, period = 14) => {
+        if (closes.length <= period) return 50;
+        let gains = 0, losses = 0;
+        for (let i = closes.length - period; i < closes.length; i++) {
+            let diff = closes[i] - closes[i - 1];
+            if (diff > 0) gains += diff; else losses -= diff;
+        }
+        let avgGain = gains / period, avgLoss = losses / period;
+        if (avgLoss === 0) return 100;
+        return 100 - (100 / (1 + (avgGain / avgLoss)));
+    };
+
+    // --- MAIN ENGINE ---
+    async function analyzeGacor() {
+        let ticker = document.getElementById("tickerInput").value.trim().toUpperCase();
+        if (!ticker) return;
+        
+        document.getElementById("loading").style.display = "block";
+        document.getElementById("resultBox").style.display = "none";
+        document.getElementById("error").style.display = "none";
+
+        if (!ticker.endsWith('.JK')) ticker += '.JK';
+        const cleanTicker = ticker.replace('.JK', '');
+
+        try {
+            const yahooUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=1y`;
+            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(yahooUrl)}`;
+            
+            const response = await fetch(proxyUrl);
+            const proxyData = await response.json();
+            const data = JSON.parse(proxyData.contents);
+
+            if (!data.chart || !data.chart.result || data.chart.result.length === 0) {
+                throw new Error(`Data realtime tidak tersedia untuk ${cleanTicker}.`);
+            }
+
+            const quotes = data.chart.result[0].indicators.quote[0];
+            const closes = quotes.close.filter(c => c !== null);
+            const volumes = quotes.volume.filter(v => v !== null);
+            const highs = quotes.high.filter(h => h !== null);
+            const lows = quotes.low.filter(l => l !== null);
+
+            if (closes.length < 50) throw new Error("Insufficient data — setup tidak dapat divalidasi.");
+
+            // --- DATA PARSING ---
+            const currClose = closes[closes.length - 1];
+            const prevClose = closes[closes.length - 2];
+            const currVol = volumes[volumes.length - 1];
+            const currOpen = data.chart.result[0].indicators.quote[0].open[closes.length - 1] || currClose;
+
+            const ma5 = calcSMA(closes, 5);
+            const ma20 = calcSMA(closes, 20);
+            const ma50 = calcSMA(closes, 50);
+            const ma200 = calcSMA(closes, Math.min(200, closes.length));
+            const volMa20 = calcSMA(volumes, 20);
+            const rsi = calcRSI(closes, 14);
+
+            const txValM = (currClose * currVol) / 1e9;
+            const volRatio = volMa20 > 0 ? (currVol / volMa20) : 1;
+            const dailyRet = ((currClose - prevClose) / prevClose) * 100;
+
+            // MACD
+            const ema12 = calcEMA(closes, 12);
+            const ema26 = calcEMA(closes, 26);
+            const macd = ema12 - ema26;
+            const isMacdBullish = macd > 0;
+
+            // Fibo & Swings (Last 60 Days)
+            const recentHighs = highs.slice(-60);
+            const recentLows = lows.slice(-60);
+            const swingHigh = Math.max(...recentHighs);
+            const swingLow = Math.min(...recentLows);
+            const fibDiff = swingHigh - swingLow;
+            const fib382 = swingHigh - (0.382 * fibDiff);
+            const fib500 = swingHigh - (0.500 * fibDiff);
+            const fib618 = swingHigh - (0.618 * fibDiff);
+
+            const high52w = Math.max(...highs);
+            const pctFrom52w = (currClose / high52w) * 100;
+
+            // --- GACOR SCORING ENGINE ---
+            
+            // 4. LIQUIDITY (15 Pts)
+            let sVal = txValM >= 50 ? 6 : (txValM >= 25 ? 5 : (txValM >= 10 ? 4 : (txValM >= 5 ? 3 : (txValM >= 1 ? 2 : 0))));
+            let sFreq = (txValM >= 30 && volRatio >= 1.5) ? 5 : (txValM >= 10 ? 4 : (txValM >= 5 ? 3 : 1));
+            let sVol = volRatio >= 2 ? 4 : (volRatio >= 1.5 ? 3 : (volRatio >= 1.2 ? 2 : (volRatio >= 1 ? 1 : 0)));
+            let scoreLiq = Math.min(15, sVal + sFreq + sVol);
+            let liqStatus = txValM >= 20 ? "🟢 LIQUID" : (txValM >= 5 ? "🟡 MODERATE" : (txValM >= 1 ? "🟠 THIN" : "🔴 VERY THIN"));
+
+            // 5. TREND (15 Pts)
+            let sTrend = 0;
+            if(currClose > ma20) sTrend += 3; if(currClose > ma50) sTrend += 2; if(currClose > ma200) sTrend += 2;
+            if(ma20 > ma50) sTrend += 3; if(ma50 > ma200) sTrend += 2;
+            let hlStruct = (currClose > prevClose && low > lows[lows.length-2]) ? 3 : 1; 
+            sTrend += hlStruct;
+            let scoreTrend = Math.min(15, sTrend);
+
+            // 6. MOMENTUM (15 Pts)
+            let sRet = (dailyRet > 3 && dailyRet <= 5) ? 4 : (dailyRet > 5 ? 3 : (dailyRet >= 1 ? 3 : 0));
+            let sRsi = (rsi >= 55 && rsi <= 65) ? 4 : (rsi > 65 && rsi <= 70 ? 3 : (rsi >= 45 && rsi < 55 ? 2 : (rsi > 70 && rsi <= 75 ? 1 : 0)));
+            let sMomConf = (currClose > prevClose ? 2 : 0) + (isMacdBullish ? 2 : 0) + (currClose > currOpen ? 1 : 0);
+            let scoreMom = Math.min(15, sRet + sRsi + sMomConf);
+
+            // 7. VOLUME & BREAKOUT (15 Pts)
+            let sVolExp = volRatio >= 2 ? 5 : (volRatio >= 1.5 ? 4 : (volRatio >= 1.2 ? 3 : (volRatio >= 1 ? 1 : 0)));
+            let sPos52 = pctFrom52w >= 98 ? 5 : (pctFrom52w >= 95 ? 4 : (pctFrom52w >= 90 ? 3 : (pctFrom52w >= 80 ? 1 : 0)));
+            let isBreakout = (currClose >= swingHigh && volRatio >= 1.5);
+            let sBoStruct = isBreakout ? 5 : (pctFrom52w >= 95 ? 4 : (currClose > ma20 && currClose < swingHigh ? 3 : 0));
+            let scoreVolBo = Math.min(15, sVolExp + sPos52 + sBoStruct);
+
+            // 8. S/R + FIBO (20 Pts)
+            let supQual = (currClose >= ma20 && currClose >= ma50) ? 5 : 3;
+            let resStruct = (high52w > currClose * 1.05) ? 5 : 2;
+            let distToFib5 = Math.abs(currClose - fib500) / currClose;
+            let sFibo = distToFib5 <= 0.03 ? 5 : 3;
+            let entryLoc = (currClose >= ma20 * 0.98 && currClose <= ma20 * 1.03) ? 5 : (currClose > ma20 * 1.03 ? 3 : 1);
+            let scoreSrFib = Math.min(20, supQual + resStruct + sFibo + entryLoc);
+
+            // 9. EARLY MOMENTUM/REVERSAL (10 Pts)
+            let sGc = (ma5 > ma20 && ma20 > ma50) ? 4 : (ma5 > ma20 ? 3 : 0);
+            let sBase = (currClose >= ma20 * 0.98 && currClose <= ma20 * 1.02) ? 2 : 0;
+            let sRev = (currClose > prevClose && currClose > currOpen && prevClose < ma20 && currClose > ma20) ? 4 : 2;
+            let scoreEarly = Math.min(10, sGc + sBase + sRev);
+
+            // 10. BROKER FLOW (PROXY VIA PRICE/VOL) (5 Pts)
+            let scoreBroker = (volRatio >= 1.5 && currClose > currOpen) ? 5 : (volRatio > 1.2 ? 4 : 2);
+
+            // 11. RISK/REWARD (5 Pts) & S/R LEVELS
+            let buyZoneLow = Math.round(ma20 * 0.99);
+            let buyZoneHigh = Math.round(ma20 * 1.02);
+            let clLevel = Math.round(Math.min(ma50, swingLow * 0.98));
+            let res1 = Math.round(swingHigh);
+            let tp1 = res1 > currClose * 1.03 ? res1 : Math.round(currClose * 1.05);
+            let tp2 = Math.round(Math.max(high52w, tp1 * 1.05));
+            let tp3 = Math.round(swingHigh + (fibDiff * 0.618));
+
+            let risk = Math.max(1, currClose - clLevel);
+            let reward = Math.max(1, tp1 - currClose);
+            let rrRatio = reward / risk;
+            let scoreRR = rrRatio >= 3 ? 5 : (rrRatio >= 2 ? 4 : (rrRatio >= 1.5 ? 2 : 0));
+
+            // TOTAL SCORE
+            let totalScore = Math.min(100, scoreLiq + scoreTrend + scoreMom + scoreVolBo + scoreSrFib + scoreEarly + scoreBroker + scoreRR);
+
+            // 12. MOMENTUM STAGE
+            let stage = "STAGE 1 — DORMANT";
+            if (isBreakout) stage = "STAGE 5 — BREAKOUT";
+            else if (pctFrom52w >= 95 && volRatio >= 1.2) stage = "STAGE 4 — PRE-BREAKOUT";
+            else if (ma5 > ma20 && volRatio >= 1.2) stage = "STAGE 3 — EARLY MOMENTUM";
+            else if (currClose > ma200 && currClose < ma20) stage = "STAGE 2 — ACCUMULATION";
+            else if (currClose > ma20 * 1.1) stage = "STAGE 6 — EXTENDED";
+
+            // 13. SETUP CLASSIFICATION
+            let setup = "SETUP F — WAIT";
+            if (isBreakout) setup = "SETUP B — BREAKOUT";
+            else if (scoreEarly >= 8 && currClose <= ma20 * 1.02) setup = "SETUP A — PULLBACK";
+            else if (ma5 > ma20 && prevClose < ma20) setup = "SETUP D — GOLDEN CROSS";
+            else if (distToFib5 <= 0.03 && currClose > prevClose) setup = "SETUP E — REVERSAL";
+
+            // 16. FINAL DECISION ENGINE
+            let finalStatus, confClass, confidence, keyReasons = [];
+            let inBuyZone = (currClose >= buyZoneLow && currClose <= buyZoneHigh * 1.01);
+            
+            if (totalScore >= 80 && inBuyZone && rrRatio >= 2) {
+                finalStatus = "BUY"; confClass = "BUY"; confidence = "HIGH";
+            } else if (totalScore >= 80 && pctFrom52w >= 95) {
+                finalStatus = "BREAKOUT WATCH"; confClass = "WATCH"; confidence = "HIGH";
+            } else if (totalScore >= 75) {
+                finalStatus = "WAIT"; confClass = "WAIT"; confidence = "MEDIUM";
             } else {
-                audio.play().catch(e => console.log("Audio play failed:", e));
-                document.getElementById('music-btn').innerText = '⏸️';
+                finalStatus = "SKIP"; confClass = "SKIP"; confidence = "LOW";
             }
-            musicPlaying = !musicPlaying;
+
+            if (rrRatio < 1) { finalStatus = "SKIP"; confClass = "SKIP"; confidence = "LOW (R:R BURUK)"; }
+
+            // REASONS
+            if(isBreakout) keyReasons.push(`Resistance tertembus dengan volume ${volRatio.toFixed(1)}x.`);
+            if(ma5 > ma20 && ma20 > ma50) keyReasons.push("Struktur MA Bullish (Golden Cross Development).");
+            if(rrRatio >= 2) keyReasons.push(`Risk/Reward sangat menarik (1 : ${rrRatio.toFixed(1)}).`);
+            if(distToFib5 <= 0.03) keyReasons.push("Harga memantul tepat di area Golden Ratio Fibonacci 0.500.");
+            if(keyReasons.length === 0) keyReasons.push("Setup sedang dalam fase konsolidasi atau belum terkonfirmasi.");
+
+            let mainRisk = (currClose > ma20 * 1.05) ? "Harga sudah extended, rawan profit taking." : `Support krusial di Rp ${clLevel.toLocaleString('id-ID')}, cutloss jika breakdown.`;
+
+            // --- OUTPUT RENDER ---
+            document.getElementById("loading").style.display = "none";
+            let out = document.getElementById("resultBox");
+            out.style.display = "block";
+
+            let html = `
+<div class="terminal-header">>>> GACOR HUNTER ENGINE OUTPUT: TARGET SCANNED</div>
+TICKER: <b>$${cleanTicker}</b>
+CURRENT PRICE: Rp ${currClose.toLocaleString('id-ID')}
+MOMENTUM STAGE: <b>${stage}</b>
+SCORE: <b>${totalScore}/100</b>
+
+LIQUIDITY: ${scoreLiq}/15 (${liqStatus})
+TREND: ${scoreTrend}/15
+MOMENTUM: ${scoreMom}/15
+VOLUME/BREAKOUT: ${scoreVolBo}/15
+S/R + FIBO: ${scoreSrFib}/20
+EARLY MOMENTUM/REVERSAL: ${scoreEarly}/10
+BROKER FLOW: ${scoreBroker}/5 (Proxy calculated)
+R:R: ${scoreRR}/5
+
+MARKET STRUCTURE: ${setup}
+SUPPORT: Rp ${buyZoneLow.toLocaleString('id-ID')}
+RESISTANCE: Rp ${res1.toLocaleString('id-ID')}
+
+FIBONACCI:
+0.382: Rp ${Math.round(fib382).toLocaleString('id-ID')}
+0.500: Rp ${Math.round(fib500).toLocaleString('id-ID')}
+0.618: Rp ${Math.round(fib618).toLocaleString('id-ID')}
+
+BUY ZONE: Rp ${buyZoneLow.toLocaleString('id-ID')} - Rp ${buyZoneHigh.toLocaleString('id-ID')}
+BREAKOUT LEVEL: Rp ${res1.toLocaleString('id-ID')}
+STOP LOSS: Rp ${clLevel.toLocaleString('id-ID')}
+TP1: Rp ${tp1.toLocaleString('id-ID')}
+TP2: Rp ${tp2.toLocaleString('id-ID')}
+TP3: Rp ${tp3.toLocaleString('id-ID')}
+R:R: 1 : ${rrRatio.toFixed(1)}
+
+STATUS: <span class="status-badge ${confClass}">${finalStatus}</span>
+CONFIDENCE: <b>${confidence}</b>
+
+KEY REASONS:
+${keyReasons.map((r, i) => `${i+1}. ${r}`).join('\n')}
+
+MAIN RISK:
+${mainRisk}
+`;
+            out.innerHTML = html;
+
+        } catch (error) {
+            document.getElementById("loading").style.display = "none";
+            let err = document.getElementById("error");
+            err.innerText = "[SYSTEM FAILURE] " + error.message;
+            err.style.display = "block";
         }
+    }
+</script>
 
-        // Trigger scene pertama + lagu
-        function startExperienceAndNext(n) {
-            if(!musicPlaying) toggleMusic();
-            nextScene(n);
-        }
-
-        // Navigasi antar scene (Logika baru yang lebih bersih, anti ngebug/stuck)
-        function nextScene(n) {
-            // Sembunyikan semua scene
-            document.querySelectorAll('.scene').forEach(el => {
-                el.classList.remove('active');
-            });
-
-            // Munculkan scene yang dituju
-            const next = document.getElementById(`scene${n}`);
-            if(next) {
-                next.classList.add('active');
-            }
-        }
-
-        // Random Praise (Scene 8)
-        const praises = [
-            "kok bisa sih secantik ini?", "gemes banget 😭", "senyumnya bahaya.",
-            "ini manusia apa karakter anime?", "cantik banget, serius.",
-            "lucu banget astaga.", "please, jangan terlalu menggemaskan.",
-            "oke, fix. favorit.", "100/10.", "nggak ada jeleknya.",
-            "yang bikin kamu begini siapa 😭", "kamera aja kalah.",
-            "ini definisi pretty privilege.", "kok makin dilihat makin lucu?",
-            "udah cantik, lucu lagi.", "stop bikin orang senyum-senyum sendiri."
-        ];
-
-        function generatePraise() {
-            clickCount++;
-            const display = document.getElementById('praise-display');
-            const random = praises[Math.floor(Math.random() * praises.length)];
-            
-            display.innerHTML = `<span style="animation: popIn 0.3s forwards">${random}</span>`;
-            
-            // Setelah klik 3 kali, tombol lanjut muncul
-            if(clickCount >= 3) {
-                document.getElementById('btn-lanjut-8').classList.remove('hidden');
-            }
-        }
-
-        // Slider interaksi (Scene 9)
-        const slider = document.getElementById('beauty-slider');
-        slider.addEventListener('input', function(e) {
-            const val = e.target.value;
-            const display = document.getElementById('slider-value');
-            const msg = document.getElementById('slider-msg');
-            const btn = document.getElementById('btn-lanjut-9');
-            
-            if(val < 100) {
-                display.innerText = val + '%';
-            } else {
-                display.innerText = '∞ / 10';
-                msg.style.display = 'block';
-                e.target.disabled = true; // Kunci slider
-                btn.classList.remove('hidden');
-                triggerConfetti();
-            }
-        });
-
-        // Efek Confetti (Kertas warna-warni jatuh)
-        function triggerConfetti() {
-            for(let i=0; i<40; i++) {
-                const colors = ['#ff6b81', '#ffb6c1', '#ffd1dc', '#fff', '#e6e6fa'];
-                const confetti = document.createElement('div');
-                confetti.classList.add('confetti');
-                confetti.style.left = Math.random() * 100 + 'vw';
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
-                document.body.appendChild(confetti);
-                setTimeout(() => confetti.remove(), 4000);
-            }
-        }
-
-        // Hati melayang di background (diatur agar tidak bikin berat hp)
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.innerHTML = '💗';
-            heart.classList.add('floating-heart');
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = (Math.random() * 4 + 4) + 's';
-            heart.style.fontSize = (Math.random() * 1 + 0.5) + 'rem';
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 8000);
-        }
-        setInterval(createHeart, 1500);
-
-        // Ulang dari awal
-        function resetExperience() {
-            clickCount = 0;
-            document.getElementById('praise-display').innerHTML = '';
-            document.getElementById('btn-lanjut-8').classList.add('hidden');
-            document.getElementById('btn-lanjut-9').classList.add('hidden');
-            
-            const slider = document.getElementById('beauty-slider');
-            slider.value = 0;
-            slider.disabled = false;
-            
-            document.getElementById('slider-value').innerText = '0%';
-            document.getElementById('slider-msg').style.display = 'none';
-
-            nextScene(1);
-        }
-    </script>
 </body>
 </html>
