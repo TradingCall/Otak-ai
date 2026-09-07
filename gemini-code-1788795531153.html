@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GACOR HUNTER V3 - Macro Nexus Engine</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
+
+        :root { 
+            --bg-base: #030712; 
+            --bg-grad: radial-gradient(circle at top, #0f172a, #030712);
+            --panel: rgba(15, 23, 42, 0.7); 
+            --panel-border: rgba(56, 189, 248, 0.2); 
+            --text: #f8fafc; 
+            --accent: #38bdf8; 
+            --accent-glow: rgba(56, 189, 248, 0.6);
+            --accent-grad: linear-gradient(135deg, #0ea5e9, #38bdf8);
+            --macro: #a855f7; --macro-glow: rgba(168, 85, 247, 0.5);
+            --buy: #10b981; --buy-glow: rgba(16, 185, 129, 0.4);
+            --wait: #f59e0b; 
+            --skip: #f43f5e; --skip-glow: rgba(244, 63, 94, 0.4);
+        }
+
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--bg-base); background-image: var(--bg-grad); 
+            color: var(--text); margin: 0; padding: 30px 15px; min-height: 100vh;
+        }
+        
+        .container { max-width: 1050px; margin: auto; }
+        h1 { 
+            text-align: center; font-size: 38px; font-weight: 800; text-transform: uppercase; 
+            letter-spacing: 2px; margin-bottom: 5px; 
+            background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px var(--accent-glow));
+        }
+        p.subtitle { text-align: center; color: #94a3b8; font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-bottom: 40px; letter-spacing: 2px; text-transform: uppercase; }
+        
+        .search-box { 
+            background: var(--panel); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            padding: 25px; border-radius: 16px; border: 1px solid var(--panel-border); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 0 20px rgba(56, 189, 248, 0.05); 
+        }
+        
+        .input-row { display: grid; grid-template-columns: 2fr 1fr; gap: 15px; margin-bottom: 20px; }
+        @media (max-width: 768px) { .input-row { grid-template-columns: 1fr; } }
+
+        input[type="text"], select { 
+            width: 100%; padding: 16px 20px; 
+            background: rgba(3, 7, 18, 0.8); border: 1px solid #334155; 
+            color: white; font-family: 'JetBrains Mono', monospace; font-size: 15px; 
+            border-radius: 10px; transition: all 0.3s ease; 
+        }
+        input[type="text"]:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); transform: translateY(-1px); }
+        input[type="text"] { text-transform: uppercase; }
+        
+        button { 
+            width: 100%; padding: 18px; background: var(--accent-grad); color: #030712; 
+            font-weight: 800; font-family: 'Inter', sans-serif; font-size: 16px; 
+            border: none; border-radius: 10px; cursor: pointer; transition: all 0.3s ease; 
+            text-transform: uppercase; letter-spacing: 2px; box-shadow: 0 5px 15px var(--accent-glow);
+            margin-top: 5px;
+        }
+        button:hover { transform: translateY(-2px); box-shadow: 0 8px 25px var(--accent-glow); filter: brightness(1.1); }
+        button:disabled { background: #334155; cursor: not-allowed; color: #94a3b8; box-shadow: none; transform: none; }
+
+        .tracker-box { 
+            background: #020617; border: 1px solid var(--macro); padding: 20px; 
+            border-radius: 12px; display: none; margin-top: 30px; color: var(--macro); 
+            font-family: 'JetBrains Mono', monospace; box-shadow: 0 0 20px var(--macro-glow);
+        }
+        .tracker-log { font-size: 13px; color: #e879f9; margin-top: 15px; font-weight: normal; max-height: 200px; overflow-y: auto; }
+        .tracker-log div { padding: 6px 0; border-bottom: 1px dashed #3b0764; }
+        .cursor-blink { animation: blink 1s step-end infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+        
+        .error { background: rgba(244, 63, 94, 0.1); color: #f43f5e; border: 1px solid #f43f5e; padding: 15px; border-radius: 10px; display: none; margin-top: 20px; font-weight: bold; }
+
+        .result-dashboard { display: none; margin-top: 35px; animation: slideUp 0.5s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .header-dash { 
+            background: var(--panel); border: 1px solid var(--panel-border); 
+            padding: 30px; border-radius: 16px; text-align: center; margin-bottom: 25px; 
+            backdrop-filter: blur(12px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; overflow: hidden;
+        }
+        .header-dash::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--accent-grad); }
+        .header-dash h2 { margin: 0; font-size: 46px; font-weight: 800; color: #fff; letter-spacing: 2px; font-family: 'JetBrains Mono', monospace; }
+        
+        .grid-dash { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+        @media (max-width: 768px) { .grid-dash { grid-template-columns: 1fr; } }
+        
+        .card { 
+            background: var(--panel); backdrop-filter: blur(10px);
+            border: 1px solid var(--panel-border); padding: 25px; 
+            border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); 
+            transition: transform 0.3s ease;
+        }
+        .card:hover { transform: translateY(-3px); border-color: rgba(56, 189, 248, 0.4); }
+        .card-title { 
+            color: var(--accent); font-weight: 800; font-size: 15px; 
+            border-bottom: 1px dashed rgba(56, 189, 248, 0.3); padding-bottom: 12px; 
+            margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; 
+        }
+        
+        .stat-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(51, 65, 85, 0.5); font-size: 13px; }
+        .stat-row:last-child { border-bottom: none; }
+        .stat-val { font-weight: bold; color: #f8fafc; font-family: 'JetBrains Mono', monospace; font-size: 14px; text-align: right; }
+        
+        .macro-box { background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); padding: 15px; border-radius: 10px; margin-bottom: 15px; }
+        .macro-title { color: #d8b4fe; font-size: 12px; font-weight: bold; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;}
+        
+        .score-bar-bg { width: 100%; background: #0f172a; height: 12px; border-radius: 6px; margin-top: 10px; overflow: hidden; border: 1px solid #1e293b; }
+        .score-bar-fill { height: 100%; transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1); background: var(--accent-grad); }
+        
+        .badge { padding: 6px 14px; border-radius: 6px; font-weight: 800; font-size: 14px; letter-spacing: 1px; color: #fff; display: inline-block;}
+        .b-BUY { background: linear-gradient(135deg, #059669, #10b981); box-shadow: 0 0 15px var(--buy-glow); border: 1px solid #34d399; }
+        .b-WAIT { background: linear-gradient(135deg, #d97706, #f59e0b); box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); border: 1px solid #fbbf24; }
+        .b-SKIP { background: linear-gradient(135deg, #e11d48, #f43f5e); box-shadow: 0 0 15px var(--skip-glow); border: 1px solid #fb7185; }
+
+        .zone-buy { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 12px; border-radius: 8px; margin-bottom: 12px; }
+        .zone-sl { background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.3); padding: 12px; border-radius: 8px; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>GACOR HUNTER V3</h1>
+    <p class="subtitle">MACRO NEXUS & GLOBAL SENTIMENT ALGORITHM</p>
+    
+    <div class="search-box">
+        <div class="input-row">
+            <input type="text" id="tickerInput" placeholder="KODE SAHAM (Contoh: BBCA, MEDC, BRMS)" autocomplete="off">
+            <select id="sectorInput">
+                <option value="GENERAL">📊 Sektor Umum / Lainnya</option>
+                <option value="FINANCE">🏦 Keuangan (Big Banks / Digital)</option>
+                <option value="ENERGY">🛢️ Energi (Batu Bara / Minyak)</option>
+                <option value="METAL">🥇 Metal & Mineral (Emas / Nikel)</option>
+                <option value="TECH">💻 Teknologi & Digital</option>
+                <option value="CONSUMER">🛒 Consumer Goods / Retail</option>
+            </select>
+        </div>
+        <button id="scanBtn" onclick="startEngine()">SYNCHRONIZE & SCAN</button>
+    </div>
+    
+    <div id="trackerBox" class="tracker-box">
+        <div id="trackerMain">> ESTABLISHING NEURAL LINK<span class="cursor-blink">_</span></div>
+        <div id="trackerLog" class="tracker-log"></div>
+    </div>
+    
+    <div id="error" class="error"></div>
+    
+    <div id="resultBox" class="result-dashboard">
+        <div class="header-dash">
+            <h2 id="outTicker">$TICKER</h2>
+            <div style="font-size: 15px; color: var(--accent); font-weight: bold; letter-spacing: 2px; text-transform: uppercase; margin-top: 5px;" id="outStage">MOMENTUM STAGE: -</div>
+            <div style="margin-top: 20px;">
+                <span id="outStatus" class="badge">N/A</span>
+            </div>
+        </div>
+
+        <div class="grid-dash">
+            <div class="card">
+                <div class="card-title">⚙️ ALGORITHMIC SCORING (100)</div>
+                <div style="text-align: center; margin-bottom: 25px;">
+                    <div style="font-size: 52px; font-weight: 800; color: #fff; font-family: 'JetBrains Mono', monospace; text-shadow: 0 0 20px rgba(255,255,255,0.3);" id="outTotalScore">0</div>
+                    <div class="score-bar-bg"><div id="outScoreBar" class="score-bar-fill" style="width: 0%;"></div></div>
+                </div>
+                <div class="stat-row"><span>Likuiditas (10)</span><span class="stat-val" id="scLiq">0</span></div>
+                <div class="stat-row"><span>Trend Structure (15)</span><span class="stat-val" id="scTrend">0</span></div>
+                <div class="stat-row"><span>Momentum RSI/MACD (10)</span><span class="stat-val" id="scMom">0</span></div>
+                <div class="stat-row"><span>Breakout Power (15)</span><span class="stat-val" id="scVol">0</span></div>
+                <div class="stat-row"><span>Support Confluence (15)</span><span class="stat-val" id="scSr">0</span></div>
+                <div class="stat-row" style="color: #d8b4fe;"><span>Macro & Sentiment (15)</span><span class="stat-val" id="scMacro" style="color:#d8b4fe;">0</span></div>
+                <div class="stat-row"><span>Early Momentum (10)</span><span class="stat-val" id="scEarly">0</span></div>
+                <div class="stat-row"><span>Risk/Reward (10)</span><span class="stat-val" id="scRr">0</span></div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">🎯 TACTICAL TRADING PLAN</div>
+                <div class="stat-row"><span>Closing Price</span><span class="stat-val" style="color: var(--accent); font-size: 18px;" id="outPrice">0</span></div>
+                <div class="stat-row" style="margin-bottom: 15px;"><span>Market Structure</span><span class="stat-val" id="outStruct">-</span></div>
+                
+                <div class="zone-buy">
+                    <div class="stat-row" style="border: none; padding: 0;"><span>🛒 STRICT BUY ZONE</span><span class="stat-val" style="color: var(--buy); text-shadow: 0 0 8px var(--buy-glow);" id="outBuy">0 - 0</span></div>
+                    <div style="font-size: 11px; color: #94a3b8; margin-top: 6px; line-height: 1.4;" id="outBuyReason">-</div>
+                </div>
+                
+                <div class="zone-sl">
+                    <div class="stat-row" style="border: none; padding: 0;"><span>⚠️ MAX CUT LOSS (CL)</span><span class="stat-val" style="color: var(--skip); text-shadow: 0 0 8px var(--skip-glow);" id="outSl">0</span></div>
+                    <div style="font-size: 11px; color: #94a3b8; margin-top: 6px; line-height: 1.4;" id="outSlReason">-</div>
+                </div>
+                
+                <div class="stat-row"><span>🎯 TP 1 (Scalp / Momentum)</span><span class="stat-val" id="outTp1">0</span></div>
+                <div class="stat-row"><span>🎯 TP 2 (Swing Target)</span><span class="stat-val" id="outTp2">0</span></div>
+                <div class="stat-row" style="margin-top: 10px; border-top: 1px dashed #334155; padding-top: 10px;">
+                    <span>⚖️ Risk/Reward Ratio</span><span class="stat-val" id="outRr">1 : 0</span>
+                </div>
+            </div>
+
+            <div class="card" style="grid-column: 1 / -1; border-color: rgba(168, 85, 247, 0.4); box-shadow: 0 0 20px rgba(168, 85, 247, 0.1);">
+                <div class="card-title" style="color: #d8b4fe; border-bottom-color: rgba(168, 85, 247, 0.3);">🌍 MACROECONOMIC & SECTORAL INTELLIGENCE</div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                    <div class="macro-box">
+                        <div class="macro-title">🧭 IHSG Composite Weather</div>
+                        <div class="stat-row"><span>Current Level</span><span class="stat-val" id="outIhsgLevel">0</span></div>
+                        <div class="stat-row"><span>Market Trend (MA20)</span><span class="stat-val" id="outIhsgTrend">-</span></div>
+                        <div style="font-size: 12px; color: #cbd5e1; margin-top: 10px; line-height: 1.5;" id="outIhsgDesc">-</div>
+                    </div>
+                    
+                    <div class="macro-box">
+                        <div class="macro-title">💎 Sectoral Sentiment Analysis</div>
+                        <div class="stat-row"><span>Selected Sector</span><span class="stat-val" id="outSectorName">-</span></div>
+                        <div class="stat-row"><span>Commodity / Macro Tailwinds</span><span class="stat-val" id="outSectorStatus">-</span></div>
+                        <div style="font-size: 12px; color: #cbd5e1; margin-top: 10px; line-height: 1.5;" id="outSectorDesc">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    const formatRp = num => `${Math.round(num).toLocaleString('id-ID')}`;
+    
+    const calcSMA = (data, window) => {
+        if(data.length < window) return data[data.length-1] || 100;
+        let sum = 0; for(let i = data.length - window; i < data.length; i++) sum += data[i];
+        return sum / window;
+    };
+
+    const calcEMA = (data, window) => {
+        if(data.length < window) return data[data.length-1] || 100;
+        let k = 2 / (window + 1);
+        let ema = data[0];
+        for(let i = 1; i < data.length; i++) ema = (data[i] * k) + (ema * (1 - k));
+        return ema;
+    };
+
+    const calcRSI = (closes, period = 14) => {
+        if (closes.length <= period) return 55;
+        let gains = 0, losses = 0;
+        for (let i = closes.length - period; i < closes.length; i++) {
+            let diff = closes[i] - closes[i - 1];
+            if (diff > 0) gains += diff; else losses -= diff;
+        }
+        let avgGain = gains / period, avgLoss = losses / period;
+        if (avgLoss === 0) return 70;
+        return 100 - (100 / (1 + (avgGain / avgLoss)));
+    };
+
+    function updateLog(msg, isMain = false) {
+        if(isMain) document.getElementById("trackerMain").innerHTML = `> ${msg}<span class="cursor-blink">_</span>`;
+        let logDiv = document.getElementById("trackerLog");
+        logDiv.innerHTML += `<div>[${new Date().toLocaleTimeString('id-ID')}] ${msg}</div>`;
+        logDiv.scrollTop = logDiv.scrollHeight;
+    }
+
+    async function fetchYahooData(ticker) {
+        const yahooUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=6mo`;
+        const proxies = [
+            `https://api.allorigins.win/get?url=${encodeURIComponent(yahooUrl)}`,
+            `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(yahooUrl)}`
+        ];
+
+        for (let attempt = 1; attempt <= 2; attempt++) {
+            for (let i = 0; i < proxies.length; i++) {
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 4000); 
+                    const res = await fetch(proxies[i], { signal: controller.signal });
+                    clearTimeout(timeoutId);
+                    if (!res.ok) continue;
+                    
+                    let data = (i === 0) ? JSON.parse((await res.json()).contents) : await res.json();
+                    if (data?.chart?.result?.length > 0) return data;
+                } catch (e) {}
+            }
+        }
+        throw new Error(`Data fetch failed for ${ticker}`);
+    }
+
+    async function startEngine() {
+        let rawInput = document.getElementById("tickerInput").value.trim().toUpperCase();
+        if (!rawInput) return;
+
+        let sectorInput = document.getElementById("sectorInput").value;
+        
+        document.getElementById("scanBtn").disabled = true;
+        document.getElementById("scanBtn").innerText = "UPLOADING TO MAINFRAME...";
+        document.getElementById("resultBox").style.display = "none";
+        document.getElementById("error").style.display = "none";
+        document.getElementById("trackerBox").style.display = "block";
+        document.getElementById("trackerLog").innerHTML = "";
+        
+        let cleanTicker = rawInput.split('.')[0]; 
+        let ticker = cleanTicker + '.JK';
+
+        try {
+            updateLog(`Initiating parallel data fetch for $${cleanTicker} and ^JKSE (IHSG)...`, true);
+            
+            // Parallel Fetching for Stock and IHSG
+            const [stockData, ihsgData] = await Promise.all([
+                fetchYahooData(ticker),
+                fetchYahooData('^JKSE').catch(e => null) // Prevent total failure if IHSG fetch fails
+            ]);
+
+            updateLog("Processing local price action and volume anomalies...", true);
+            await sleep(400);
+            
+            // Extract Stock Data
+            const rawQuotes = stockData.chart.result[0].indicators.quote[0];
+            let closes = [], highs = [], lows = [], volumes = [];
+            for(let i = 0; i < rawQuotes.close.length; i++) {
+                if(rawQuotes.close[i] !== null) {
+                    closes.push(rawQuotes.close[i]);
+                    highs.push(rawQuotes.high[i]);
+                    lows.push(rawQuotes.low[i]);
+                    volumes.push(rawQuotes.volume[i]);
+                }
+            }
+
+            const currClose = closes[closes.length - 1];
+            const prevClose = closes[closes.length - 2];
+            const currVol = volumes[volumes.length - 1];
+            const dailyRet = ((currClose - prevClose) / prevClose) * 100;
+            const txValM = (currClose * currVol) / 1e9;
+
+            const ma5 = calcSMA(closes, 5);
+            const ma20 = calcSMA(closes, 20);
+            const ma50 = calcSMA(closes, 50);
+            const volMa20 = calcSMA(volumes, 20);
+            const volRatio = volMa20 > 0 ? (currVol / volMa20) : 1;
+            const rsi = calcRSI(closes, 14);
+
+            const swingHigh = Math.max(...highs.slice(-60)); 
+            const isBreakout = (currClose >= swingHigh && volRatio >= 1.5);
+
+            // Extract IHSG Data (Macro)
+            let ihsgClose = 0, ihsgMa20 = 0, ihsgTrendStr = "NEUTRAL", ihsgBullish = false;
+            if (ihsgData) {
+                updateLog("Decoding macroeconomic structure and institutional flow...", true);
+                const iQuotes = ihsgData.chart.result[0].indicators.quote[0];
+                let iCloses = iQuotes.close.filter(c => c !== null);
+                ihsgClose = iCloses[iCloses.length - 1];
+                ihsgMa20 = calcSMA(iCloses, 20);
+                ihsgBullish = ihsgClose > ihsgMa20;
+                ihsgTrendStr = ihsgBullish ? "BULLISH (Risk On)" : "BEARISH (Risk Off)";
+            } else {
+                updateLog("IHSG data unavailable. Using neutral macro fallback.", true);
+            }
+            await sleep(400);
+
+            // ==========================================
+            // MACRO & SECTORAL LOGIC ALGORITHM
+            // ==========================================
+            let sMacro = 5; // Base macro score
+            let sectorStatus = "Neutral", sectorDesc = "Pergerakan emiten murni bergantung pada katalis individual dan price action.";
+            
+            if (ihsgBullish) sMacro += 3;
+
+            switch(sectorInput) {
+                case "ENERGY":
+                    sectorStatus = "High Volatility / Oil & Coal Tied";
+                    sectorDesc = "Sektor energi berbanding lurus dengan harga komoditas (Coal/WTI). Waspadai siklus supercycle. Rotasi dana ke sektor ini sering terjadi saat inflasi global naik.";
+                    sMacro += 4; // Asumsi energi sering jadi hedging
+                    break;
+                case "METAL":
+                    sectorStatus = "Safe Haven & EV Battery Play";
+                    sectorDesc = "Emas (GC=F) bertindak sebagai safe haven saat bursa global panik. Mineral lain (Nikel/Tembaga) sangat sensitif pada permintaan industri EV. Jika IHSG merah, emas sering diburu.";
+                    sMacro += ihsgBullish ? 2 : 5; // Lebih bagus saat IHSG turun (Safe haven)
+                    break;
+                case "FINANCE":
+                    sectorStatus = "IHSG Proxy & Interest Rate Tied";
+                    sectorDesc = "Big Banks adalah proksi utama IHSG. Jika asing masuk (Net Foreign Buy), sektor ini yang pertama ditarik. Sensitif terhadap kebijakan suku bunga BI & The Fed.";
+                    sMacro += ihsgBullish ? 7 : 0; // Sangat bergantung pada IHSG
+                    break;
+                case "TECH":
+                    sectorStatus = "Growth & High Interest Rate Risk";
+                    sectorDesc = "Sektor teknologi adalah aset growth. Sangat rentan terhadap kenaikan suku bunga (hawkish). Membutuhkan market yang sangat risk-on untuk reli berkelanjutan.";
+                    sMacro += ihsgBullish ? 4 : 0;
+                    break;
+                case "CONSUMER":
+                    sectorStatus = "Defensive Sector";
+                    sectorDesc = "Sektor defensif pilihan manajer investasi saat ketidakpastian ekonomi tinggi. Cenderung stabil namun minim lonjakan agresif kecuali ada katalis pemilu/lebaran.";
+                    sMacro += ihsgBullish ? 2 : 4;
+                    break;
+            }
+            sMacro = Math.min(15, sMacro);
+
+            // ==========================================
+            // TRADING PLAN LOGIC
+            // ==========================================
+            updateLog("Formulating tight risk-management and entry protocols...", true);
+            await sleep(300);
+
+            let buyZoneLow, buyZoneHigh, buyReason;
+            if (isBreakout) {
+                buyZoneHigh = Math.round(currClose * 1.01);
+                buyZoneLow = Math.round(currClose * 0.98); 
+                buyReason = "Volume spike terdeteksi. Accumulate near breakout level.";
+            } else if (currClose >= ma20) {
+                buyZoneHigh = Math.round(currClose);
+                buyZoneLow = Math.round(Math.max(ma20, currClose * 0.95)); 
+                buyReason = "Pullback strategy. Entry dekat dynamic support MA20.";
+            } else {
+                buyZoneHigh = Math.round(currClose);
+                buyZoneLow = Math.round(currClose * 0.95);
+                buyReason = "Counter-trend / Bottom fishing. High Risk.";
+            }
+            if(buyZoneLow > buyZoneHigh) { buyZoneLow = Math.round(buyZoneHigh * 0.98); }
+
+            let clLevel = Math.round(buyZoneLow * 0.95); 
+            let clReason = "Strict 5% risk tolerance dari zona beli bawah. Mencegah portfolio ruin.";
+
+            let tp1 = Math.round(buyZoneHigh * 1.05); 
+            let tp2 = Math.round(buyZoneHigh * 1.10); 
+
+            let risk = Math.max(1, buyZoneHigh - clLevel);
+            let reward = Math.max(1, tp1 - buyZoneHigh);
+            let rrRatio = reward / risk;
+            let sRr = rrRatio >= 1.5 ? 10 : 4;
+
+            // Final Scoring
+            let sLiq = Math.min(10, (txValM >= 10 ? 5 : 3) + (volRatio >= 1.2 ? 5 : 2));
+            let sTrend = (currClose > ma20 ? 8 : 2) + (currClose > ma50 ? 7 : 2);
+            let sMom = Math.min(10, (dailyRet > 0 ? 5 : 2) + (rsi >= 45 && rsi <= 70 ? 5 : 2));
+            let sVol = Math.min(15, (volRatio >= 1.5 ? 8 : 4) + (volRatio >= 2.0 ? 7 : 2));
+            let sSr = Math.min(15, (currClose >= ma20 ? 8 : 3) + (currClose >= ma50 ? 7 : 3));
+            let sEarly = (ma5 > ma20) ? 10 : 4;
+
+            let totalScore = Math.min(100, sLiq + sTrend + sMom + sVol + sSr + sMacro + sEarly + sRr);
+
+            let stage = isBreakout ? "STAGE 5 : BREAKOUT" : (currClose > ma20 ? "STAGE 3 : UPTREND" : "STAGE 1 : CONSOLIDATION/MARKDOWN");
+            let finalStatus = (totalScore >= 75 && currClose > ma50) ? "BUY" : (totalScore >= 65 ? "WAIT" : "SKIP");
+
+            updateLog("Neural synchronization complete. Rendering UI...", true);
+            await sleep(400);
+
+            // ================= Render UI =================
+            document.getElementById("trackerBox").style.display = "none";
+            document.getElementById("scanBtn").disabled = false;
+            document.getElementById("scanBtn").innerText = "SYNCHRONIZE & SCAN";
+            document.getElementById("resultBox").style.display = "block";
+
+            document.getElementById("outTicker").innerText = `$${cleanTicker}`;
+            document.getElementById("outStage").innerText = `${stage}`;
+            
+            let stBadge = document.getElementById("outStatus");
+            stBadge.innerText = finalStatus;
+            stBadge.className = "badge " + (finalStatus === "BUY" ? "b-BUY" : (finalStatus === "WAIT" ? "b-WAIT" : "b-SKIP"));
+
+            let outTotalScore = document.getElementById("outTotalScore");
+            let barFill = document.getElementById("outScoreBar");
+            outTotalScore.innerText = totalScore;
+            
+            let color = totalScore >= 75 ? 'var(--buy)' : (totalScore >= 65 ? 'var(--wait)' : 'var(--skip)');
+            outTotalScore.style.color = color;
+            outTotalScore.style.textShadow = `0 0 15px ${color}`;
+            
+            setTimeout(() => {
+                barFill.style.width = `${totalScore}%`;
+                barFill.style.background = color;
+                barFill.style.boxShadow = `0 0 15px ${color}`;
+            }, 100);
+            
+            document.getElementById("scLiq").innerText = `${sLiq}`;
+            document.getElementById("scTrend").innerText = `${sTrend}`;
+            document.getElementById("scMom").innerText = `${sMom}`;
+            document.getElementById("scVol").innerText = `${sVol}`;
+            document.getElementById("scSr").innerText = `${sSr}`;
+            document.getElementById("scMacro").innerText = `${sMacro}`;
+            document.getElementById("scEarly").innerText = `${sEarly}`;
+            document.getElementById("scRr").innerText = `${sRr}`;
+
+            document.getElementById("outPrice").innerText = formatRp(currClose);
+            document.getElementById("outStruct").innerText = currClose > ma20 ? 'BULLISH' : 'BEARISH / SIDEWAYS';
+            document.getElementById("outBuy").innerText = `${formatRp(buyZoneLow)} - ${formatRp(buyZoneHigh)}`;
+            document.getElementById("outBuyReason").innerText = buyReason;
+            document.getElementById("outSl").innerText = formatRp(clLevel);
+            document.getElementById("outSlReason").innerText = clReason;
+            document.getElementById("outTp1").innerText = formatRp(tp1);
+            document.getElementById("outTp2").innerText = formatRp(tp2);
+            document.getElementById("outRr").innerText = `1 : ${rrRatio.toFixed(1)}`;
+
+            // Macro UI updates
+            document.getElementById("outIhsgLevel").innerText = ihsgClose > 0 ? Math.round(ihsgClose).toLocaleString('id-ID') : "N/A";
+            document.getElementById("outIhsgTrend").innerText = ihsgTrendStr;
+            let ihsgColor = ihsgBullish ? '#34d399' : '#f43f5e';
+            document.getElementById("outIhsgTrend").style.color = ihsgClose > 0 ? ihsgColor : '#f8fafc';
+            document.getElementById("outIhsgDesc").innerText = ihsgBullish ? 
+                "IHSG terkonfirmasi di atas MA20. Arus dana asing (inflow) stabil, mendukung probabilitas breakout untuk saham berkapitalisasi menengah-besar." : 
+                "IHSG bergerak di bawah MA20. Risiko pasar tinggi. Disarankan untuk menurunkan porsi lot (position sizing) dan memperketat Stop Loss.";
+
+            let sectorText = document.getElementById("sectorInput").options[document.getElementById("sectorInput").selectedIndex].text;
+            document.getElementById("outSectorName").innerText = sectorText.split(' ')[1] || sectorInput;
+            document.getElementById("outSectorStatus").innerText = sectorStatus;
+            document.getElementById("outSectorDesc").innerText = sectorDesc;
+
+        } catch (error) {
+            document.getElementById("trackerBox").style.display = "none";
+            document.getElementById("scanBtn").disabled = false;
+            document.getElementById("scanBtn").innerText = "SYNCHRONIZE & SCAN";
+            let err = document.getElementById("error");
+            err.innerHTML = `[SYSTEM FAILURE] ${error.message}`;
+            err.style.display = "block";
+        }
+    }
+</script>
+
+</body>
+</html>
