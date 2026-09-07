@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GACOR HUNTER V4 - Commodity & Macro Nexus</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
+
+        :root { 
+            --bg-base: #030712; 
+            --bg-grad: radial-gradient(circle at top, #0f172a, #030712);
+            --panel: rgba(15, 23, 42, 0.7); 
+            --panel-border: rgba(56, 189, 248, 0.2); 
+            --text: #f8fafc; 
+            --accent: #38bdf8; 
+            --accent-glow: rgba(56, 189, 248, 0.6);
+            --accent-grad: linear-gradient(135deg, #0ea5e9, #38bdf8);
+            --macro: #a855f7; --macro-glow: rgba(168, 85, 247, 0.5);
+            --buy: #10b981; --buy-glow: rgba(16, 185, 129, 0.4);
+            --wait: #f59e0b; 
+            --skip: #f43f5e; --skip-glow: rgba(244, 63, 94, 0.4);
+        }
+
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--bg-base); background-image: var(--bg-grad); 
+            color: var(--text); margin: 0; padding: 30px 15px; min-height: 100vh;
+        }
+        
+        .container { max-width: 1050px; margin: auto; }
+        h1 { 
+            text-align: center; font-size: 38px; font-weight: 800; text-transform: uppercase; 
+            letter-spacing: 2px; margin-bottom: 5px; 
+            background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px var(--accent-glow));
+        }
+        p.subtitle { text-align: center; color: #94a3b8; font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-bottom: 40px; letter-spacing: 2px; text-transform: uppercase; }
+        
+        .search-box { 
+            background: var(--panel); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            padding: 25px; border-radius: 16px; border: 1px solid var(--panel-border); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 0 20px rgba(56, 189, 248, 0.05); 
+            display: flex; gap: 15px; flex-direction: column;
+        }
+
+        input[type="text"] { 
+            width: 100%; padding: 18px 20px; 
+            background: rgba(3, 7, 18, 0.8); border: 1px solid #334155; 
+            color: white; font-family: 'JetBrains Mono', monospace; font-size: 18px; 
+            border-radius: 10px; transition: all 0.3s ease; text-transform: uppercase; text-align: center; letter-spacing: 2px;
+        }
+        input[type="text"]:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
+        
+        button { 
+            width: 100%; padding: 18px; background: var(--accent-grad); color: #030712; 
+            font-weight: 800; font-family: 'Inter', sans-serif; font-size: 16px; 
+            border: none; border-radius: 10px; cursor: pointer; transition: all 0.3s ease; 
+            text-transform: uppercase; letter-spacing: 2px; box-shadow: 0 5px 15px var(--accent-glow);
+        }
+        button:hover { transform: translateY(-2px); box-shadow: 0 8px 25px var(--accent-glow); filter: brightness(1.1); }
+        button:disabled { background: #334155; cursor: not-allowed; color: #94a3b8; box-shadow: none; transform: none; }
+
+        .tracker-box { 
+            background: #020617; border: 1px solid var(--macro); padding: 20px; 
+            border-radius: 12px; display: none; margin-top: 30px; color: var(--macro); 
+            font-family: 'JetBrains Mono', monospace; box-shadow: 0 0 20px var(--macro-glow);
+        }
+        .tracker-log { font-size: 13px; color: #e879f9; margin-top: 15px; font-weight: normal; max-height: 250px; overflow-y: auto; }
+        .tracker-log div { padding: 6px 0; border-bottom: 1px dashed #3b0764; }
+        .cursor-blink { animation: blink 1s step-end infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+        
+        .error { background: rgba(244, 63, 94, 0.1); color: #f43f5e; border: 1px solid #f43f5e; padding: 15px; border-radius: 10px; display: none; margin-top: 20px; font-weight: bold; text-align: center; }
+
+        .result-dashboard { display: none; margin-top: 35px; animation: slideUp 0.5s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .header-dash { 
+            background: var(--panel); border: 1px solid var(--panel-border); 
+            padding: 30px; border-radius: 16px; text-align: center; margin-bottom: 25px; 
+            backdrop-filter: blur(12px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; overflow: hidden;
+        }
+        .header-dash::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--accent-grad); }
+        .header-dash h2 { margin: 0; font-size: 46px; font-weight: 800; color: #fff; letter-spacing: 2px; font-family: 'JetBrains Mono', monospace; }
+        
+        .grid-dash { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+        @media (max-width: 768px) { .grid-dash { grid-template-columns: 1fr; } }
+        
+        .card { 
+            background: var(--panel); backdrop-filter: blur(10px);
+            border: 1px solid var(--panel-border); padding: 25px; 
+            border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); 
+            transition: transform 0.3s ease;
+        }
+        .card:hover { transform: translateY(-3px); border-color: rgba(56, 189, 248, 0.4); }
+        .card-title { 
+            color: var(--accent); font-weight: 800; font-size: 15px; 
+            border-bottom: 1px dashed rgba(56, 189, 248, 0.3); padding-bottom: 12px; 
+            margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; 
+        }
+        
+        .stat-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(51, 65, 85, 0.5); font-size: 13px; }
+        .stat-row:last-child { border-bottom: none; }
+        .stat-val { font-weight: bold; color: #f8fafc; font-family: 'JetBrains Mono', monospace; font-size: 14px; text-align: right; }
+        
+        .macro-box { background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); padding: 15px; border-radius: 10px; margin-bottom: 15px; }
+        .macro-title { color: #d8b4fe; font-size: 12px; font-weight: bold; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid rgba(168,85,247,0.3); padding-bottom: 5px;}
+        
+        .score-bar-bg { width: 100%; background: #0f172a; height: 12px; border-radius: 6px; margin-top: 10px; overflow: hidden; border: 1px solid #1e293b; }
+        .score-bar-fill { height: 100%; transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1); background: var(--accent-grad); }
+        
+        .badge { padding: 6px 14px; border-radius: 6px; font-weight: 800; font-size: 14px; letter-spacing: 1px; color: #fff; display: inline-block;}
+        .b-BUY { background: linear-gradient(135deg, #059669, #10b981); box-shadow: 0 0 15px var(--buy-glow); border: 1px solid #34d399; }
+        .b-WAIT { background: linear-gradient(135deg, #d97706, #f59e0b); box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); border: 1px solid #fbbf24; }
+        .b-SKIP { background: linear-gradient(135deg, #e11d48, #f43f5e); box-shadow: 0 0 15px var(--skip-glow); border: 1px solid #fb7185; }
+
+        .zone-buy { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 12px; border-radius: 8px; margin-bottom: 12px; }
+        .zone-sl { background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.3); padding: 12px; border-radius: 8px; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>GACOR HUNTER V4</h1>
+    <p class="subtitle">COMMODITY SENTIMENT & MACRO NEXUS ENGINE</p>
+    
+    <div class="search-box">
+        <input type="text" id="tickerInput" placeholder="KODE SAHAM (Contoh: BRMS, MEDC, ADRO)" autocomplete="off">
+        <button id="scanBtn" onclick="startEngine()">SYNCHRONIZE & SCAN</button>
+    </div>
+    
+    <div id="trackerBox" class="tracker-box">
+        <div id="trackerMain">> ESTABLISHING NEURAL LINK<span class="cursor-blink">_</span></div>
+        <div id="trackerLog" class="tracker-log"></div>
+    </div>
+    
+    <div id="error" class="error"></div>
+    
+    <div id="resultBox" class="result-dashboard">
+        <div class="header-dash">
+            <h2 id="outTicker">$TICKER</h2>
+            <div style="font-size: 15px; color: var(--accent); font-weight: bold; letter-spacing: 2px; text-transform: uppercase; margin-top: 5px;" id="outStage">MOMENTUM STAGE: -</div>
+            <div style="margin-top: 20px;">
+                <span id="outStatus" class="badge">N/A</span>
+            </div>
+        </div>
+
+        <div class="grid-dash">
+            <div class="card">
+                <div class="card-title">⚙️ ALGORITHMIC SCORING (100)</div>
+                <div style="text-align: center; margin-bottom: 25px;">
+                    <div style="font-size: 52px; font-weight: 800; color: #fff; font-family: 'JetBrains Mono', monospace; text-shadow: 0 0 20px rgba(255,255,255,0.3);" id="outTotalScore">0</div>
+                    <div class="score-bar-bg"><div id="outScoreBar" class="score-bar-fill" style="width: 0%;"></div></div>
+                </div>
+                <div class="stat-row"><span>Likuiditas (10)</span><span class="stat-val" id="scLiq">0</span></div>
+                <div class="stat-row"><span>Trend Structure (15)</span><span class="stat-val" id="scTrend">0</span></div>
+                <div class="stat-row"><span>Momentum RSI/MACD (10)</span><span class="stat-val" id="scMom">0</span></div>
+                <div class="stat-row"><span>Breakout Power (15)</span><span class="stat-val" id="scVol">0</span></div>
+                <div class="stat-row"><span>Support Confluence (15)</span><span class="stat-val" id="scSr">0</span></div>
+                <div class="stat-row" style="color: #d8b4fe; font-weight:bold;"><span>Commodity/Macro Bias (15)</span><span class="stat-val" id="scMacro" style="color:#d8b4fe;">0</span></div>
+                <div class="stat-row"><span>Early Momentum (10)</span><span class="stat-val" id="scEarly">0</span></div>
+                <div class="stat-row"><span>Risk/Reward (10)</span><span class="stat-val" id="scRr">0</span></div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">🎯 TACTICAL TRADING PLAN</div>
+                <div class="stat-row"><span>Closing Price</span><span class="stat-val" style="color: var(--accent); font-size: 18px;" id="outPrice">0</span></div>
+                <div class="stat-row" style="margin-bottom: 15px;"><span>Market Structure</span><span class="stat-val" id="outStruct">-</span></div>
+                
+                <div class="zone-buy">
+                    <div class="stat-row" style="border: none; padding: 0;"><span>🛒 STRICT BUY ZONE</span><span class="stat-val" style="color: var(--buy); text-shadow: 0 0 8px var(--buy-glow);" id="outBuy">0 - 0</span></div>
+                    <div style="font-size: 11px; color: #94a3b8; margin-top: 6px; line-height: 1.4;" id="outBuyReason">-</div>
+                </div>
+                
+                <div class="zone-sl">
+                    <div class="stat-row" style="border: none; padding: 0;"><span>⚠️ MAX CUT LOSS (CL)</span><span class="stat-val" style="color: var(--skip); text-shadow: 0 0 8px var(--skip-glow);" id="outSl">0</span></div>
+                    <div style="font-size: 11px; color: #94a3b8; margin-top: 6px; line-height: 1.4;" id="outSlReason">-</div>
+                </div>
+                
+                <div class="stat-row"><span>🎯 TP 1 (Scalp / Momentum)</span><span class="stat-val" id="outTp1">0</span></div>
+                <div class="stat-row"><span>🎯 TP 2 (Swing Target)</span><span class="stat-val" id="outTp2">0</span></div>
+                <div class="stat-row" style="margin-top: 10px; border-top: 1px dashed #334155; padding-top: 10px;">
+                    <span>⚖️ Risk/Reward Ratio</span><span class="stat-val" id="outRr">1 : 0</span>
+                </div>
+            </div>
+
+            <div class="card" style="grid-column: 1 / -1; border-color: rgba(168, 85, 247, 0.4); box-shadow: 0 0 20px rgba(168, 85, 247, 0.1);">
+                <div class="card-title" style="color: #d8b4fe; border-bottom-color: rgba(168, 85, 247, 0.3);">🌍 COMMODITY & MACRO INTELLIGENCE</div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                    <!-- Kotak Komoditas -->
+                    <div class="macro-box" id="boxCommodity">
+                        <div class="macro-title">💎 Real-Time Commodity Sentiment</div>
+                        <div class="stat-row"><span>Komoditas Acuan</span><span class="stat-val" id="outComName">Mendeteksi...</span></div>
+                        <div class="stat-row"><span>Global Ticker</span><span class="stat-val" id="outComTicker">-</span></div>
+                        <div class="stat-row"><span>Trend Harga Global</span><span class="stat-val" id="outComTrend">-</span></div>
+                        <div style="font-size: 12px; color: #cbd5e1; margin-top: 10px; line-height: 1.5;" id="outComDesc">-</div>
+                    </div>
+
+                    <!-- Kotak IHSG -->
+                    <div class="macro-box">
+                        <div class="macro-title">🧭 IHSG Composite Weather</div>
+                        <div class="stat-row"><span>IHSG Level</span><span class="stat-val" id="outIhsgLevel">0</span></div>
+                        <div class="stat-row"><span>Market Trend (MA20)</span><span class="stat-val" id="outIhsgTrend">-</span></div>
+                        <div style="font-size: 12px; color: #cbd5e1; margin-top: 10px; line-height: 1.5;" id="outIhsgDesc">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // === DICTIONARY EMITEN & KOMODITAS (CORE ENGINE V4) ===
+    const COMMODITY_TYPES = {
+        "GOLD": { name: "Emas (Gold)", ticker: "GC=F", desc: "Pergerakan emiten sangat bergantung pada harga Emas global. Emas bertindak sebagai aset safe haven saat bursa global panik, inflasi tinggi, atau saat Yield US Treasury melemah." },
+        "COAL": { name: "Batu Bara (Coal)", ticker: "XLE", proxyName: "Energy ETF Proxy", desc: "Harga batu bara sangat siklikal, digerakkan oleh supply musim dingin, konflik geopolitik, dan harga substitusi (gas/minyak). Waspadai siklus penurunan permintaan." }, // Menggunakan XLE (Energy ETF) sbg proxy proxy krn batubara NCF=F sering tidak tersedia di YF public API
+        "OIL": { name: "Minyak (WTI Crude)", ticker: "CL=F", desc: "Sangat sensitif terhadap tensi geopolitik (terutama Timur Tengah), data inventori US, dan keputusan pemangkasan produksi oleh OPEC+." },
+        "NICKEL": { name: "Nikel / Tembaga (Copper proxy)", ticker: "HG=F", desc: "Komoditas mineral dipacu oleh narasi transisi energi & Electric Vehicle (EV). Harga sangat bergantung pada pemulihan aktivitas manufaktur global (terutama China)." }, // Tembaga (HG=F) digunakan sbg proxy base metal yg paling reliable di YF
+        "CPO": { name: "CPO / Sawit (Soybean Oil Proxy)", ticker: "ZL=F", desc: "Dipengaruhi oleh cuaca (El Nino/La Nina), mandat Biodiesel pemerintah (B35/B40), dan harga minyak nabati substitusi (Soybean Oil global)." },
+        "BANK": { name: "Finansial / Perbankan", ticker: "^JKSE", proxyName: "IHSG Proxy", desc: "Saham Big Banks adalah mesin utama pergerakan IHSG. Sangat bergantung pada data pertumbuhan kredit (loan growth) dan kebijakan suku bunga BI (BI Rate)." },
+        "GENERAL": { name: "Sektor Umum / Konsumer", ticker: "^JKSE", proxyName: "IHSG Proxy", desc: "Emiten ini tidak terikat pada komoditas spesifik. Pergerakan harga murni didorong oleh katalis internal perusahaan, laporan keuangan, dan rotasi sektor IHSG." }
+    };
+
+    // Mapping Emiten Indonesia ke Komoditasnya
+    const EMITEN_MAP = {
+        'BRMS':'GOLD', 'MDKA':'GOLD', 'PSAB':'GOLD', 'AMMN':'GOLD', 'ANTM':'GOLD', 'SQMI':'GOLD',
+        'ADRO':'COAL', 'PTBA':'COAL', 'ITMG':'COAL', 'BUMI':'COAL', 'DOID':'COAL', 'INDY':'COAL', 'HRUM':'COAL',
+        'MEDC':'OIL', 'ENRG':'OIL', 'ELSA':'OIL', 'AKRA':'OIL', 'PGAS':'OIL',
+        'INCO':'NICKEL', 'NCKL':'NICKEL', 'MBMA':'NICKEL', 'DKFT':'NICKEL', 'VALE':'NICKEL',
+        'AALI':'CPO', 'LSIP':'CPO', 'DSNG':'CPO', 'TAPG':'CPO', 'SSMS':'CPO', 'SIMP':'CPO',
+        'BBCA':'BANK', 'BBRI':'BANK', 'BMRI':'BANK', 'BBNI':'BANK', 'BRIS':'BANK', 'ARTO':'BANK', 'BBTN':'BANK'
+    };
+
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    const formatRp = num => `${Math.round(num).toLocaleString('id-ID')}`;
+    
+    const calcSMA = (data, window) => {
+        if(!data || data.length < window) return data?.[data?.length-1] || 100;
+        let sum = 0; for(let i = data.length - window; i < data.length; i++) sum += data[i];
+        return sum / window;
+    };
+
+    const calcRSI = (closes, period = 14) => {
+        if (!closes || closes.length <= period) return 55;
+        let gains = 0, losses = 0;
+        for (let i = closes.length - period; i < closes.length; i++) {
+            let diff = closes[i] - closes[i - 1];
+            if (diff > 0) gains += diff; else losses -= diff;
+        }
+        let avgGain = gains / period, avgLoss = losses / period;
+        if (avgLoss === 0) return 70;
+        return 100 - (100 / (1 + (avgGain / avgLoss)));
+    };
+
+    function updateLog(msg, isMain = false) {
+        if(isMain) document.getElementById("trackerMain").innerHTML = `> ${msg}<span class="cursor-blink">_</span>`;
+        let logDiv = document.getElementById("trackerLog");
+        logDiv.innerHTML += `<div>[${new Date().toLocaleTimeString('id-ID')}] ${msg}</div>`;
+        logDiv.scrollTop = logDiv.scrollHeight;
+    }
+
+    // Fungsi fetch dengan proxy yg jauh lebih kuat dan anti-crash
+    async function fetchYahooData(ticker) {
+        const yahooUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=6mo`;
+        const proxies = [
+            `https://api.allorigins.win/get?url=${encodeURIComponent(yahooUrl)}`,
+            `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(yahooUrl)}`
+        ];
+
+        for (let i = 0; i < proxies.length; i++) {
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 Detik timeout
+                const res = await fetch(proxies[i], { signal: controller.signal });
+                clearTimeout(timeoutId);
+                
+                if (!res.ok) continue;
+                let data = (i === 0) ? JSON.parse((await res.json()).contents) : await res.json();
+                
+                if (data?.chart?.result?.[0]?.indicators?.quote?.[0]) {
+                    return data.chart.result[0].indicators.quote[0];
+                }
+            } catch (e) { console.warn(`Proxy ${i} failed for ${ticker}`); }
+        }
+        return null; // Return null bukan melempar error agar aplikasi tetap berjalan
+    }
+
+    // Ekstraksi array data yang valid (membuang nilai null)
+    function extractValidData(quoteData) {
+        if(!quoteData) return null;
+        let closes = [], highs = [], lows = [], volumes = [];
+        for(let i = 0; i < quoteData.close.length; i++) {
+            if(quoteData.close[i] !== null) {
+                closes.push(quoteData.close[i]);
+                highs.push(quoteData.high[i]);
+                lows.push(quoteData.low[i]);
+                volumes.push(quoteData.volume[i]);
+            }
+        }
+        return { closes, highs, lows, volumes };
+    }
+
+    async function startEngine() {
+        let rawInput = document.getElementById("tickerInput").value.trim().toUpperCase();
+        if (!rawInput) return;
+
+        let cleanTicker = rawInput.split('.')[0]; 
+        let ticker = cleanTicker + '.JK';
+
+        // Auto-detect Komoditas
+        let mappedType = EMITEN_MAP[cleanTicker] || "GENERAL";
+        let comInfo = COMMODITY_TYPES[mappedType];
+        
+        document.getElementById("scanBtn").disabled = true;
+        document.getElementById("scanBtn").innerText = "UPLOADING TO MAINFRAME...";
+        document.getElementById("resultBox").style.display = "none";
+        document.getElementById("error").style.display = "none";
+        document.getElementById("trackerBox").style.display = "block";
+        document.getElementById("trackerLog").innerHTML = "";
+        
+        try {
+            updateLog(`Mengidentifikasi profil fundamental $${cleanTicker}... [Tipe: ${mappedType}]`, true);
+            await sleep(300);
+
+            let fetchPromises = [
+                fetchYahooData(ticker), // 0: Saham Utama
+                fetchYahooData('^JKSE') // 1: Makro IHSG
+            ];
+
+            // Jika ada komoditas global yg relevan, fetch juga harganya
+            if(comInfo.ticker !== '^JKSE') {
+                updateLog(`Menyiapkan sinkronisasi sentimen komoditas global (${comInfo.ticker})...`);
+                fetchPromises.push(fetchYahooData(comInfo.ticker)); // 2: Komoditas Global
+            }
+
+            updateLog(`Initiating parallel data fetch (Saham, Makro, Komoditas)...`, true);
+            const results = await Promise.allSettled(fetchPromises);
+            
+            const stockQuote = results[0].status === 'fulfilled' ? results[0].value : null;
+            const ihsgQuote = results[1].status === 'fulfilled' ? results[1].value : null;
+            const comQuote = (results.length > 2 && results[2].status === 'fulfilled') ? results[2].value : null;
+
+            if (!stockQuote) throw new Error(`Gagal mengambil data saham ${cleanTicker}. Cek koneksi atau ticker tidak valid.`);
+            
+            const stockData = extractValidData(stockQuote);
+            const currClose = stockData.closes[stockData.closes.length - 1];
+            const prevClose = stockData.closes[stockData.closes.length - 2];
+            const currVol = stockData.volumes[stockData.volumes.length - 1];
+            
+            const dailyRet = ((currClose - prevClose) / prevClose) * 100;
+            const txValM = (currClose * currVol) / 1e9;
+            const ma5 = calcSMA(stockData.closes, 5);
+            const ma20 = calcSMA(stockData.closes, 20);
+            const ma50 = calcSMA(stockData.closes, 50);
+            const volMa20 = calcSMA(stockData.volumes, 20);
+            const volRatio = volMa20 > 0 ? (currVol / volMa20) : 1;
+            const rsi = calcRSI(stockData.closes, 14);
+
+            const swingHigh = Math.max(...stockData.highs.slice(-60)); 
+            const isBreakout = (currClose >= swingHigh && volRatio >= 1.5);
+
+            // ==========================================
+            // LOGIKA SENTIMEN KOMODITAS & MAKRO (V4)
+            // ==========================================
+            updateLog("Decoding macroeconomic structure and global commodity trends...", true);
+            await sleep(400);
+
+            let sMacro = 5; // Base makro score (max 15)
+            
+            // 1. Analisis IHSG
+            let ihsgClose = 0, ihsgBullish = false, ihsgTrendStr = "NEUTRAL";
+            if (ihsgQuote) {
+                const iData = extractValidData(ihsgQuote);
+                ihsgClose = iData.closes[iData.closes.length - 1];
+                let ihsgMa20 = calcSMA(iData.closes, 20);
+                ihsgBullish = ihsgClose > ihsgMa20;
+                ihsgTrendStr = ihsgBullish ? "BULLISH (Risk On)" : "BEARISH (Risk Off)";
+                if(ihsgBullish) sMacro += 4; // Tambah poin jika makro bursa bagus
+            } else {
+                updateLog("Warning: IHSG Macro Proxy offline. Menggunakan default netral.");
+            }
+
+            // 2. Analisis Sentimen Komoditas
+            let comTrendStr = "N/A (Cek Manual)", isComBullish = false;
+            if(mappedType === "GENERAL" || mappedType === "BANK") {
+                // Sektor umum ikut trend IHSG
+                comTrendStr = ihsgTrendStr;
+                isComBullish = ihsgBullish;
+                if(isComBullish) sMacro += 6;
+            } else if (comQuote) {
+                const cData = extractValidData(comQuote);
+                let cClose = cData.closes[cData.closes.length - 1];
+                let cPrev = cData.closes[cData.closes.length - 2];
+                let cMa20 = calcSMA(cData.closes, 20);
+                let cRet = ((cClose - cPrev) / cPrev) * 100;
+                
+                isComBullish = cClose > cMa20;
+                comTrendStr = `${isComBullish ? '📈 UPTREND' : '📉 DOWNTREND'} (${cRet > 0 ? '+' : ''}${cRet.toFixed(1)}%)`;
+                
+                if(isComBullish) sMacro += 6; // Katalis komoditas sangat kuat menambah skor
+                else sMacro -= 2; // Penalti jika komoditas sedang turun
+
+                updateLog(`Sentimen Global ${comInfo.name} terdeteksi: ${comTrendStr}`);
+            } else {
+                updateLog(`Warning: Gagal mengambil live data komoditas ${comInfo.ticker}. Proxy YF limit.`);
+                comTrendStr = "Gagal Akses Data Global";
+                sMacro += 3; // Kasih skor tengah jika gagal
+            }
+
+            sMacro = Math.max(0, Math.min(15, sMacro)); // Limit 0-15
+
+            // ==========================================
+            // TRADING PLAN LOGIC
+            // ==========================================
+            updateLog("Formulating tight risk-management and entry protocols...", true);
+            await sleep(300);
+
+            let buyZoneLow, buyZoneHigh, buyReason;
+            if (isBreakout) {
+                buyZoneHigh = Math.round(currClose * 1.01);
+                buyZoneLow = Math.round(currClose * 0.98); 
+                buyReason = "Volume spike terdeteksi. Accumulate near breakout level.";
+            } else if (currClose >= ma20) {
+                buyZoneHigh = Math.round(currClose);
+                buyZoneLow = Math.round(Math.max(ma20, currClose * 0.95)); 
+                buyReason = "Pullback strategy. Entry dekat dynamic support MA20.";
+            } else {
+                buyZoneHigh = Math.round(currClose);
+                buyZoneLow = Math.round(currClose * 0.95);
+                buyReason = "Counter-trend / Bottom fishing. High Risk.";
+            }
+            if(buyZoneLow > buyZoneHigh) { buyZoneLow = Math.round(buyZoneHigh * 0.98); }
+
+            let clLevel = Math.round(buyZoneLow * 0.95); 
+            let clReason = "Strict 5% risk tolerance dari zona beli bawah. Mencegah portfolio ruin.";
+
+            let tp1 = Math.round(buyZoneHigh * 1.05); 
+            let tp2 = Math.round(buyZoneHigh * 1.10); 
+
+            let risk = Math.max(1, buyZoneHigh - clLevel);
+            let reward = Math.max(1, tp1 - buyZoneHigh);
+            let rrRatio = reward / risk;
+            let sRr = rrRatio >= 1.5 ? 10 : 4;
+
+            // Final Scoring
+            let sLiq = Math.min(10, (txValM >= 10 ? 5 : 3) + (volRatio >= 1.2 ? 5 : 2));
+            let sTrend = (currClose > ma20 ? 8 : 2) + (currClose > ma50 ? 7 : 2);
+            let sMom = Math.min(10, (dailyRet > 0 ? 5 : 2) + (rsi >= 45 && rsi <= 70 ? 5 : 2));
+            let sVol = Math.min(15, (volRatio >= 1.5 ? 8 : 4) + (volRatio >= 2.0 ? 7 : 2));
+            let sSr = Math.min(15, (currClose >= ma20 ? 8 : 3) + (currClose >= ma50 ? 7 : 3));
+            let sEarly = (ma5 > ma20) ? 10 : 4;
+
+            let totalScore = Math.min(100, sLiq + sTrend + sMom + sVol + sSr + sMacro + sEarly + sRr);
+
+            let stage = isBreakout ? "STAGE 5 : BREAKOUT" : (currClose > ma20 ? "STAGE 3 : UPTREND" : "STAGE 1 : CONSOLIDATION/MARKDOWN");
+            let finalStatus = (totalScore >= 75 && currClose > ma50) ? "BUY" : (totalScore >= 65 ? "WAIT" : "SKIP");
+
+            updateLog("Neural synchronization complete. Rendering UI...", true);
+            await sleep(400);
+
+            // ================= Render UI =================
+            document.getElementById("trackerBox").style.display = "none";
+            document.getElementById("scanBtn").disabled = false;
+            document.getElementById("scanBtn").innerText = "SYNCHRONIZE & SCAN";
+            document.getElementById("resultBox").style.display = "block";
+
+            document.getElementById("outTicker").innerText = `$${cleanTicker}`;
+            document.getElementById("outStage").innerText = `${stage}`;
+            
+            let stBadge = document.getElementById("outStatus");
+            stBadge.innerText = finalStatus;
+            stBadge.className = "badge " + (finalStatus === "BUY" ? "b-BUY" : (finalStatus === "WAIT" ? "b-WAIT" : "b-SKIP"));
+
+            let outTotalScore = document.getElementById("outTotalScore");
+            let barFill = document.getElementById("outScoreBar");
+            outTotalScore.innerText = totalScore;
+            
+            let color = totalScore >= 75 ? 'var(--buy)' : (totalScore >= 65 ? 'var(--wait)' : 'var(--skip)');
+            outTotalScore.style.color = color;
+            outTotalScore.style.textShadow = `0 0 15px ${color}`;
+            
+            setTimeout(() => {
+                barFill.style.width = `${totalScore}%`;
+                barFill.style.background = color;
+                barFill.style.boxShadow = `0 0 15px ${color}`;
+            }, 100);
+            
+            document.getElementById("scLiq").innerText = `${sLiq}`;
+            document.getElementById("scTrend").innerText = `${sTrend}`;
+            document.getElementById("scMom").innerText = `${sMom}`;
+            document.getElementById("scVol").innerText = `${sVol}`;
+            document.getElementById("scSr").innerText = `${sSr}`;
+            document.getElementById("scMacro").innerText = `${sMacro}`;
+            document.getElementById("scEarly").innerText = `${sEarly}`;
+            document.getElementById("scRr").innerText = `${sRr}`;
+
+            document.getElementById("outPrice").innerText = formatRp(currClose);
+            document.getElementById("outStruct").innerText = currClose > ma20 ? 'BULLISH' : 'BEARISH / SIDEWAYS';
+            document.getElementById("outBuy").innerText = `${formatRp(buyZoneLow)} - ${formatRp(buyZoneHigh)}`;
+            document.getElementById("outBuyReason").innerText = buyReason;
+            document.getElementById("outSl").innerText = formatRp(clLevel);
+            document.getElementById("outSlReason").innerText = clReason;
+            document.getElementById("outTp1").innerText = formatRp(tp1);
+            document.getElementById("outTp2").innerText = formatRp(tp2);
+            document.getElementById("outRr").innerText = `1 : ${rrRatio.toFixed(1)}`;
+
+            // Macro UI updates
+            document.getElementById("outIhsgLevel").innerText = ihsgClose > 0 ? Math.round(ihsgClose).toLocaleString('id-ID') : "N/A";
+            document.getElementById("outIhsgTrend").innerText = ihsgTrendStr;
+            let ihsgColor = ihsgBullish ? '#34d399' : '#f43f5e';
+            document.getElementById("outIhsgTrend").style.color = ihsgClose > 0 ? ihsgColor : '#f8fafc';
+            document.getElementById("outIhsgDesc").innerText = ihsgBullish ? 
+                "IHSG terkonfirmasi di atas MA20. Arus dana (inflow) berpihak pada saham bluechip/midcap. Probabilitas breakout tinggi." : 
+                "IHSG berada dalam fase koreksi (Risk-Off). Kurangi porsi beli (position sizing) dan disiplin pada level Stop Loss.";
+
+            // Commodity UI Updates
+            document.getElementById("outComName").innerText = comInfo.name;
+            document.getElementById("outComTicker").innerText = comInfo.proxyName || comInfo.ticker;
+            
+            let domTrend = document.getElementById("outComTrend");
+            domTrend.innerText = comTrendStr;
+            if(isComBullish) {
+                domTrend.style.color = '#34d399';
+                domTrend.style.textShadow = '0 0 10px rgba(16,185,129,0.5)';
+            } else if(comTrendStr.includes('DOWNTREND')) {
+                domTrend.style.color = '#f43f5e';
+                domTrend.style.textShadow = '0 0 10px rgba(244,63,94,0.5)';
+            } else {
+                domTrend.style.color = '#f8fafc';
+                domTrend.style.textShadow = 'none';
+            }
+            document.getElementById("outComDesc").innerText = comInfo.desc;
+
+        } catch (error) {
+            document.getElementById("trackerBox").style.display = "none";
+            document.getElementById("scanBtn").disabled = false;
+            document.getElementById("scanBtn").innerText = "SYNCHRONIZE & SCAN";
+            let err = document.getElementById("error");
+            err.innerHTML = `[SYSTEM FAILURE] ${error.message}`;
+            err.style.display = "block";
+        }
+    }
+</script>
+
+</body>
+</html>
