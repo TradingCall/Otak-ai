@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GACOR HUNTER V4.1 - Technical & Volume Radar</title>
+    <title>GACOR HUNTER V4.2 - Realtime Dashboard</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
 
@@ -21,225 +21,243 @@
             --skip: #f43f5e; --skip-glow: rgba(244, 63, 94, 0.4);
         }
 
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; scroll-behavior: smooth; }
         body { 
             font-family: 'Inter', sans-serif; 
             background: var(--bg-base); background-image: var(--bg-grad); 
-            color: var(--text); margin: 0; padding: 30px 15px; min-height: 100vh;
+            color: var(--text); margin: 0; padding: 20px 15px; min-height: 100vh;
         }
         
         .container { max-width: 1050px; margin: auto; }
+        
+        /* HEADER */
         h1 { 
-            text-align: center; font-size: 38px; font-weight: 800; text-transform: uppercase; 
+            text-align: center; font-size: 36px; font-weight: 900; text-transform: uppercase; 
             letter-spacing: 2px; margin-bottom: 5px; 
             background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 15px var(--accent-glow));
+            filter: drop-shadow(0 0 10px var(--accent-glow));
         }
-        p.subtitle { text-align: center; color: #94a3b8; font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-bottom: 30px; letter-spacing: 2px; text-transform: uppercase; }
+        p.subtitle { text-align: center; color: #94a3b8; font-family: 'JetBrains Mono', monospace; font-size: 11px; margin-bottom: 30px; letter-spacing: 2px; text-transform: uppercase; }
 
-        /* IHSG Live Banner */
-        .ihsg-banner {
-            background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(10px);
-            border: 1px solid rgba(52, 211, 153, 0.3); padding: 20px; 
-            border-radius: 12px; margin-bottom: 30px; box-shadow: 0 5px 20px rgba(0,0,0,0.4);
-            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;
-        }
-        .ihsg-col { flex: 1; min-width: 200px; }
-        .ihsg-title { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; font-weight: bold;}
-        .ihsg-val { font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: bold; color: #fff; }
+        /* IHSG DASHBOARD */
+        .ihsg-container { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 35px; }
+        @media (max-width: 768px) { .ihsg-container { grid-template-columns: 1fr; } }
         
-        .search-box { 
-            background: var(--panel); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            padding: 25px; border-radius: 16px; border: 1px solid var(--panel-border); 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 0 20px rgba(56, 189, 248, 0.05); 
-            display: flex; gap: 15px; flex-direction: column;
+        .tv-chart-box {
+            background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 12px; overflow: hidden; height: 350px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        .input-group { display: flex; gap: 15px; }
-        @media (max-width: 768px) { .input-group { flex-direction: column; } }
+        .ihsg-weather {
+            background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(10px);
+            border: 1px solid rgba(56, 189, 248, 0.3); padding: 20px; 
+            border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex; flex-direction: column; gap: 15px;
+        }
+        .ihsg-weather-title { font-size: 12px; color: var(--accent); font-weight: 800; letter-spacing: 1px; border-bottom: 1px dashed rgba(56,189,248,0.3); padding-bottom: 8px;}
+        .ihsg-val { font-family: 'JetBrains Mono', monospace; font-size: 28px; font-weight: bold; color: #fff; }
+        .ihsg-desc { font-size: 13px; color: #cbd5e1; line-height: 1.5; background: rgba(3,7,18,0.5); padding: 12px; border-radius: 8px; border: 1px solid #334155;}
 
+        /* TOP 10 RADAR */
+        .radar-section { margin-bottom: 35px; }
+        .radar-title { font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .radar-title span { font-size: 11px; font-weight: normal; color: #34d399; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); padding: 4px 8px; border-radius: 6px; }
+        
+        .radar-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
+        .radar-card {
+            background: rgba(3, 7, 18, 0.6); border: 1px solid #334155; padding: 15px; 
+            border-radius: 12px; cursor: pointer; transition: all 0.2s ease;
+            display: flex; flex-direction: column; gap: 8px; position: relative; overflow: hidden;
+        }
+        .radar-card::before { content: ''; position: absolute; top:0; left:0; width: 4px; height: 100%; background: var(--accent); transition: width 0.3s ease; }
+        .radar-card:hover::before { width: 6px; }
+        .radar-card:hover { border-color: var(--accent); background: rgba(15, 23, 42, 0.9); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(56, 189, 248, 0.2); }
+        .rc-head { display: flex; justify-content: space-between; align-items: center; }
+        .rc-ticker { font-weight: 800; font-size: 18px; color: #fff; z-index: 1; }
+        .rc-score { font-size: 11px; font-weight: bold; background: rgba(56,189,248,0.1); color: var(--accent); padding: 3px 6px; border-radius: 4px; border: 1px solid rgba(56,189,248,0.3); z-index: 1;}
+        .rc-price { font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #f8fafc; font-weight: bold; }
+        .rc-change { font-size: 12px; font-weight: bold; }
+        .rc-change.up { color: #34d399; }
+        .rc-change.down { color: #f43f5e; }
+        .rc-reason { font-size: 11px; color: #94a3b8; }
+
+        .skeleton { animation: pulse 1.5s infinite ease-in-out; background: #0f172a !important; border-color: #1e293b !important; pointer-events: none; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+        /* SEARCH BOX */
+        .search-box { 
+            background: var(--panel); backdrop-filter: blur(15px); padding: 25px; border-radius: 16px; 
+            border: 1px solid var(--panel-border); box-shadow: 0 20px 40px rgba(0,0,0,0.6); 
+        }
         input[type="text"] { 
-            width: 100%; padding: 18px 20px; 
-            background: rgba(3, 7, 18, 0.8); border: 1px solid #334155; 
-            color: white; font-family: 'JetBrains Mono', monospace; font-size: 14px; 
-            border-radius: 10px; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px;
+            width: 100%; padding: 18px 20px; background: rgba(3, 7, 18, 0.8); border: 1px solid #334155; 
+            color: white; font-family: 'JetBrains Mono', monospace; font-size: 18px; text-align: center;
+            border-radius: 10px; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px;
         }
         input[type="text"]:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
-        .primary-input { font-size: 18px !important; text-align: center; letter-spacing: 2px !important; }
-        
         button { 
             width: 100%; padding: 18px; background: var(--accent-grad); color: #030712; 
             font-weight: 800; font-family: 'Inter', sans-serif; font-size: 16px; 
-            border: none; border-radius: 10px; cursor: pointer; transition: all 0.3s ease; 
-            text-transform: uppercase; letter-spacing: 2px; box-shadow: 0 5px 15px var(--accent-glow);
+            border: none; border-radius: 10px; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; 
         }
-        button:hover { transform: translateY(-2px); box-shadow: 0 8px 25px var(--accent-glow); filter: brightness(1.1); }
-        button:disabled { background: #334155; cursor: not-allowed; color: #94a3b8; box-shadow: none; transform: none; }
-
-        .tracker-box { background: #020617; border: 1px solid #3b82f6; padding: 20px; border-radius: 12px; display: none; margin-top: 30px; color: #3b82f6; font-family: 'JetBrains Mono', monospace; box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
-        .tracker-log { font-size: 13px; color: #60a5fa; margin-top: 15px; font-weight: normal; max-height: 250px; overflow-y: auto; }
-        .tracker-log div { padding: 6px 0; border-bottom: 1px dashed #1e3a8a; }
-        .cursor-blink { animation: blink 1s step-end infinite; }
-        @keyframes blink { 50% { opacity: 0; } }
+        button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 25px var(--accent-glow); }
+        button:disabled { background: #334155; color: #94a3b8; cursor: not-allowed; box-shadow: none; transform: none; }
         
-        .error { background: rgba(244, 63, 94, 0.1); color: #f43f5e; border: 1px solid #f43f5e; padding: 15px; border-radius: 10px; display: none; margin-top: 20px; font-weight: bold; text-align: center; }
-
+        /* UI RESULT & LOGS */
+        .tracker-box { background: #020617; border: 1px solid #3b82f6; padding: 20px; border-radius: 12px; display: none; margin-top: 25px; color: #3b82f6; font-family: 'JetBrains Mono', monospace; }
+        .tracker-log { font-size: 12px; color: #60a5fa; margin-top: 15px; max-height: 200px; overflow-y: auto; }
         .result-dashboard { display: none; margin-top: 35px; animation: slideUp 0.5s ease-out; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .header-dash { background: var(--panel); border: 1px solid var(--panel-border); padding: 30px; border-radius: 16px; text-align: center; margin-bottom: 25px; backdrop-filter: blur(12px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; overflow: hidden; }
-        .header-dash::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--accent-grad); }
-        .header-dash h2 { margin: 0; font-size: 46px; font-weight: 800; color: #fff; letter-spacing: 2px; font-family: 'JetBrains Mono', monospace; }
-        
-        .grid-dash { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+        /* GRID DASHBOARD */
+        .header-dash { background: var(--panel); border: 1px solid var(--panel-border); padding: 25px; border-radius: 16px; text-align: center; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border-top: 4px solid var(--accent); }
+        .header-dash h2 { margin: 0; font-size: 40px; font-weight: 800; color: #fff; }
+        .grid-dash { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         @media (max-width: 768px) { .grid-dash { grid-template-columns: 1fr; } }
+        .card { background: var(--panel); border: 1px solid var(--panel-border); padding: 20px; border-radius: 16px; }
+        .card-title { color: var(--accent); font-weight: 800; font-size: 14px; border-bottom: 1px dashed rgba(56, 189, 248, 0.3); padding-bottom: 10px; margin-bottom: 15px; }
+        .stat-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(51, 65, 85, 0.5); font-size: 13px; }
+        .stat-val { font-weight: bold; color: #f8fafc; font-family: 'JetBrains Mono', monospace; }
         
-        .card { background: var(--panel); backdrop-filter: blur(10px); border: 1px solid var(--panel-border); padding: 25px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); transition: transform 0.3s ease; }
-        .card:hover { transform: translateY(-3px); border-color: rgba(56, 189, 248, 0.4); }
-        .card-title { color: var(--accent); font-weight: 800; font-size: 15px; border-bottom: 1px dashed rgba(56, 189, 248, 0.3); padding-bottom: 12px; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
-        
-        .stat-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(51, 65, 85, 0.5); font-size: 13px; }
-        .stat-row:last-child { border-bottom: none; }
-        .stat-val { font-weight: bold; color: #f8fafc; font-family: 'JetBrains Mono', monospace; font-size: 14px; text-align: right; }
-        
-        .score-bar-bg { width: 100%; background: #0f172a; height: 12px; border-radius: 6px; margin-top: 10px; overflow: hidden; border: 1px solid #1e293b; }
-        .score-bar-fill { height: 100%; transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1); background: var(--accent-grad); }
-        
-        .badge { padding: 6px 14px; border-radius: 6px; font-weight: 800; font-size: 14px; letter-spacing: 1px; color: #fff; display: inline-block;}
-        .b-BUY { background: linear-gradient(135deg, #059669, #10b981); box-shadow: 0 0 15px var(--buy-glow); border: 1px solid #34d399; }
-        .b-WAIT { background: linear-gradient(135deg, #d97706, #f59e0b); box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); border: 1px solid #fbbf24; }
-        .b-SKIP { background: linear-gradient(135deg, #e11d48, #f43f5e); box-shadow: 0 0 15px var(--skip-glow); border: 1px solid #fb7185; }
+        .badge { padding: 6px 14px; border-radius: 6px; font-weight: 800; font-size: 14px; color: #fff; display: inline-block; transition: all 0.3s;}
+        .b-BUY { background: var(--buy); box-shadow: 0 0 15px var(--buy-glow); }
+        .b-WAIT { background: var(--wait); }
+        .b-SKIP { background: var(--skip); }
 
-        .sr-box { background: rgba(3, 7, 18, 0.5); padding: 12px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #334155; }
-        .sr-title { font-size: 12px; color: #94a3b8; font-weight: bold; margin-bottom: 8px; }
-        
-        .zone-buy { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 12px; border-radius: 8px; margin-bottom: 12px; }
-        .zone-sl { background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.3); padding: 12px; border-radius: 8px; margin-bottom: 15px; }
-        .catalyst-box { background: rgba(56, 189, 248, 0.1); border: 1px dashed rgba(56, 189, 248, 0.4); padding: 12px; border-radius: 8px; margin-top: 15px; font-size: 12px; line-height: 1.5;}
+        .score-bar-bg { width: 100%; background: #0f172a; height: 10px; border-radius: 5px; margin-top: 10px; overflow: hidden; border: 1px solid #1e293b; }
+        .score-bar-fill { height: 100%; background: var(--accent-grad); transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 5px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>GACOR HUNTER V4.1</h1>
-    <p class="subtitle">MOBILE-FIRST STOCK ANALYSIS & VOLUME SPIKE RADAR</p>
+    <h1>GACOR HUNTER V4.2</h1>
+    <p class="subtitle">ACTIVE MOMENTUM & REALTIME INTRADAY ENGINE</p>
     
-    <!-- IHSG Live Banner (Dimuat Pertama) -->
-    <div class="ihsg-banner" id="ihsgBanner">
-        <div class="ihsg-col">
-            <div class="ihsg-title">🌍 LIVE IHSG SENTIMENT</div>
-            <div class="ihsg-val" id="topIhsgLevel">Loading...</div>
-        </div>
-        <div class="ihsg-col">
-            <div class="ihsg-title">MARKET TREND (MA20)</div>
-            <div class="ihsg-val" id="topIhsgTrend">-</div>
-        </div>
-        <div class="ihsg-col">
-            <div class="ihsg-title">OUTLOOK HARI INI</div>
-            <div style="font-size: 12px; color: #cbd5e1; line-height: 1.4;" id="topIhsgDesc">Menganalisa kondisi market makro...</div>
+    <!-- 1. LIVE IHSG DASHBOARD -->
+    <div class="ihsg-container">
+        <!-- TradingView Chart -->
+        <div class="tv-chart-box" id="tv_chart_container"></div>
+
+        <!-- Algorithmic Weather -->
+        <div class="ihsg-weather">
+            <div class="ihsg-weather-title">🌍 ALGORITHMIC MARKET WEATHER</div>
+            <div>
+                <div style="font-size: 11px; color: #94a3b8; margin-bottom: 5px;">IHSG LATEST LEVEL</div>
+                <div class="ihsg-val" id="topIhsgLevel">Menganalisa...</div>
+            </div>
+            <div>
+                <div style="font-size: 11px; color: #94a3b8; margin-bottom: 5px;">TREND STATUS (MA20)</div>
+                <div class="ihsg-val" id="topIhsgTrend" style="font-size: 20px;">-</div>
+            </div>
+            <div class="ihsg-desc" id="topIhsgDesc">Memuat data histori market dari server...</div>
         </div>
     </div>
 
-    <div class="search-box">
-        <input type="text" id="tickerInput" class="primary-input" placeholder="KODE TICKER (Misal: BBCA.JK)" autocomplete="off">
-        <div class="input-group">
-            <input type="text" id="catalystInput" placeholder="Katalis/Peristiwa (Opsional)">
-            <input type="text" id="foreignInput" placeholder="Net Foreign (Opsional, cth: +15B)">
+    <!-- 2. TOP 10 VOLUME SPIKE RADAR -->
+    <div class="radar-section">
+        <div class="radar-title">
+            🔥 TOP 10 MOMENTUM RADAR
+            <span>⚡ Terfilter Data EOD Backend</span>
+            <span id="lastScanBadge" style="background: rgba(56,189,248,0.1); color: var(--accent); border-color: rgba(56,189,248,0.3);">🔄 Syncing Database...</span>
         </div>
-        <button id="scanBtn" onclick="startEngine()">SYNCHRONIZE & SCAN</button>
+        <div class="radar-grid" id="top10Grid">
+            <!-- Loading Skeletons (Dibuat 10 untuk antisipasi hasil max) -->
+            <script>
+                for(let i=0; i<10; i++) document.write('<div class="radar-card skeleton" style="min-height: 85px;"></div>');
+            </script>
+        </div>
+    </div>
+
+    <!-- 3. MANUAL SEARCH BOX -->
+    <div class="search-box">
+        <input type="text" id="tickerInput" placeholder="KODE TICKER (Misal: BBCA.JK)" autocomplete="off">
+        <button id="scanBtn" onclick="startEngine()">JALANKAN ANALISA MENDALAM</button>
     </div>
     
+    <!-- TRACKING SYSTEM -->
     <div id="trackerBox" class="tracker-box">
-        <div id="trackerMain">> ESTABLISHING NEURAL LINK<span class="cursor-blink">_</span></div>
+        <div id="trackerMain" style="font-weight:bold;">> SYSTEM INITIALIZING...</div>
         <div id="trackerLog" class="tracker-log"></div>
     </div>
     
-    <div id="error" class="error"></div>
-    
+    <!-- 4. ANALISIS DETAIL -->
     <div id="resultBox" class="result-dashboard">
         <div class="header-dash">
             <h2 id="outTicker">$TICKER</h2>
-            <div style="font-size: 15px; color: var(--accent); font-weight: bold; letter-spacing: 2px; text-transform: uppercase; margin-top: 5px;" id="outStage">MOMENTUM STAGE: -</div>
-            <div style="margin-top: 20px;">
-                <span id="outStatus" class="badge">N/A</span>
-            </div>
+            <div style="font-size: 14px; color: var(--accent); font-weight: bold; margin-top: 8px;" id="outStage">MOMENTUM STAGE: -</div>
+            <div style="margin-top: 15px;"><span id="outStatus" class="badge">N/A</span></div>
         </div>
 
         <div class="grid-dash">
+            <!-- SKORING ALGORITMA -->
             <div class="card">
                 <div class="card-title">⚙️ ALGORITHMIC SCORING (100)</div>
-                <div style="text-align: center; margin-bottom: 25px;">
-                    <div style="font-size: 52px; font-weight: 800; color: #fff; font-family: 'JetBrains Mono', monospace; text-shadow: 0 0 20px rgba(255,255,255,0.3);" id="outTotalScore">0</div>
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="font-size: 48px; font-weight: 800; font-family: 'JetBrains Mono';" id="outTotalScore">0</div>
                     <div class="score-bar-bg"><div id="outScoreBar" class="score-bar-fill" style="width: 0%;"></div></div>
                 </div>
-                <div class="stat-row"><span>Likuiditas (10)</span><span class="stat-val" id="scLiq">0</span></div>
-                <div class="stat-row"><span>Trend Structure HH/HL (15)</span><span class="stat-val" id="scTrend">0</span></div>
-                <div class="stat-row"><span>Momentum (MACD, Stoch) (15)</span><span class="stat-val" id="scMom">0</span></div>
-                <div class="stat-row"><span>Volume Power (20)</span><span class="stat-val" id="scVol">0</span></div>
+                <div class="stat-row"><span>Likuiditas Transaksi (10)</span><span class="stat-val" id="scLiq">0</span></div>
+                <div class="stat-row"><span>Trend Structure (15)</span><span class="stat-val" id="scTrend">0</span></div>
+                <div class="stat-row"><span>Momentum (MACD/Stoch) (15)</span><span class="stat-val" id="scMom">0</span></div>
+                <div class="stat-row" style="color: #38bdf8;"><span>Volume Hari Ini vs Kemarin (20)</span><span class="stat-val" id="scVol">0</span></div>
                 <div class="stat-row"><span>S/R Confluence (20)</span><span class="stat-val" id="scSr">0</span></div>
                 <div class="stat-row"><span>Early Momentum MA5 (10)</span><span class="stat-val" id="scEarly">0</span></div>
                 <div class="stat-row"><span>Risk/Reward Ratio (10)</span><span class="stat-val" id="scRr">0</span></div>
             </div>
 
+            <!-- TRADING PLAN -->
             <div class="card">
                 <div class="card-title">🎯 TACTICAL TRADING PLAN</div>
-                <div class="stat-row"><span>Closing Price</span><span class="stat-val" style="color: var(--accent); font-size: 18px;" id="outPrice">0</span></div>
-                <div class="stat-row" style="margin-bottom: 15px;"><span>Arah Trend</span><span class="stat-val" id="outStruct">-</span></div>
+                <div class="stat-row"><span>Realtime Price</span><span class="stat-val" style="color: var(--accent); font-size: 16px;" id="outPrice">0</span></div>
+                <div class="stat-row"><span>Arah Trend Utama</span><span class="stat-val" id="outStruct">-</span></div>
                 
-                <div class="sr-box">
-                    <div class="sr-title">📌 AREA SUPPORT & RESISTANCE DETAIL</div>
-                    <div class="stat-row"><span>Classic (Swing High/Low)</span><span class="stat-val" id="outSrClassic">-</span></div>
-                    <div class="stat-row"><span>Dynamic (EMA 21, 34, 99)</span><span class="stat-val" id="outSrDynamic" style="font-size: 12px;">-</span></div>
-                    <div class="stat-row"><span>Harmonic (Fibo 0.382 - 0.618)</span><span class="stat-val" id="outSrFibo" style="font-size: 12px;">-</span></div>
-                </div>
-
-                <div class="sr-box" style="border-color: rgba(52, 211, 153, 0.4);">
-                    <div class="sr-title" style="color: #34d399;">⚡ ENTRY & EXIT TRIGGER</div>
-                    <div class="stat-row"><span>MACD Signal</span><span class="stat-val" id="outTriggerMacd">-</span></div>
-                    <div class="stat-row"><span>Stochastic (K/D)</span><span class="stat-val" id="outTriggerStoch">-</span></div>
-                    <div class="stat-row"><span>Vol Today vs Prev</span><span class="stat-val" id="outTriggerVol">-</span></div>
+                <div style="background: rgba(3,7,18,0.5); padding: 10px; border-radius: 8px; margin: 15px 0;">
+                    <div style="font-size: 11px; color: #94a3b8; margin-bottom: 5px;">⚡ INTRADAY VOLUME TRIGGER</div>
+                    <div class="stat-row" style="border:none; padding:0;"><span>Rasio Volume Terkini</span><span class="stat-val" id="outTriggerVol">-</span></div>
                 </div>
                 
-                <div class="zone-buy">
-                    <div class="stat-row" style="border: none; padding: 0;"><span>🛒 STRICT BUY ZONE</span><span class="stat-val" style="color: var(--buy); text-shadow: 0 0 8px var(--buy-glow);" id="outBuy">0 - 0</span></div>
+                <div style="background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); padding: 10px; border-radius: 8px; margin-bottom: 10px;">
+                    <div class="stat-row" style="border:none; padding:0;"><span>🛒 STRICT BUY ZONE</span><span class="stat-val" style="color: var(--buy);" id="outBuy">0 - 0</span></div>
                 </div>
                 
-                <div class="zone-sl">
-                    <div class="stat-row" style="border: none; padding: 0;"><span>⚠️ MAX CUT LOSS (CL 5%)</span><span class="stat-val" style="color: var(--skip); text-shadow: 0 0 8px var(--skip-glow);" id="outSl">0</span></div>
+                <div style="background: rgba(244,63,94,0.1); border: 1px solid rgba(244,63,94,0.3); padding: 10px; border-radius: 8px; margin-bottom: 15px;">
+                    <div class="stat-row" style="border:none; padding:0;"><span>⚠️ MAX CUT LOSS (5%)</span><span class="stat-val" style="color: var(--skip);" id="outSl">0</span></div>
                 </div>
                 
                 <div class="stat-row"><span>🎯 TP 1 (Scalp / Momentum)</span><span class="stat-val" id="outTp1">0</span></div>
                 <div class="stat-row"><span>🎯 TP 2 (Swing Target)</span><span class="stat-val" id="outTp2">0</span></div>
-                
-                <div class="catalyst-box" id="outCatalystBox">
-                    <strong style="color: var(--accent);">ALASAN ENTRY / PERISTIWA:</strong><br>
-                    <span id="outCatalystText" style="color: #cbd5e1;">-</span><br><br>
-                    <strong style="color: var(--accent);">FOREIGN FLOW:</strong> <span id="outForeignText" style="color: #cbd5e1;">-</span>
-                </div>
             </div>
         </div>
     </div>
 </div>
 
+<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 <script>
-    const GOOGLE_PROXY_URL = "https://script.google.com/macros/s/AKfycbxby_kAIn5x_n5CXpGlJqewBtmNbDaFyjBizjQAHm4FVIbFLjwf06C81KLKS2fJePP-/exec";
+    // ⚠️ GANTI STRING DI BAWAH INI DENGAN URL DEPLOYMENT APPS SCRIPT ANDA (VERSI 4.2)
+    const GOOGLE_PROXY_URL = "URL_GAS_ANDA_DISINI";
+    
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     const formatNumber = num => num < 10 ? num.toFixed(2) : Math.round(num).toLocaleString('id-ID');
-    
-    // Technical Indicator Calculations
+
+    // Robust Technical Indicator Calculations
     const calcSMA = (data, window) => {
-        if(!data || data.length < window) return data?.[data?.length-1] || 100;
-        let sum = 0; for(let i = data.length - window; i < data.length; i++) sum += data[i];
+        if(!data || data.length === 0) return 0;
+        if(data.length < window) window = data.length; // Fallback jika data kurang
+        let sum = 0; 
+        for(let i = data.length - window; i < data.length; i++) sum += data[i];
         return sum / window;
     };
 
     const calcEMAArray = (data, window) => {
-        if (!data || data.length < window) return Array(data?.length || 0).fill(0);
+        if (!data || data.length === 0) return [];
+        let emaArray = new Array(data.length).fill(data[0]); // Safe default
+        if (data.length < window) return emaArray; // Mengembalikan data flat jika histori kurang
+        
         let k = 2 / (window + 1);
-        let emaArray = new Array(data.length).fill(0);
         let sum = 0;
         for (let i = 0; i < window; i++) sum += data[i];
-        emaArray[window - 1] = sum / window; // initial SMA
+        emaArray[window - 1] = sum / window; 
         for (let i = window; i < data.length; i++) {
             emaArray[i] = (data[i] * k) + (emaArray[i - 1] * (1 - k));
         }
@@ -252,44 +270,23 @@
         let macdLine = [];
         for (let i = 0; i < closes.length; i++) macdLine.push(ema12[i] - ema26[i]);
         let signalLine = calcEMAArray(macdLine, 9);
-        return { 
-            macd: macdLine[macdLine.length - 1], 
-            signal: signalLine[signalLine.length - 1],
-            hist: macdLine[macdLine.length - 1] - signalLine[signalLine.length - 1]
-        };
+        return { hist: macdLine[macdLine.length - 1] - signalLine[signalLine.length - 1] || 0 };
     };
 
     const calcStoch = (highs, lows, closes) => {
         const period = 14;
+        if(closes.length < period) return { k: 50 }; // Safe fallback
         let highest = Math.max(...highs.slice(-period));
         let lowest = Math.min(...lows.slice(-period));
-        let kRaw = ((closes[closes.length - 1] - lowest) / (highest - lowest)) * 100;
-        // Simplified Stochastic smoothing for single latest value
-        let prevHighest = Math.max(...highs.slice(-period - 1, -1));
-        let prevLowest = Math.min(...lows.slice(-period - 1, -1));
-        let prevKRaw = ((closes[closes.length - 2] - prevLowest) / (prevHighest - prevLowest)) * 100;
-        let k = (kRaw + prevKRaw) / 2; // Rough smoothing %K
-        let d = k; // Simplified %D placeholder
-        return { k: k || 50, d: d || 50 };
-    };
-
-    const calcFibo = (highs, lows) => {
-        let maxH = Math.max(...highs.slice(-60));
-        let minL = Math.min(...lows.slice(-60));
-        let diff = maxH - minL;
-        return {
-            high: maxH, low: minL,
-            f382: maxH - 0.382 * diff,
-            f500: maxH - 0.500 * diff,
-            f618: maxH - 0.618 * diff
-        };
+        if (highest === lowest) return { k: 50 }; // Prevent division by zero
+        return { k: ((closes[closes.length - 1] - lowest) / (highest - lowest)) * 100 };
     };
 
     function extractValidData(quoteData) {
         if(!quoteData) return null;
         let closes = [], highs = [], lows = [], volumes = [];
         for(let i = 0; i < quoteData.close.length; i++) {
-            if(quoteData.close[i] !== null) {
+            if(quoteData.close[i] !== null && quoteData.volume[i] !== null) {
                 closes.push(quoteData.close[i]);
                 highs.push(quoteData.high[i]);
                 lows.push(quoteData.low[i]);
@@ -308,34 +305,110 @@
         } catch (e) { return null; }
     }
 
-    // Auto-load IHSG on start
+    // ON PAGE LOAD
     window.onload = async function() {
+        // 1. Render TradingView IHSG
+        new TradingView.widget({
+            "autosize": true,
+            "symbol": "IDX:COMPOSITE",
+            "interval": "D",
+            "timezone": "Asia/Jakarta",
+            "theme": "dark",
+            "style": "1",
+            "locale": "id",
+            "enable_publishing": false,
+            "hide_top_toolbar": true,
+            "hide_legend": true,
+            "save_image": false,
+            "container_id": "tv_chart_container"
+        });
+
+        // 2. Fetch IHSG Technical Weather
         try {
             const ihsgQuote = await fetchYahooData('^JKSE');
             if (ihsgQuote) {
                 const iData = extractValidData(ihsgQuote);
-                const ihsgClose = iData.closes[iData.closes.length - 1];
-                const ihsgMa20 = calcSMA(iData.closes, 20);
-                const isBullish = ihsgClose > ihsgMa20;
-                
-                document.getElementById('topIhsgLevel').innerText = formatNumber(ihsgClose);
-                let trendEl = document.getElementById('topIhsgTrend');
-                trendEl.innerText = isBullish ? 'BULLISH (Risk On)' : 'BEARISH (Risk Off)';
-                trendEl.style.color = isBullish ? '#34d399' : '#f43f5e';
-                
-                document.getElementById('topIhsgDesc').innerText = isBullish ? 
-                    "Market bergerak di atas MA20. Arus dana mengalir ke saham berkapitalisasi besar. Setup Buy & Breakout lebih probabel." : 
-                    "Market dalam fase koreksi di bawah MA20. Kurangi position sizing, terapkan Stop Loss ketat, cari saham dengan katalis mandiri.";
-            } else {
-                document.getElementById('topIhsgLevel').innerText = "DATA GAGAL DIMUAT";
+                if (iData && iData.closes.length > 0) {
+                    const ihsgClose = iData.closes[iData.closes.length - 1];
+                    const ihsgMa20 = calcSMA(iData.closes, 20);
+                    const isBullish = ihsgClose > ihsgMa20;
+                    
+                    document.getElementById('topIhsgLevel').innerText = formatNumber(ihsgClose);
+                    let trendEl = document.getElementById('topIhsgTrend');
+                    trendEl.innerText = isBullish ? 'BULLISH (>MA20)' : 'BEARISH (<MA20)';
+                    trendEl.style.color = isBullish ? '#34d399' : '#f43f5e';
+                    document.getElementById('topIhsgDesc').innerText = isBullish ? 
+                        "Market bergerak Uptrend. Setup breakout memiliki probabilitas sukses lebih tinggi hari ini." : 
+                        "Market sedang korektif. Gunakan money management ketat, fokus pada saham defensif.";
+                }
             }
-        } catch(e) {
-            document.getElementById('topIhsgLevel').innerText = "ERROR KONEKSI";
+        } catch(e) {}
+
+        // 3. Fetch Top 10 EOD Dari GAS Database
+        const grid = document.getElementById("top10Grid");
+        const badgeScan = document.getElementById("lastScanBadge");
+        
+        try {
+            const req = await fetch(`${GOOGLE_PROXY_URL}?action=getTop10`);
+            const top10Res = await req.json();
+
+            if(top10Res.status === 'success' && top10Res.data && top10Res.data.length > 0) {
+                badgeScan.innerText = `🔄 Last Update: ${top10Res.lastUpdate}`;
+                
+                // Hapus skeleton lama dan siapkan tempat
+                grid.innerHTML = top10Res.data.map((item, idx) => `
+                    <div class="radar-card skeleton" id="card-${idx}" style="min-height: 85px;"></div>
+                `).join('');
+
+                // Render per kartu & fetch live price
+                top10Res.data.forEach(async (item, idx) => {
+                    const cardEl = document.getElementById(`card-${idx}`);
+                    try {
+                        const quote = await fetchYahooData(item.ticker);
+                        const data = extractValidData(quote);
+                        if(!data || data.closes.length < 2) throw new Error("Data tidak lengkap");
+
+                        const curr = data.closes[data.closes.length - 1];
+                        const prev = data.closes[data.closes.length - 2];
+                        const changePct = ((curr - prev) / prev) * 100;
+                        
+                        let chgClass = changePct >= 0 ? "up" : "down";
+                        let chgSign = changePct >= 0 ? "+" : "";
+
+                        cardEl.classList.remove("skeleton");
+                        cardEl.setAttribute("onclick", `scanFromRadar('${item.ticker}')`);
+                        cardEl.innerHTML = `
+                            <div class="rc-head">
+                                <div class="rc-ticker">${item.ticker.replace('.JK', '')}</div>
+                                <div class="rc-score">🚀 Vol ${item.volRatio}x</div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 8px;">
+                                <div class="rc-price">Rp ${formatNumber(curr)}</div>
+                                <div class="rc-change ${chgClass}">${chgSign}${changePct.toFixed(2)}%</div>
+                            </div>
+                            <div class="rc-reason" style="margin-top: 4px;">EOD Target: ${item.setup || 'WATCH'}</div>
+                        `;
+                    } catch (e) {
+                        cardEl.classList.remove("skeleton");
+                        cardEl.innerHTML = `<div class="rc-ticker">${item.ticker.replace('.JK', '')}</div><div class="rc-reason" style="color:#f43f5e; margin-top:5px;">Data Live Error</div>`;
+                    }
+                });
+            } else {
+                badgeScan.innerText = `⚠️ Data Kosong`;
+                grid.innerHTML = `<div style="grid-column: 1 / -1; padding: 20px; text-align: center; border: 1px dashed #334155; border-radius: 12px; color: #94a3b8;">Belum ada hasil scan. Tunggu Engine Backend memproses Watchlist Anda.</div>`;
+            }
+        } catch(err) {
+            badgeScan.innerText = `❌ Error API`;
+            grid.innerHTML = `<div style="grid-column: 1 / -1; padding: 20px; text-align: center; border: 1px dashed #f43f5e; border-radius: 12px; color: #f43f5e;">Koneksi ke Apps Script gagal. Pastikan URL Proxy sudah benar.</div>`;
         }
     };
 
-    function updateLog(msg, isMain = false) {
-        if(isMain) document.getElementById("trackerMain").innerHTML = `> ${msg}<span class="cursor-blink">_</span>`;
+    function scanFromRadar(ticker) {
+        document.getElementById("tickerInput").value = ticker;
+        startEngine();
+    }
+
+    function updateLog(msg) {
         let logDiv = document.getElementById("trackerLog");
         logDiv.innerHTML += `<div>[${new Date().toLocaleTimeString('id-ID')}] ${msg}</div>`;
         logDiv.scrollTop = logDiv.scrollHeight;
@@ -343,35 +416,37 @@
 
     async function startEngine() {
         let ticker = document.getElementById("tickerInput").value.trim().toUpperCase();
-        let catalyst = document.getElementById("catalystInput").value.trim() || "Berdasarkan teknikal & momentum volume.";
-        let foreignFlow = document.getElementById("foreignInput").value.trim() || "Tidak tercatat/Tidak Diinput.";
-        
         if (!ticker) return;
-        if (!ticker.includes('.')) {
-            // Asumsi saham Indo jika tidak ada .JK atau suffix lain
-            ticker += ".JK"; 
-        }
+        if (!ticker.includes('.')) ticker += ".JK"; 
 
-        document.getElementById("scanBtn").disabled = true;
-        document.getElementById("scanBtn").innerText = "ANALYZING TAPE...";
+        const btn = document.getElementById("scanBtn");
+        btn.disabled = true;
+        btn.innerText = "MENGANALISA...";
+        
         document.getElementById("resultBox").style.display = "none";
-        document.getElementById("error").style.display = "none";
         document.getElementById("trackerBox").style.display = "block";
         document.getElementById("trackerLog").innerHTML = "";
         
         try {
-            updateLog(`Melakukan pemindaian algoritma pada $${ticker}...`, true);
-            await sleep(300);
+            updateLog(`Memindai $${ticker} secara mendalam...`);
+            document.getElementById("trackerBox").scrollIntoView({ behavior: 'smooth', block: 'center' });
 
             const stockQuote = await fetchYahooData(ticker);
-            if (!stockQuote) throw new Error(`Gagal mengambil data ${ticker}. Pastikan kode ticker valid (Saham Indo gunakan akhiran .JK).`);
+            if (!stockQuote) throw new Error(`Gagal memuat data histori untuk ${ticker}. Pastikan kode ticker benar.`);
             
-            updateLog("Menghitung indikator Moving Averages (MA5, MA20) & EMA (21, 34, 99)...");
             const stockData = extractValidData(stockQuote);
+            if (!stockData || stockData.closes.length < 2) throw new Error("Data histori tidak cukup untuk analisa teknikal.");
+
             const currClose = stockData.closes[stockData.closes.length - 1];
-            const prevClose = stockData.closes[stockData.closes.length - 2];
+            
+            // VOLUME HARI INI vs KEMARIN (Hindari Infinity/Divide by Zero)
             const currVol = stockData.volumes[stockData.volumes.length - 1];
             const prevVol = stockData.volumes[stockData.volumes.length - 2];
+            const txValM = (currClose * currVol) / 1e9;
+            
+            let volRatio = 0;
+            if (prevVol > 0) volRatio = currVol / prevVol; 
+            else if (currVol > 0) volRatio = 5; // Default spike jika kemarin suspend (0)
             
             const ma5 = calcSMA(stockData.closes, 5);
             const ma20 = calcSMA(stockData.closes, 20);
@@ -379,55 +454,45 @@
             const ema21Arr = calcEMAArray(stockData.closes, 21);
             const ema34Arr = calcEMAArray(stockData.closes, 34);
             const ema99Arr = calcEMAArray(stockData.closes, 99);
-            const ema21 = ema21Arr[ema21Arr.length - 1];
-            const ema34 = ema34Arr[ema34Arr.length - 1];
-            const ema99 = ema99Arr[ema99Arr.length - 1];
-
-            updateLog("Menarik garis Fibo & Struktur High/Low (Arah Trend)...");
-            const fibo = calcFibo(stockData.highs, stockData.lows);
-            const volMa20 = calcSMA(stockData.volumes, 20);
-            const txValM = (currClose * currVol) / 1e9;
             
-            updateLog("Kalkulasi momentum MACD & Stochastic...");
+            // Safe Array Accessor
+            const ema21 = ema21Arr.length > 0 ? ema21Arr[ema21Arr.length - 1] : currClose;
+            const ema34 = ema34Arr.length > 0 ? ema34Arr[ema34Arr.length - 1] : currClose;
+            const ema99 = ema99Arr.length > 0 ? ema99Arr[ema99Arr.length - 1] : currClose;
+
             const macdData = calcMACD(stockData.closes);
             const stochData = calcStoch(stockData.highs, stockData.lows, stockData.closes);
             
-            // Tentukan Struktur Trend (HH/HL)
-            let trendStr = "SIDEWAYS (Konsolidasi)";
-            if (currClose > ema34 && ema34 > ema99) {
-                trendStr = "📈 UPTREND (Higher High, Higher Low)";
-            } else if (currClose < ema34 && ema34 < ema99) {
-                trendStr = "📉 DOWNTREND (Lower High, Lower Low)";
-            }
+            let trendStr = "SIDEWAYS";
+            if (currClose > ema34 && ema34 > ema99) trendStr = "📈 UPTREND";
+            else if (currClose < ema34 && ema34 < ema99) trendStr = "📉 DOWNTREND";
 
-            // Scoring Logic Baru (Total 100)
-            let sLiq = txValM >= 10 ? 10 : (txValM >= 2 ? 5 : 0);
-            
+            // SKORING LOGIC
+            let sLiq = txValM >= 5 ? 10 : (txValM >= 1 ? 5 : 0);
             let sTrend = 0;
             if (currClose > ema21) sTrend += 7;
             if (ema21 > ema34) sTrend += 8;
             
             let sMom = 0;
-            if (macdData.hist > 0) sMom += 8; // MACD Bullish
-            if (stochData.k > 20 && stochData.k < 80) sMom += 7; // Ruang gerak stoch
+            if (macdData.hist > 0) sMom += 8; 
+            if (stochData.k > 20 && stochData.k < 80) sMom += 7; 
             
             let sVol = 0;
-            if (currVol > prevVol) sVol += 10;
-            if (currVol > volMa20 * 1.2) sVol += 10;
+            if (volRatio >= 0.2) sVol += 10; 
+            if (volRatio >= 0.5) sVol += 5; 
+            if (volRatio >= 1.0) sVol += 5; 
             
-            let sSr = 0; // Confluence dekat support
-            if (Math.abs(currClose - ema21)/currClose < 0.05) sSr += 10;
-            if (Math.abs(currClose - fibo.f500)/currClose < 0.05 || Math.abs(currClose - fibo.f618)/currClose < 0.05) sSr += 10;
+            let sSr = 0; 
+            if (Math.abs(currClose - ema21)/currClose < 0.05) sSr += 20; 
             
             let sEarly = ma5 > ma20 ? 10 : 0;
             
-            // Trading Plan Setup
-            let isBreakout = currClose >= fibo.high * 0.98 && currVol > volMa20 * 1.5;
+            let isBreakout = volRatio >= 0.2 && currClose > ema21;
             let buyZoneLow = isBreakout ? currClose * 0.98 : Math.max(ema21, currClose * 0.95);
             let buyZoneHigh = isBreakout ? currClose * 1.01 : currClose;
             if(buyZoneLow > buyZoneHigh) buyZoneLow = buyZoneHigh * 0.98;
             
-            let clLevel = buyZoneLow * 0.95; // Max 5% CL
+            let clLevel = buyZoneLow * 0.95; 
             let tp1 = buyZoneHigh * 1.05; 
             let tp2 = buyZoneHigh * 1.10;
             
@@ -436,38 +501,34 @@
             let rrRatio = reward / risk;
             let sRr = rrRatio >= 1.5 ? 10 : 4;
             
-            let totalScore = Math.min(100, sLiq + sTrend + sMom + sVol + sSr + sEarly + sRr);
+            // Clean Score
+            let totalScore = Math.floor(Math.min(100, Math.max(0, sLiq + sTrend + sMom + sVol + sSr + sEarly + sRr)));
+            if(isNaN(totalScore)) totalScore = 0;
+            
             let finalStatus = (totalScore >= 75 && currClose > ema34) ? "BUY" : (totalScore >= 65 ? "WAIT" : "SKIP");
 
-            updateLog("Kompilasi selesai. Menampilkan Tactical Trading Plan.", true);
-            await sleep(200);
+            updateLog("Selesai mengkalkulasi Algoritma. Render UI Output...");
+            await sleep(400);
 
-            // Render UI
+            // RENDER UI HASIL
             document.getElementById("trackerBox").style.display = "none";
-            document.getElementById("scanBtn").disabled = false;
-            document.getElementById("scanBtn").innerText = "SYNCHRONIZE & SCAN";
+            btn.disabled = false;
+            btn.innerText = "JALANKAN ANALISA MENDALAM";
             document.getElementById("resultBox").style.display = "block";
 
             document.getElementById("outTicker").innerText = `$${ticker}`;
-            document.getElementById("outStage").innerText = isBreakout ? "STAGE: BREAKOUT / MARKUP" : (currClose > ema21 ? "STAGE: UPTREND PULLBACK" : "STAGE: DOWNTREND / BOTTOMING");
+            document.getElementById("outStage").innerText = isBreakout ? "STAGE: INTRADAY BREAKOUT" : "STAGE: ACCUMULATION / PULLBACK";
             
             let stBadge = document.getElementById("outStatus");
             stBadge.innerText = finalStatus;
             stBadge.className = "badge " + (finalStatus === "BUY" ? "b-BUY" : (finalStatus === "WAIT" ? "b-WAIT" : "b-SKIP"));
 
             let outTotalScore = document.getElementById("outTotalScore");
-            let barFill = document.getElementById("outScoreBar");
             outTotalScore.innerText = totalScore;
-            
             let color = totalScore >= 75 ? 'var(--buy)' : (totalScore >= 65 ? 'var(--wait)' : 'var(--skip)');
             outTotalScore.style.color = color;
-            outTotalScore.style.textShadow = `0 0 15px ${color}`;
-            
-            setTimeout(() => {
-                barFill.style.width = `${totalScore}%`;
-                barFill.style.background = color;
-                barFill.style.boxShadow = `0 0 15px ${color}`;
-            }, 100);
+            document.getElementById("outScoreBar").style.width = `${totalScore}%`;
+            document.getElementById("outScoreBar").style.background = color;
             
             document.getElementById("scLiq").innerText = sLiq;
             document.getElementById("scTrend").innerText = sTrend;
@@ -480,37 +541,27 @@
             document.getElementById("outPrice").innerText = formatNumber(currClose);
             document.getElementById("outStruct").innerText = trendStr;
             
-            // Support Resistance Text
-            document.getElementById("outSrClassic").innerText = `R: ${formatNumber(fibo.high)} | S: ${formatNumber(fibo.low)}`;
-            document.getElementById("outSrDynamic").innerText = `EMA21: ${formatNumber(ema21)} | EMA34: ${formatNumber(ema34)} | EMA99: ${formatNumber(ema99)}`;
-            document.getElementById("outSrFibo").innerText = `0.382: ${formatNumber(fibo.f382)} | 0.5: ${formatNumber(fibo.f500)} | 0.618: ${formatNumber(fibo.f618)}`;
-
-            // Triggers Text
-            document.getElementById("outTriggerMacd").innerText = macdData.hist > 0 ? 'BULLISH (Hist > 0)' : 'BEARISH (Hist < 0)';
-            document.getElementById("outTriggerMacd").style.color = macdData.hist > 0 ? 'var(--buy)' : 'var(--skip)';
-            document.getElementById("outTriggerStoch").innerText = `${stochData.k.toFixed(1)} %K`;
-            
-            let volRatioStr = (currVol / volMa20).toFixed(1);
-            document.getElementById("outTriggerVol").innerText = currVol > prevVol ? `Spike! (${volRatioStr}x MA20)` : `Sepi (${volRatioStr}x MA20)`;
+            let volTrigEl = document.getElementById("outTriggerVol");
+            if (volRatio >= 0.2) {
+                volTrigEl.innerText = `🔥 INTRADAY SPIKE (${volRatio.toFixed(2)}x Vol Kemarin)`;
+                volTrigEl.style.color = 'var(--buy)';
+            } else {
+                volTrigEl.innerText = `😴 KONSOLIDASI (${volRatio.toFixed(2)}x Vol Kemarin)`;
+                volTrigEl.style.color = 'var(--wait)';
+            }
 
             document.getElementById("outBuy").innerText = `${formatNumber(buyZoneLow)} - ${formatNumber(buyZoneHigh)}`;
             document.getElementById("outSl").innerText = formatNumber(clLevel);
             document.getElementById("outTp1").innerText = formatNumber(tp1);
             document.getElementById("outTp2").innerText = formatNumber(tp2);
 
-            document.getElementById("outCatalystText").innerText = catalyst;
-            document.getElementById("outForeignText").innerText = foreignFlow;
-
-            // Auto-scroll ke hasil
-            document.getElementById("resultBox").scrollIntoView({ behavior: 'smooth' });
+            document.getElementById("resultBox").scrollIntoView({ behavior: 'smooth', block: 'start' });
 
         } catch (error) {
             document.getElementById("trackerBox").style.display = "none";
-            document.getElementById("scanBtn").disabled = false;
-            document.getElementById("scanBtn").innerText = "SYNCHRONIZE & SCAN";
-            let err = document.getElementById("error");
-            err.innerHTML = `[SYSTEM FAILURE] ${error.message}`;
-            err.style.display = "block";
+            btn.disabled = false;
+            btn.innerText = "JALANKAN ANALISA MENDALAM";
+            alert("Terjadi Kesalahan: " + error.message);
         }
     }
 </script>
