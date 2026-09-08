@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GACOR HUNTER V4.2 - Active Momentum Dashboard</title>
+    <title>GACOR HUNTER V5.0 - Structured Trading Engine</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
 
@@ -129,8 +129,8 @@
 <body>
 
 <div class="container">
-    <h1>GACOR HUNTER V4.2</h1>
-    <p class="subtitle">ACTIVE MOMENTUM & EOD DASHBOARD</p>
+    <h1>GACOR HUNTER V5.0</h1>
+    <p class="subtitle">STRUCTURE • EMA • MACD • FIBO • S&R • RISK/REWARD</p>
     
     <!-- 1. LIVE IHSG DASHBOARD -->
     <div class="ihsg-container">
@@ -189,41 +189,56 @@
         </div>
 
         <div class="grid-dash">
-            <!-- SKORING ALGORITMA V4.2 -->
+            <!-- SCORING V5.0 -->
             <div class="card">
-                <div class="card-title">⚙️ ALGORITHMIC SCORING V4.2 (100)</div>
-                <div style="text-align: center; margin-bottom: 20px;">
-                    <div style="font-size: 48px; font-weight: 800; font-family: 'JetBrains Mono';" id="outTotalScore">0</div>
-                    <div class="score-bar-bg"><div id="outScoreBar" class="score-bar-fill" style="width: 0%;"></div></div>
+                <div class="card-title">⚙️ STRUCTURED SCORING V5.0 (100)</div>
+                <div style="text-align:center;margin-bottom:20px;">
+                    <div style="font-size:48px;font-weight:800;font-family:'JetBrains Mono';" id="outTotalScore">0</div>
+                    <div class="score-bar-bg"><div id="outScoreBar" class="score-bar-fill" style="width:0%"></div></div>
                 </div>
-                <div class="stat-row"><span>Likuiditas (Avg Val 20D) (15)</span><span class="stat-val" id="scLiq">0</span></div>
-                <div class="stat-row"><span>Momentum (RSI & Ret) (20)</span><span class="stat-val" id="scMom">0</span></div>
-                <div class="stat-row"><span>Trend Structure (MA) (25)</span><span class="stat-val" id="scTrend">0</span></div>
-                <div class="stat-row" style="color: #34d399;"><span>Volume Ratio (20)</span><span class="stat-val" id="scVol">0</span></div>
-                <div class="stat-row"><span>Setup Quality (20)</span><span class="stat-val" id="scSetup">0</span></div>
+                <div class="stat-row"><span>Structure HH/HL/LH/LL (20)</span><span class="stat-val" id="scStructure">0</span></div>
+                <div class="stat-row"><span>EMA 5 / 21 + Trend (15)</span><span class="stat-val" id="scEma">0</span></div>
+                <div class="stat-row"><span>MACD Momentum (10)</span><span class="stat-val" id="scMacd">0</span></div>
+                <div class="stat-row"><span>Fibonacci / Harmonic S&R (10)</span><span class="stat-val" id="scFibo">0</span></div>
+                <div class="stat-row"><span>Classic S&R (10)</span><span class="stat-val" id="scClassic">0</span></div>
+                <div class="stat-row"><span>Dynamic S&R EMA 21/34/99 (10)</span><span class="stat-val" id="scDynamic">0</span></div>
+                <div class="stat-row"><span>Momentum + Volume (15)</span><span class="stat-val" id="scMomentum">0</span></div>
+                <div class="stat-row"><span>Setup + Risk/Reward (10)</span><span class="stat-val" id="scSetup">0</span></div>
             </div>
 
-            <!-- TRADING PLAN -->
+            <!-- LOGICAL TRADING PLAN -->
             <div class="card">
-                <div class="card-title">🎯 TACTICAL TRADING PLAN</div>
-                <div class="stat-row"><span>Realtime Price</span><span class="stat-val" style="color: var(--accent); font-size: 16px;" id="outPrice">0</span></div>
-                <div class="stat-row"><span>Setup Detected</span><span class="stat-val" id="outStruct">-</span></div>
-                
-                <div style="background: rgba(3,7,18,0.5); padding: 10px; border-radius: 8px; margin: 15px 0;">
-                    <div style="font-size: 11px; color: #94a3b8; margin-bottom: 5px;">⚡ INTRADAY VOLUME TRIGGER</div>
-                    <div class="stat-row" style="border:none; padding:0;"><span>Rasio Volume Terkini</span><span class="stat-val" id="outTriggerVol">-</span></div>
+                <div class="card-title">🎯 LOGICAL TRADING PLAN</div>
+                <div class="stat-row"><span>Realtime Price</span><span class="stat-val" style="color:var(--accent);font-size:16px;" id="outPrice">0</span></div>
+                <div class="stat-row"><span>Arah Dominan</span><span class="stat-val" id="outDirection">-</span></div>
+                <div class="stat-row"><span>Struktur Swing</span><span class="stat-val" id="outStruct">-</span></div>
+                <div class="stat-row"><span>EMA 5 / EMA 21</span><span class="stat-val" id="outEma">-</span></div>
+                <div class="stat-row"><span>MACD</span><span class="stat-val" id="outMacd">-</span></div>
+                <div class="stat-row"><span>Golden / Death Cross</span><span class="stat-val" id="outCross">-</span></div>
+
+                <div style="background:rgba(3,7,18,.5);padding:10px;border-radius:8px;margin:15px 0;">
+                    <div style="font-size:11px;color:#94a3b8;margin-bottom:5px;">📍 SUPPORT / RESISTANCE MAP</div>
+                    <div class="stat-row" style="border:none;padding:3px 0;"><span>Classic Support</span><span class="stat-val" id="outClassicS">-</span></div>
+                    <div class="stat-row" style="border:none;padding:3px 0;"><span>Classic Resistance</span><span class="stat-val" id="outClassicR">-</span></div>
+                    <div class="stat-row" style="border:none;padding:3px 0;"><span>Dynamic Support</span><span class="stat-val" id="outDynamicS">-</span></div>
+                    <div class="stat-row" style="border:none;padding:3px 0;"><span>Dynamic Resistance</span><span class="stat-val" id="outDynamicR">-</span></div>
+                    <div class="stat-row" style="border:none;padding:3px 0;"><span>Fibo Support / Resistance</span><span class="stat-val" id="outFibo">-</span></div>
                 </div>
-                
-                <div style="background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); padding: 10px; border-radius: 8px; margin-bottom: 10px;">
-                    <div class="stat-row" style="border:none; padding:0;"><span>🛒 STRICT BUY ZONE</span><span class="stat-val" style="color: var(--buy);" id="outBuy">0 - 0</span></div>
+
+                <div style="background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);padding:10px;border-radius:8px;margin-bottom:10px;">
+                    <div class="stat-row" style="border:none;padding:0;"><span>🛒 STRICT ENTRY ZONE</span><span class="stat-val" style="color:var(--buy)" id="outBuy">-</span></div>
+                    <div style="font-size:10px;color:#94a3b8;margin-top:6px;" id="outEntryLogic">-</div>
                 </div>
-                
-                <div style="background: rgba(244,63,94,0.1); border: 1px solid rgba(244,63,94,0.3); padding: 10px; border-radius: 8px; margin-bottom: 15px;">
-                    <div class="stat-row" style="border:none; padding:0;"><span>⚠️ MAX CUT LOSS</span><span class="stat-val" style="color: var(--skip);" id="outSl">0</span></div>
+                <div style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);padding:10px;border-radius:8px;margin-bottom:10px;">
+                    <div class="stat-row" style="border:none;padding:0;"><span>⚡ ENTRY TRIGGER</span><span class="stat-val" id="outEntryTrigger">-</span></div>
                 </div>
-                
-                <div class="stat-row"><span>🎯 TP 1 (Scalp / Momentum)</span><span class="stat-val" id="outTp1">0</span></div>
-                <div class="stat-row"><span>🎯 TP 2 (Swing Target)</span><span class="stat-val" id="outTp2">0</span></div>
+                <div style="background:rgba(244,63,94,.1);border:1px solid rgba(244,63,94,.3);padding:10px;border-radius:8px;margin-bottom:15px;">
+                    <div class="stat-row" style="border:none;padding:0;"><span>🛑 INVALIDATION / CUT LOSS</span><span class="stat-val" style="color:var(--skip)" id="outSl">-</span></div>
+                </div>
+                <div class="stat-row"><span>🎯 TP 1</span><span class="stat-val" id="outTp1">-</span></div>
+                <div class="stat-row"><span>🎯 TP 2</span><span class="stat-val" id="outTp2">-</span></div>
+                <div class="stat-row"><span>📐 Risk / Reward</span><span class="stat-val" id="outRR">-</span></div>
+                <div class="stat-row"><span>🧭 Exit Trigger</span><span class="stat-val" id="outExitTrigger">-</span></div>
             </div>
         </div>
     </div>
@@ -237,54 +252,115 @@
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     const formatNumber = num => num < 10 ? num.toFixed(2) : Math.round(num).toLocaleString('id-ID');
 
-    // Technical Indicator Calculations V4.2
-    const average = arr => arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0;
+    // Technical Indicator Calculations V5.0
+    const average = arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0;
     const highest = arr => arr.length ? Math.max(...arr) : 0;
     const lowest = arr => arr.length ? Math.min(...arr) : 0;
-    const calcSMA = (arr, period) => arr.length >= period ? average(arr.slice(-period)) : (arr[arr.length-1] || 0);
-    
-    const calcRSI = (closes, period) => {
-        if (!closes || closes.length <= period) return 50;
-        let gains = 0, losses = 0;
-        for (let i = 1; i <= period; i++) {
-            let diff = closes[i] - closes[i - 1];
-            if (diff > 0) gains += diff;
-            else losses += Math.abs(diff);
-        }
-        let avgGain = gains / period;
-        let avgLoss = losses / period;
-        for (let i = period + 1; i < closes.length; i++) {
-            let diff = closes[i] - closes[i - 1];
-            avgGain = (avgGain * (period - 1) + (diff > 0 ? diff : 0)) / period;
-            avgLoss = (avgLoss * (period - 1) + (diff < 0 ? Math.abs(diff) : 0)) / period;
-        }
-        if (avgLoss === 0) return 100;
-        return 100 - (100 / (1 + (avgGain / avgLoss)));
-    };
+    const calcSMA = (arr,p) => arr.length>=p ? average(arr.slice(-p)) : (arr[arr.length-1]||0);
 
-    function extractValidData(quoteData) {
-        if(!quoteData) return null;
-        let closes = [], highs = [], lows = [], volumes = [];
-        for(let i = 0; i < quoteData.close.length; i++) {
-            if(quoteData.close[i] !== null) {
-                closes.push(quoteData.close[i]);
-                highs.push(quoteData.high[i]);
-                lows.push(quoteData.low[i]);
-                volumes.push(quoteData.volume[i]);
+    const calcEMA = (arr, period) => {
+        if(!arr?.length) return 0;
+        const k=2/(period+1); let ema=arr[0];
+        for(let i=1;i<arr.length;i++) ema=arr[i]*k+ema*(1-k);
+        return ema;
+    };
+    const emaSeries = (arr, period) => {
+        if(!arr?.length) return [];
+        const out=[arr[0]], k=2/(period+1);
+        for(let i=1;i<arr.length;i++) out[i]=arr[i]*k+out[i-1]*(1-k);
+        return out;
+    };
+    const calcRSI = (closes, period) => {
+        if(!closes || closes.length<=period) return 50;
+        let gains=0,losses=0;
+        for(let i=1;i<=period;i++){const d=closes[i]-closes[i-1];if(d>0)gains+=d;else losses+=Math.abs(d);}
+        let avgGain=gains/period, avgLoss=losses/period;
+        for(let i=period+1;i<closes.length;i++){
+            const d=closes[i]-closes[i-1];
+            avgGain=(avgGain*(period-1)+(d>0?d:0))/period;
+            avgLoss=(avgLoss*(period-1)+(d<0?Math.abs(d):0))/period;
+        }
+        if(avgLoss===0)return 100;
+        return 100-(100/(1+avgGain/avgLoss));
+    };
+    const calcMACD = closes => {
+        const e12=emaSeries(closes,12),e26=emaSeries(closes,26);
+        const macd=closes.map((_,i)=>e12[i]-e26[i]),signal=emaSeries(macd,9);
+        return {macd,signal,hist:macd.map((v,i)=>v-signal[i])};
+    };
+    function extractValidData(q){
+        if(!q)return null;
+        const closes=[],highs=[],lows=[],volumes=[];
+        for(let i=0;i<q.close.length;i++){
+            if(q.close[i]!=null&&q.high[i]!=null&&q.low[i]!=null){
+                closes.push(Number(q.close[i]));highs.push(Number(q.high[i]));lows.push(Number(q.low[i]));volumes.push(Number(q.volume[i]||0));
             }
         }
-        return { closes, highs, lows, volumes };
+        return {closes,highs,lows,volumes};
     }
-
-    async function fetchYahooData(ticker) {
-        try {
-            const res = await fetch(`${GOOGLE_PROXY_URL}?ticker=${encodeURIComponent(ticker)}`);
-            if (!res.ok) return null;
-            const data = await res.json();
-            return data?.chart?.result?.[0]?.indicators?.quote?.[0] || null;
-        } catch (e) { return null; }
+    async function fetchYahooData(ticker){
+        try{const res=await fetch(`${GOOGLE_PROXY_URL}?ticker=${encodeURIComponent(ticker)}`);if(!res.ok)return null;
+            const data=await res.json();return data?.chart?.result?.[0]?.indicators?.quote?.[0]||null;
+        }catch(e){return null;}
     }
-
+    function getPivots(highs,lows,lookback=2){
+        const highPivots=[],lowPivots=[];
+        for(let i=lookback;i<highs.length-lookback;i++){
+            let hi=true,lo=true;
+            for(let j=1;j<=lookback;j++){
+                if(!(highs[i]>highs[i-j]&&highs[i]>=highs[i+j]))hi=false;
+                if(!(lows[i]<lows[i-j]&&lows[i]<=lows[i+j]))lo=false;
+            }
+            if(hi)highPivots.push({index:i,price:highs[i]});
+            if(lo)lowPivots.push({index:i,price:lows[i]});
+        }
+        return {highPivots,lowPivots};
+    }
+    function nearestBelow(values,price){const x=values.filter(v=>Number.isFinite(v)&&v<price);return x.length?Math.max(...x):0;}
+    function nearestAbove(values,price){const x=values.filter(v=>Number.isFinite(v)&&v>price);return x.length?Math.min(...x):0;}
+    function fmtRange(a,b){if(!a||!b)return "-";return `${formatNumber(Math.min(a,b))} - ${formatNumber(Math.max(a,b))}`;}
+    function buildStructure(p){
+        const hs=p.highPivots.slice(-3),ls=p.lowPivots.slice(-3);
+        if(hs.length<2||ls.length<2)return {label:"UNDEFINED",bullish:false,bearish:false};
+        const lh=hs.at(-1).price,ph=hs.at(-2).price,ll=ls.at(-1).price,pl=ls.at(-2).price;
+        if(lh>ph&&ll>pl)return {label:"HH + HL (UPTREND)",bullish:true,bearish:false};
+        if(lh<ph&&ll<pl)return {label:"LH + LL (DOWNTREND)",bullish:false,bearish:true};
+        if(lh>ph&&ll<pl)return {label:"EXPANSION / MIXED",bullish:false,bearish:false};
+        return {label:"RANGE / TRANSITION",bullish:false,bearish:false};
+    }
+    function fibMap(swingLow,swingHigh,bullish){
+        if(!(swingHigh>swingLow))return null;
+        const r=swingHigh-swingLow;
+        if(bullish)return {0:swingHigh,.236:swingHigh-r*.236,.382:swingHigh-r*.382,.5:swingHigh-r*.5,.618:swingHigh-r*.618,.786:swingHigh-r*.786,1:swingLow};
+        return {0:swingLow,.236:swingLow+r*.236,.382:swingLow+r*.382,.5:swingLow+r*.5,.618:swingLow+r*.618,.786:swingLow+r*.786,1:swingHigh};
+    }
+    function buildPlan(price,direction,setup,supports,resistances,atr){
+        const S=supports.filter(x=>x>0&&x<price).sort((a,b)=>b-a)[0]||price-atr;
+        const R=resistances.filter(x=>x>price).sort((a,b)=>a-b)[0]||price+Math.max(atr*2,price*.04);
+        let entryLow=0,entryHigh=0,stop=0,tp1=0,tp2=0,trigger="",logic="";
+        if(direction==="BEARISH"){
+            trigger="NO LONG ENTRY — tunggu reclaim EMA21 + HL baru";
+            logic="Struktur bearish (LH/LL). Engine tidak memaksakan posisi BUY.";
+        }else if(setup==="BREAKOUT"){
+            const breakoutR = resistances.filter(x=>x>0).sort((a,b)=>b-a).find(x=>Math.abs(x-price)/price<.03)||R;
+            entryLow=breakoutR*.995;entryHigh=breakoutR*1.005;
+            stop=Math.min(breakoutR-Math.max(atr*.7,price*.015),S-atr*.25);
+            tp1=R>entryHigh?R:entryHigh+Math.max(atr*2,price*.04);
+            tp2=tp1+Math.max(atr*1.5,price*.03);
+            trigger=`Close > ${formatNumber(breakoutR)} + volume ≥ 1.5x, lalu retest bertahan`;
+            logic=`Entry hanya di area retest level breakout ${formatNumber(breakoutR)}; tidak mengejar harga.`;
+        }else{
+            entryLow=Math.max(S*.995,S+atr*.15);entryHigh=Math.min(S*1.01,price);
+            if(entryLow>entryHigh){entryLow=Math.max(S*.995,price*.985);entryHigh=price;}
+            stop=S-Math.max(atr*.7,price*.015);
+            tp1=R>entryHigh?R:entryHigh+Math.max(atr*2,price*.04);
+            tp2=tp1+Math.max(atr*1.5,price*.03);
+            trigger=`Pantulan ${formatNumber(S)} + candle bullish + close kembali di atas EMA21`;
+            logic=`Entry ditempatkan dekat support terdekat (${formatNumber(S)}), bukan range arbitrer yang menjauh dari harga.`;
+        }
+        const mid=entryLow&&entryHigh?(entryLow+entryHigh)/2:0, rr=mid&&stop&&tp1>mid?(tp1-mid)/(mid-stop):0;
+        return {entryLow,entryHigh,stop,tp1,tp2,rr,trigger,logic};
+    }
     // ON PAGE LOAD
     window.onload = async function() {
         // 1. Render TradingView IHSG
@@ -417,107 +493,76 @@
 
             if (closes.length < 120) throw new Error("Data historis tidak mencukupi (minimal 120 hari).");
 
-            // PRICE & RETURN
-            const currClose = closes[lastIndex];
-            const prevClose = closes[lastIndex - 1];
-            const return1d = prevClose > 0 ? ((currClose - prevClose) / prevClose) * 100 : 0;
-            const close5d = closes.length >= 6 ? closes[closes.length - 6] : null;
-            const return5d = close5d > 0 ? ((currClose - close5d) / close5d) * 100 : 0;
+            // PRICE / EMA / MACD
+            const currClose=closes.at(-1), prevClose=closes.at(-2);
+            const return1d=prevClose?((currClose-prevClose)/prevClose)*100:0;
+            const close5d=closes.at(-6), return5d=close5d?((currClose-close5d)/close5d)*100:0;
+            const e5=emaSeries(closes,5),e21=emaSeries(closes,21),e34=emaSeries(closes,34),e99=emaSeries(closes,99);
+            const ema5=e5.at(-1),ema21=e21.at(-1),ema34=e34.at(-1),ema99=e99.at(-1);
+            const macd=calcMACD(closes),macdLine=macd.macd.at(-1),signalLine=macd.signal.at(-1),macdHist=macd.hist.at(-1);
+            const prevE5=e5.at(-2),prevE21=e21.at(-2);
+            const goldenCross=prevE5<=prevE21&&ema5>ema21, deathCross=prevE5>=prevE21&&ema5<ema21;
+            const rsi=calcRSI(closes,14);
 
-            // MOVING AVERAGES & RSI
-            const ma5 = calcSMA(closes, 5);
-            const ma10 = calcSMA(closes, 10);
-            const ma20 = calcSMA(closes, 20);
-            const ma21 = calcSMA(closes, 21);
-            const ma34 = calcSMA(closes, 34);
-            const ma99 = calcSMA(closes, 99);
-            const rsi = calcRSI(closes, 14);
+            // Volume / liquidity
+            const currVol=volumes.at(-1),avgVol20=average(volumes.slice(-21,-1)),volRatio=avgVol20?currVol/avgVol20:0;
+            const avgVal20=average(closes.slice(-21,-1).map((v,i)=>v*(volumes.at(-21+i)||0)));
 
-            // VOLUME RATIO
-            const currVol = volumes[lastIndex];
-            const prev20Vols = volumes.slice(Math.max(0, lastIndex - 20), lastIndex);
-            const avgVol20 = average(prev20Vols);
-            const volRatio = avgVol20 > 0 ? currVol / avgVol20 : 0;
+            // ATR
+            const trs=[]; for(let i=Math.max(1,closes.length-20);i<closes.length;i++)
+                trs.push(Math.max(highs[i]-lows[i],Math.abs(highs[i]-closes[i-1]),Math.abs(lows[i]-closes[i-1])));
+            const atr=average(trs)||currClose*.02;
 
-            // VALUE / LIQUIDITY (20 Days)
-            let valSeries = [];
-            for (let i = Math.max(0, closes.length - 21); i < lastIndex; i++) {
-                valSeries.push(closes[i] * volumes[i]);
-            }
-            const avgVal20 = average(valSeries);
+            // Classic S&R = swing high/low pivots
+            const piv=getPivots(highs,lows,2),structure=buildStructure(piv);
+            const recentH=piv.highPivots.slice(-10).map(x=>x.price),recentL=piv.lowPivots.slice(-10).map(x=>x.price);
+            const classicS=nearestBelow(recentL,currClose)||lowest(lows.slice(-20));
+            const classicR=nearestAbove(recentH,currClose)||highest(highs.slice(-20));
 
-            // SUPPORT & RESISTANCE (20 Days)
-            const srStart = Math.max(0, lastIndex - 20 + 1);
-            const res20 = highest(highs.slice(srStart, lastIndex + 1));
-            const sup20 = lowest(lows.slice(srStart, lastIndex + 1));
-            const distRes = res20 > 0 ? ((res20 - currClose) / res20) * 100 : 999;
+            // Significant swing + Fibo (harmonic S&R)
+            const win=Math.min(80,closes.length),startIdx=closes.length-win;
+            let hiI=startIdx,loI=startIdx;
+            for(let i=startIdx;i<closes.length;i++){if(highs[i]>highs[hiI])hiI=i;if(lows[i]<lows[loI])loI=i;}
+            const swingHigh=highs[hiI],swingLow=lows[loI],fib=fibMap(swingLow,swingHigh,structure.bullish||currClose>ema21);
+            const fibS=fib?nearestBelow(Object.values(fib),currClose):0, fibR=fib?nearestAbove(Object.values(fib),currClose):0;
 
-            // 1. SETUP DETECTION
-            let setup = "MOMENTUM WATCH";
-            if (currClose >= res20 * 0.995 && volRatio >= 1.5) {
-                setup = "BREAKOUT";
-            } else if (currClose > ma5 && ma5 > ma10 && ma10 > ma20 && ma20 > ma34) {
-                setup = "TREND CONTINUATION";
-            } else if (currClose >= ma20 && currClose <= ma21 * 1.03 && return1d >= 0) {
-                setup = "PULLBACK";
-            } else if (currClose > ma20 && ma5 > ma10 && ma10 > ma20) {
-                setup = "EARLY MOMENTUM";
-            }
+            // Dynamic S&R = EMA 21/34/99
+            const dynS=nearestBelow([ema21,ema34,ema99],currClose)||Math.min(ema21,ema34,ema99);
+            const dynR=nearestAbove([ema21,ema34,ema99],currClose)||Math.max(ema21,ema34,ema99);
 
-            // 2. SCORING ENGINE (Max 100)
-            // A. Liquidity (15)
-            let sLiq = 3;
-            if (avgVal20 >= 10000000000) sLiq = 15;
-            else if (avgVal20 >= 5000000000) sLiq = 13;
-            else if (avgVal20 >= 2000000000) sLiq = 11;
-            else if (avgVal20 >= 1000000000) sLiq = 8;
+            // Dominant direction: structure first, indicators confirm
+            const emaBull=ema5>ema21&&ema21>ema34, emaBear=ema5<ema21&&ema21<ema34;
+            let direction="SIDEWAYS";
+            if(structure.bullish&&emaBull&&currClose>ema21&&macdLine>signalLine)direction="BULLISH";
+            else if(structure.bearish&&emaBear&&currClose<ema21&&macdLine<signalLine)direction="BEARISH";
+            else if(currClose>ema21&&ema5>ema21&&macdLine>signalLine)direction="BULLISH";
+            else if(currClose<ema21&&ema5<ema21&&macdLine<signalLine)direction="BEARISH";
 
-            // B. Momentum (20)
-            let sMom = 0;
-            if (return1d >= 2 && return1d <= 8) sMom += 10;
-            else if (return1d > 0) sMom += 5;
-            if (rsi >= 55 && rsi <= 70) sMom += 7;
-            else if (rsi > 45) sMom += 4;
-            if (return5d > 0) sMom += 3;
-            sMom = Math.min(sMom, 20);
+            let setup="RANGE / WAIT";
+            if(direction==="BULLISH"&&classicR&&currClose>=classicR*.995&&volRatio>=1.5)setup="BREAKOUT";
+            else if(direction==="BULLISH"&&ema5>ema21&&currClose<=ema21*1.025&&currClose>=dynS*.985)setup="PULLBACK TO DYNAMIC SUPPORT";
+            else if(direction==="BULLISH"&&structure.bullish)setup="TREND CONTINUATION";
+            else if(direction==="BEARISH")setup="DOWNTREND / NO LONG";
 
-            // C. Trend (25)
-            let sTrend = 0;
-            if (currClose > ma20) sTrend += 6;
-            if (ma5 > ma10) sTrend += 5;
-            if (ma10 > ma20) sTrend += 5;
-            if (ma20 > ma34) sTrend += 4;
-            if (currClose > ma99) sTrend += 5;
-            sTrend = Math.min(sTrend, 25);
+            // SCORING /100
+            let scStructure=structure.bullish?20:structure.bearish?0:structure.label==="EXPANSION / MIXED"?10:7;
+            let scEma=(ema5>ema21?6:0)+(ema21>ema34?4:0)+(ema34>ema99?3:0)+(currClose>ema21?2:0);
+            let scMacd=(macdLine>signalLine?5:0)+(macdLine>0?3:0)+(macdHist>0?2:0);
+            let scFibo=fibS&&currClose>fibS?(Math.abs(currClose-fibS)/currClose<=.03?10:7):3;
+            const dS=classicS?Math.abs(currClose-classicS)/currClose:1,dR=classicR?Math.abs(classicR-currClose)/currClose:1;
+            let scClassic=Math.min(10,(dS<=.03?7:4)+((dR<=.03&&volRatio>=1.5)?3:0));
+            let scDynamic=(currClose>ema21?4:0)+(ema21>ema34?3:0)+(currClose>ema99?3:0);
+            let scMomentum=(rsi>=55&&rsi<=70?6:rsi>50?3:0)+(return5d>0?3:0)+(volRatio>=2?6:volRatio>=1.5?4:volRatio>=1.2?2:0);
+            let scSetup=setup==="BREAKOUT"?8:setup==="PULLBACK TO DYNAMIC SUPPORT"?7:setup==="TREND CONTINUATION"?6:direction==="SIDEWAYS"?4:0;
 
-            // D. Volume (20)
-            let sVol = 3;
-            if (volRatio >= 3) sVol = 20;
-            else if (volRatio >= 2) sVol = 16;
-            else if (volRatio >= 1.5) sVol = 12;
-            else if (volRatio >= 1.2) sVol = 8;
+            const plan=buildPlan(currClose,direction,setup,[classicS,dynS,fibS,ema21,ema34],[classicR,dynR,fibR],atr);
+            if(plan.rr>=2)scSetup=Math.min(10,scSetup+2); else if(plan.rr>=1.5)scSetup=Math.min(10,scSetup+1);
+            else if(direction==="BULLISH"&&plan.rr<1.2)scSetup=Math.max(0,scSetup-2);
 
-            // E. Setup (20)
-            let sSetup = 8;
-            if (setup === "BREAKOUT") sSetup = 20;
-            else if (setup === "TREND CONTINUATION") sSetup = 17;
-            else if (setup === "EARLY MOMENTUM") sSetup = 14;
-            else if (setup === "PULLBACK") sSetup = 14;
-            if (distRes <= 3) sSetup += 3;
-            sSetup = Math.min(sSetup, 20);
-
-            let totalScore = Math.min(100, sLiq + sMom + sTrend + sVol + sSetup);
-            let finalStatus = (totalScore >= 75 && currClose > ma34) ? "BUY" : (totalScore >= 65 ? "WAIT" : "SKIP");
-
-            // TACTICAL TRADING PLAN RULES
-            let isBreakout = setup === "BREAKOUT";
-            let buyZoneLow = isBreakout ? currClose * 0.98 : Math.max(ma20, currClose * 0.95);
-            let buyZoneHigh = isBreakout ? currClose * 1.01 : currClose;
-            if(buyZoneLow > buyZoneHigh) buyZoneLow = buyZoneHigh * 0.98;
-            
-            let clLevel = Math.max(buyZoneLow * 0.95, sup20 * 0.97); 
-            let tp1 = buyZoneHigh * 1.05; 
-            let tp2 = buyZoneHigh * 1.10;
+            const totalScore=Math.min(100,scStructure+scEma+scMacd+scFibo+scClassic+scDynamic+scMomentum+scSetup);
+            const finalStatus=direction==="BEARISH"?"SKIP":(totalScore>=75&&(plan.rr>=1.5||setup==="BREAKOUT")?"BUY":totalScore>=60?"WAIT":"SKIP");
+            const crossLabel=goldenCross?"GOLDEN CROSS":deathCross?"DEATH CROSS":(ema5>ema21?"BULLISH ALIGNMENT":"BEARISH ALIGNMENT");
+            const macdLabel=`${macdLine>=signalLine?"BULLISH":"BEARISH"} • Hist ${macdHist>=0?"+":""}${macdHist.toFixed(2)}`;
 
             updateLog("Selesai mengkalkulasi. Render panel Tactical Trading Plan...");
             await sleep(300);
@@ -541,32 +586,47 @@
             document.getElementById("outScoreBar").style.width = `${totalScore}%`;
             document.getElementById("outScoreBar").style.background = color;
             
-            document.getElementById("scLiq").innerText = sLiq;
-            document.getElementById("scMom").innerText = sMom;
-            document.getElementById("scTrend").innerText = sTrend;
-            document.getElementById("scVol").innerText = sVol;
-            document.getElementById("scSetup").innerText = sSetup;
+            document.getElementById("scStructure").innerText=scStructure;
+            document.getElementById("scEma").innerText=scEma;
+            document.getElementById("scMacd").innerText=scMacd;
+            document.getElementById("scFibo").innerText=scFibo;
+            document.getElementById("scClassic").innerText=scClassic;
+            document.getElementById("scDynamic").innerText=scDynamic;
+            document.getElementById("scMomentum").innerText=scMomentum;
+            document.getElementById("scSetup").innerText=scSetup;
 
-            document.getElementById("outPrice").innerText = formatNumber(currClose);
-            document.getElementById("outStruct").innerText = setup;
-            
-            let volTrigEl = document.getElementById("outTriggerVol");
-            if (volRatio >= 1.5) {
-                volTrigEl.innerText = `🔥 INTRADAY SPIKE (${volRatio.toFixed(2)}x Vol Avg)`;
-                volTrigEl.style.color = 'var(--buy)';
-            } else if (volRatio >= 1.0) {
-                volTrigEl.innerText = `⚡ VOLUME NORMAL (${volRatio.toFixed(2)}x Vol Avg)`;
-                volTrigEl.style.color = 'var(--accent)';
-            } else {
-                volTrigEl.innerText = `😴 KERING / KONSOLIDASI (${volRatio.toFixed(2)}x Vol Avg)`;
-                volTrigEl.style.color = 'var(--wait)';
-            }
+            document.getElementById("outPrice").innerText=formatNumber(currClose);
+            document.getElementById("outDirection").innerText=direction;
+            document.getElementById("outDirection").style.color=direction==="BULLISH"?"var(--buy)":direction==="BEARISH"?"var(--skip)":"var(--wait)";
+            document.getElementById("outStruct").innerText=structure.label;
+            document.getElementById("outEma").innerText=`${formatNumber(ema5)} / ${formatNumber(ema21)}`;
+            document.getElementById("outMacd").innerText=macdLabel;
+            document.getElementById("outCross").innerText=crossLabel;
 
-            document.getElementById("outBuy").innerText = `${formatNumber(buyZoneLow)} - ${formatNumber(buyZoneHigh)}`;
-            document.getElementById("outSl").innerText = formatNumber(clLevel);
-            document.getElementById("outTp1").innerText = formatNumber(tp1);
-            document.getElementById("outTp2").innerText = formatNumber(tp2);
+            document.getElementById("outClassicS").innerText=formatNumber(classicS);
+            document.getElementById("outClassicR").innerText=formatNumber(classicR);
+            document.getElementById("outDynamicS").innerText=formatNumber(dynS);
+            document.getElementById("outDynamicR").innerText=formatNumber(dynR);
+            document.getElementById("outFibo").innerText=`${formatNumber(fibS)} / ${formatNumber(fibR)}`;
 
+            document.getElementById("outBuy").innerText=plan.entryLow?fmtRange(plan.entryLow,plan.entryHigh):"NO LONG ENTRY";
+            document.getElementById("outEntryLogic").innerText=plan.logic;
+            document.getElementById("outEntryTrigger").innerText=plan.trigger;
+            document.getElementById("outSl").innerText=plan.stop?formatNumber(plan.stop):"STRUCTURE INVALIDATION";
+            document.getElementById("outTp1").innerText=plan.tp1?formatNumber(plan.tp1):"-";
+            document.getElementById("outTp2").innerText=plan.tp2?formatNumber(plan.tp2):"-";
+            document.getElementById("outRR").innerText=plan.rr?`${plan.rr.toFixed(2)}R`:"-";
+            document.getElementById("outExitTrigger").innerText=direction==="BULLISH"
+                ?"TP1/TP2 bertahap; full exit bila close < EMA21 dan HL terakhir gagal"
+                :"Belum ada long entry; tunggu reclaim EMA21 + HL baru";
+
+            document.getElementById("outStage").innerText=`STAGE: ${setup} • RSI ${rsi.toFixed(1)} • VOL ${volRatio.toFixed(2)}x`;
+
+            const scoreEl=document.getElementById("outTotalScore"); scoreEl.innerText=totalScore;
+            let scoreColor=totalScore>=75?"var(--buy)":totalScore>=60?"var(--wait)":"var(--skip)";
+            scoreEl.style.color=scoreColor;
+            document.getElementById("outScoreBar").style.width=`${totalScore}%`;
+            document.getElementById("outScoreBar").style.background=scoreColor;
             document.getElementById("resultBox").scrollIntoView({ behavior: 'smooth', block: 'start' });
 
         } catch (error) {
