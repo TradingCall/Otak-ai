@@ -274,44 +274,43 @@
 <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 <script>
     // URL Deployment Apps Script Baru
-    const GOOGLE_PROXY_URL = "https://script.google.com/macros/s/AKfycbz0idryioSkON8Jy4SLC1KrGGSNH-gPERwDg089akYy99J08p-RU2Ptvv2THTt5HNTi/exec";
+    // GANTI STRING DI BAWAH INI DENGAN URL WEB APP ANDA YANG BARU
+    const GOOGLE_PROXY_URL = "https://script.google.com/macros/s/AKfycbzeoVNNP6zX88_KeY0cWhoTvWZ7GYFhqDSbtVFX2dtgYdXDaW4yxGggcORzp80Twmq1/exec";
     
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     const formatNumber = num => num < 10 ? num.toFixed(2) : Math.round(num).toLocaleString('id-ID');
 
     // ==========================================
-    // SISTEM TRACKING PENGGUNA (BARU)
+    // SISTEM TRACKING PENGGUNA (PERBAIKAN)
     // ==========================================
     
-    // 1. Fungsi Generate / Ambil User ID Unik (Disimpan Permanen di Perangkat)
     function getUserId() {
         let uid = localStorage.getItem('gacor_user_id');
         if (!uid) {
-            // Membuat ID unik: Kombinasi waktu + angka acak
             uid = 'USR_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 6).toUpperCase();
             localStorage.setItem('gacor_user_id', uid);
         }
         return uid;
     }
 
-    // 2. Fungsi Heartbeat ke GAS
     async function sendHeartbeat() {
         const uid = getUserId();
         try {
-            // Memanggil endpoint GAS (action=heartbeat&userId=xxx)
+            // URL endpoint yang benar ke GAS Anda
             const url = `${GOOGLE_PROXY_URL}?action=heartbeat&userId=${encodeURIComponent(uid)}`;
-            const response = await fetch(url);
             
-            if (response.ok) {
-                const data = await response.json();
-                if (data.status === "success") {
-                    // Update DOM jika sukses
-                    document.getElementById('uiTotalUsers').innerText = data.totalUsers;
-                    document.getElementById('uiOnlineUsers').innerText = data.onlineUsers;
-                }
+            // Perbaikan Parsing JSON
+            const response = await fetch(url);
+            const data = await response.json(); // ini bagian yang sering gagal jika GAS mengembalikan plain text
+
+            if (data && data.status === "success") {
+                document.getElementById('uiTotalUsers').innerText = data.totalUsers || 0;
+                document.getElementById('uiOnlineUsers').innerText = data.onlineUsers || 0;
+            } else {
+                console.warn("Heartbeat gagal atau respon tidak valid:", data);
             }
         } catch (error) {
-            console.error("Gagal mengirim heartbeat:", error);
+            console.error("Gagal menghubungi server tracker:", error);
         }
     }
 
@@ -428,8 +427,6 @@
     
     // ON PAGE LOAD
     window.onload = async function() {
-        // ---------------------------------------------------------
-        // EKSEKUSI HEARTBEAT & INTERVAL PADA SAAT LOAD (BARU)
         // ---------------------------------------------------------
         sendHeartbeat(); // Tembak pertama kali saat aplikasi dibuka
         setInterval(sendHeartbeat, 60000); // Looping tiap 60 detik
