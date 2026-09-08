@@ -37,7 +37,24 @@
             background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             filter: drop-shadow(0 0 10px var(--accent-glow));
         }
-        p.subtitle { text-align: center; color: #94a3b8; font-family: 'JetBrains Mono', monospace; font-size: 11px; margin-bottom: 25px; letter-spacing: 2px; text-transform: uppercase; }
+        p.subtitle { text-align: center; color: #94a3b8; font-family: 'JetBrains Mono', monospace; font-size: 11px; margin-bottom: 20px; letter-spacing: 2px; text-transform: uppercase; }
+
+        /* USER STATS BADGE (BARU) */
+        .user-stats-container {
+            display: flex; justify-content: center; gap: 15px; margin-bottom: 30px;
+            font-family: 'JetBrains Mono', monospace; font-size: 12px; flex-wrap: wrap;
+        }
+        .stat-badge {
+            background: rgba(3, 7, 18, 0.6); border: 1px solid #334155;
+            padding: 8px 16px; border-radius: 8px; display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .stat-badge span { font-weight: bold; color: var(--accent); }
+        .stat-badge .online-dot {
+            width: 8px; height: 8px; background: #10b981; border-radius: 50%;
+            box-shadow: 0 0 8px #10b981; animation: blink 1.5s infinite alternate;
+        }
+        @keyframes blink { from { opacity: 1; } to { opacity: 0.3; } }
 
         /* IHSG DASHBOARD */
         .ihsg-container { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 35px; }
@@ -132,6 +149,16 @@
     <h1>GACOR HUNTER V5.0</h1>
     <p class="subtitle">STRUCTURE • EMA • MACD • FIBO • S&R • RISK/REWARD</p>
     
+    <!-- STATISTIK PENGGUNA (BARU) -->
+    <div class="user-stats-container">
+        <div class="stat-badge">
+            👥 Total User: <span id="uiTotalUsers">Syncing...</span>
+        </div>
+        <div class="stat-badge">
+            <div class="online-dot"></div> Online: <span id="uiOnlineUsers">Syncing...</span>
+        </div>
+    </div>
+
     <!-- 1. LIVE IHSG DASHBOARD -->
     <div class="ihsg-container">
         <!-- TradingView Chart -->
@@ -252,6 +279,43 @@
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     const formatNumber = num => num < 10 ? num.toFixed(2) : Math.round(num).toLocaleString('id-ID');
 
+    // ==========================================
+    // SISTEM TRACKING PENGGUNA (BARU)
+    // ==========================================
+    
+    // 1. Fungsi Generate / Ambil User ID Unik (Disimpan Permanen di Perangkat)
+    function getUserId() {
+        let uid = localStorage.getItem('gacor_user_id');
+        if (!uid) {
+            // Membuat ID unik: Kombinasi waktu + angka acak
+            uid = 'USR_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 6).toUpperCase();
+            localStorage.setItem('gacor_user_id', uid);
+        }
+        return uid;
+    }
+
+    // 2. Fungsi Heartbeat ke GAS
+    async function sendHeartbeat() {
+        const uid = getUserId();
+        try {
+            // Memanggil endpoint GAS (action=heartbeat&userId=xxx)
+            const url = `${GOOGLE_PROXY_URL}?action=heartbeat&userId=${encodeURIComponent(uid)}`;
+            const response = await fetch(url);
+            
+            if (response.ok) {
+                const data = await response.json();
+                if (data.status === "success") {
+                    // Update DOM jika sukses
+                    document.getElementById('uiTotalUsers').innerText = data.totalUsers;
+                    document.getElementById('uiOnlineUsers').innerText = data.onlineUsers;
+                }
+            }
+        } catch (error) {
+            console.error("Gagal mengirim heartbeat:", error);
+        }
+    }
+
+
     // Technical Indicator Calculations V5.0
     const average = arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0;
     const highest = arr => arr.length ? Math.max(...arr) : 0;
@@ -361,8 +425,16 @@
         const mid=entryLow&&entryHigh?(entryLow+entryHigh)/2:0, rr=mid&&stop&&tp1>mid?(tp1-mid)/(mid-stop):0;
         return {entryLow,entryHigh,stop,tp1,tp2,rr,trigger,logic};
     }
+    
     // ON PAGE LOAD
     window.onload = async function() {
+        // ---------------------------------------------------------
+        // EKSEKUSI HEARTBEAT & INTERVAL PADA SAAT LOAD (BARU)
+        // ---------------------------------------------------------
+        sendHeartbeat(); // Tembak pertama kali saat aplikasi dibuka
+        setInterval(sendHeartbeat, 60000); // Looping tiap 60 detik
+        // ---------------------------------------------------------
+
         // 1. Render TradingView IHSG
         new TradingView.widget({
             "autosize": true,
