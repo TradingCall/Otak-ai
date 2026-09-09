@@ -448,24 +448,32 @@
             "container_id": "tv_chart_container"
         });
 
-        // 2. Fetch IHSG Technical Weather
+// 2. Fetch IHSG Technical Weather (TERINTEGRASI DENGAN BACKEND EOD SCAN)
         try {
-            const ihsgQuote = await fetchYahooData('^JKSE');
-            if (ihsgQuote) {
-                const iData = extractValidData(ihsgQuote);
-                const ihsgClose = iData.closes[iData.closes.length - 1];
-                const ihsgMa20 = calcSMA(iData.closes, 20);
-                const isBullish = ihsgClose > ihsgMa20;
+            const outReq = await fetch(`${GOOGLE_PROXY_URL}?action=getMarketOutlook`);
+            const outRes = await outReq.json();
+
+            if (outRes.status === 'success' && outRes.data) {
+                document.getElementById('topIhsgLevel').innerText = formatNumber(outRes.data.level);
                 
-                document.getElementById('topIhsgLevel').innerText = formatNumber(ihsgClose);
                 let trendEl = document.getElementById('topIhsgTrend');
-                trendEl.innerText = isBullish ? 'BULLISH (>MA20)' : 'BEARISH (<MA20)';
-                trendEl.style.color = isBullish ? '#34d399' : '#f43f5e';
-                document.getElementById('topIhsgDesc').innerText = isBullish ? 
-                    "Market bergerak Uptrend. Setup breakout memiliki probabilitas sukses lebih tinggi hari ini." : 
-                    "Market sedang korektif. Gunakan money management ketat, fokus pada saham yang melawan arus IHSG.";
+                trendEl.innerText = `${outRes.data.trend} (MA20: ${outRes.data.ma20})`;
+                
+                // Pewarnaan Trend
+                if (outRes.data.trend === "BULLISH") {
+                    trendEl.style.color = '#34d399'; // Hijau
+                } else if (outRes.data.trend === "BEARISH") {
+                    trendEl.style.color = '#f43f5e'; // Merah
+                } else {
+                    trendEl.style.color = '#f59e0b'; // Kuning (Sideways)
+                }
+                
+                document.getElementById('topIhsgDesc').innerText = outRes.data.summary;
             }
-        } catch(e) {}
+        } catch(e) {
+            console.error("Gagal load Market Outlook", e);
+            document.getElementById('topIhsgDesc').innerText = "Gagal memuat data dari server.";
+        }
 
         // 3. Fetch Top 10 EOD Dari GAS Database V4.2
         const grid = document.getElementById("top10Grid");
