@@ -30,7 +30,6 @@
         
         .container { max-width: 1050px; margin: auto; }
         
-        /* HEADER */
         h1 { 
             text-align: center; font-size: 32px; font-weight: 800; text-transform: uppercase; 
             letter-spacing: 2px; margin-bottom: 5px; 
@@ -39,7 +38,6 @@
         }
         p.subtitle { text-align: center; color: #94a3b8; font-family: 'JetBrains Mono', monospace; font-size: 11px; margin-bottom: 20px; letter-spacing: 2px; text-transform: uppercase; }
 
-        /* USER STATS BADGE (BARU) */
         .user-stats-container {
             display: flex; justify-content: center; gap: 15px; margin-bottom: 30px;
             font-family: 'JetBrains Mono', monospace; font-size: 12px; flex-wrap: wrap;
@@ -56,7 +54,6 @@
         }
         @keyframes blink { from { opacity: 1; } to { opacity: 0.3; } }
 
-        /* IHSG DASHBOARD */
         .ihsg-container { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 35px; }
         @media (max-width: 768px) { .ihsg-container { grid-template-columns: 1fr; } }
         
@@ -75,7 +72,6 @@
         .ihsg-val { font-family: 'JetBrains Mono', monospace; font-size: 28px; font-weight: bold; color: #fff; }
         .ihsg-desc { font-size: 13px; color: #cbd5e1; line-height: 1.5; background: rgba(3,7,18,0.5); padding: 12px; border-radius: 8px; border: 1px solid #334155;}
 
-        /* TOP 10 RADAR */
         .radar-section { margin-bottom: 35px; }
         .radar-title { font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
         .radar-title span { font-size: 11px; font-weight: normal; color: #34d399; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); padding: 4px 8px; border-radius: 6px; }
@@ -100,7 +96,6 @@
         .skeleton { animation: pulse 1.5s infinite ease-in-out; background: #0f172a !important; border-color: #1e293b !important; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
-        /* SEARCH BOX */
         .search-box { 
             background: var(--panel); backdrop-filter: blur(15px); padding: 25px; border-radius: 16px; 
             border: 1px solid var(--panel-border); box-shadow: 0 20px 40px rgba(0,0,0,0.6); 
@@ -118,13 +113,11 @@
         }
         button:hover { transform: translateY(-2px); box-shadow: 0 8px 25px var(--accent-glow); }
         
-        /* UI RESULT & LOGS */
         .tracker-box { background: #020617; border: 1px solid #3b82f6; padding: 20px; border-radius: 12px; display: none; margin-top: 25px; color: #3b82f6; font-family: 'JetBrains Mono', monospace; }
         .tracker-log { font-size: 12px; color: #60a5fa; margin-top: 15px; max-height: 200px; overflow-y: auto; }
         .result-dashboard { display: none; margin-top: 35px; animation: slideUp 0.5s ease-out; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* GRID DASHBOARD */
         .header-dash { background: var(--panel); border: 1px solid var(--panel-border); padding: 25px; border-radius: 16px; text-align: center; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border-top: 4px solid var(--accent); }
         .header-dash h2 { margin: 0; font-size: 40px; font-weight: 800; color: #fff; }
         .grid-dash { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
@@ -149,22 +142,13 @@
     <h1>GACOR HUNTER V5.0</h1>
     <p class="subtitle">STRUCTURE • EMA • MACD • FIBO • S&R • RISK/REWARD</p>
     
-    <!-- STATISTIK PENGGUNA (BARU) -->
     <div class="user-stats-container">
-        <div class="stat-badge">
-            👥 Total User: <span id="uiTotalUsers">Syncing...</span>
-        </div>
-        <div class="stat-badge">
-            <div class="online-dot"></div> Online: <span id="uiOnlineUsers">Syncing...</span>
-        </div>
+        <div class="stat-badge">👥 Total User: <span id="uiTotalUsers">Syncing...</span></div>
+        <div class="stat-badge"><div class="online-dot"></div> Online: <span id="uiOnlineUsers">Syncing...</span></div>
     </div>
 
-    <!-- 1. LIVE IHSG DASHBOARD -->
     <div class="ihsg-container">
-        <!-- TradingView Chart -->
         <div class="tv-chart-box" id="tv_chart_container"></div>
-
-        <!-- Algorithmic Weather -->
         <div class="ihsg-weather">
             <div class="ihsg-weather-title">🌍 ALGORITHMIC MARKET WEATHER</div>
             <div>
@@ -179,7 +163,6 @@
         </div>
     </div>
 
-    <!-- 2. TOP 10 VOLUME SPIKE RADAR -->
     <div class="radar-section">
         <div class="radar-title">
             🔥 TOP 10 RADAR HARI INI 
@@ -187,7 +170,6 @@
             <span id="lastScanBadge" style="background: rgba(56,189,248,0.1); color: var(--accent); border-color: rgba(56,189,248,0.3);">🔄 Syncing Database...</span>
         </div>
         <div class="radar-grid" id="top10Grid">
-            <!-- Diisi otomatis via fetch JSON -->
             <div class="radar-card skeleton" style="min-height: 100px;"></div>
             <div class="radar-card skeleton" style="min-height: 100px;"></div>
             <div class="radar-card skeleton" style="min-height: 100px;"></div>
@@ -196,7 +178,6 @@
         </div>
     </div>
 
-    <!-- 3. MANUAL SEARCH BOX -->
     <div class="search-box">
         <input type="text" id="tickerInput" placeholder="KODE TICKER (Misal: BBCA.JK)" autocomplete="off">
         <button id="scanBtn" onclick="startEngine()">JALANKAN ANALISA MENDALAM V4.2</button>
@@ -207,7 +188,6 @@
         <div id="trackerLog" class="tracker-log"></div>
     </div>
     
-    <!-- 4. ANALISIS DETAIL -->
     <div id="resultBox" class="result-dashboard">
         <div class="header-dash">
             <h2 id="outTicker">$TICKER</h2>
@@ -216,7 +196,6 @@
         </div>
 
         <div class="grid-dash">
-            <!-- SCORING V5.0 -->
             <div class="card">
                 <div class="card-title">⚙️ STRUCTURED SCORING V5.0 (100)</div>
                 <div style="text-align:center;margin-bottom:20px;">
@@ -233,7 +212,6 @@
                 <div class="stat-row"><span>Setup + Risk/Reward (10)</span><span class="stat-val" id="scSetup">0</span></div>
             </div>
 
-            <!-- LOGICAL TRADING PLAN -->
             <div class="card">
                 <div class="card-title">🎯 LOGICAL TRADING PLAN</div>
                 <div class="stat-row"><span>Realtime Price</span><span class="stat-val" style="color:var(--accent);font-size:16px;" id="outPrice">0</span></div>
@@ -273,17 +251,14 @@
 
 <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 <script>
-    // URL Deployment Apps Script Baru
-    // GANTI STRING DI BAWAH INI DENGAN URL WEB APP ANDA YANG BARU
-    const GOOGLE_PROXY_URL = "https://script.google.com/macros/s/AKfycbwa3waio4klGlJK9_j6VKlaLKbwXgtpozdshkMd9Eqi3iIdsQEH6vjOSTkckdQDh24/exec";
+    // =========================================================================
+    // WAJIB DIGANTI: Masukkan URL Web App terbaru kamu di antara tanda kutip di bawah ini!
+    // =========================================================================
+    const GOOGLE_PROXY_URL = "https://script.google.com/macros/s/AKfycbyCFWBRbCFFTisr3yEA8ZrxwLLAwFagur8KFMYrHIBQNHh4sExfvIGWmwNDLDHqZQ8/exec";
     
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     const formatNumber = num => num < 10 ? num.toFixed(2) : Math.round(num).toLocaleString('id-ID');
 
-    // ==========================================
-    // SISTEM TRACKING PENGGUNA (PERBAIKAN)
-    // ==========================================
-    
     function getUserId() {
         let uid = localStorage.getItem('gacor_user_id');
         if (!uid) {
@@ -296,26 +271,18 @@
     async function sendHeartbeat() {
         const uid = getUserId();
         try {
-            // URL endpoint yang benar ke GAS Anda
             const url = `${GOOGLE_PROXY_URL}?action=heartbeat&userId=${encodeURIComponent(uid)}`;
-            
-            // Perbaikan Parsing JSON
             const response = await fetch(url);
-            const data = await response.json(); // ini bagian yang sering gagal jika GAS mengembalikan plain text
-
+            const data = await response.json();
             if (data && data.status === "success") {
                 document.getElementById('uiTotalUsers').innerText = data.totalUsers || 0;
                 document.getElementById('uiOnlineUsers').innerText = data.onlineUsers || 0;
-            } else {
-                console.warn("Heartbeat gagal atau respon tidak valid:", data);
             }
         } catch (error) {
             console.error("Gagal menghubungi server tracker:", error);
         }
     }
 
-
-    // Technical Indicator Calculations V5.0
     const average = arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0;
     const highest = arr => arr.length ? Math.max(...arr) : 0;
     const lowest = arr => arr.length ? Math.min(...arr) : 0;
@@ -362,8 +329,11 @@
         return {closes,highs,lows,volumes};
     }
     async function fetchYahooData(ticker){
-        try{const res=await fetch(`${GOOGLE_PROXY_URL}?ticker=${encodeURIComponent(ticker)}`);if(!res.ok)return null;
-            const data=await res.json();return data?.chart?.result?.[0]?.indicators?.quote?.[0]||null;
+        try{
+            const res=await fetch(`${GOOGLE_PROXY_URL}?ticker=${encodeURIComponent(ticker)}`);
+            if(!res.ok)return null;
+            const data=await res.json();
+            return data?.chart?.result?.[0]?.indicators?.quote?.[0]||null;
         }catch(e){return null;}
     }
     function getPivots(highs,lows,lookback=2){
@@ -425,14 +395,10 @@
         return {entryLow,entryHigh,stop,tp1,tp2,rr,trigger,logic};
     }
     
-    // ON PAGE LOAD
     window.onload = async function() {
-        // ---------------------------------------------------------
-        sendHeartbeat(); // Tembak pertama kali saat aplikasi dibuka
-        setInterval(sendHeartbeat, 60000); // Looping tiap 60 detik
-        // ---------------------------------------------------------
+        sendHeartbeat();
+        setInterval(sendHeartbeat, 60000); 
 
-        // 1. Render TradingView IHSG
         new TradingView.widget({
             "autosize": true,
             "symbol": "IDX:COMPOSITE",
@@ -448,26 +414,16 @@
             "container_id": "tv_chart_container"
         });
 
-// 2. Fetch IHSG Technical Weather (TERINTEGRASI DENGAN BACKEND EOD SCAN)
         try {
             const outReq = await fetch(`${GOOGLE_PROXY_URL}?action=getMarketOutlook`);
             const outRes = await outReq.json();
-
             if (outRes.status === 'success' && outRes.data) {
                 document.getElementById('topIhsgLevel').innerText = formatNumber(outRes.data.level);
-                
                 let trendEl = document.getElementById('topIhsgTrend');
                 trendEl.innerText = `${outRes.data.trend} (MA20: ${outRes.data.ma20})`;
-                
-                // Pewarnaan Trend
-                if (outRes.data.trend === "BULLISH") {
-                    trendEl.style.color = '#34d399'; // Hijau
-                } else if (outRes.data.trend === "BEARISH") {
-                    trendEl.style.color = '#f43f5e'; // Merah
-                } else {
-                    trendEl.style.color = '#f59e0b'; // Kuning (Sideways)
-                }
-                
+                if (outRes.data.trend === "BULLISH") trendEl.style.color = '#34d399'; 
+                else if (outRes.data.trend === "BEARISH") trendEl.style.color = '#f43f5e';
+                else trendEl.style.color = '#f59e0b'; 
                 document.getElementById('topIhsgDesc').innerText = outRes.data.summary;
             }
         } catch(e) {
@@ -475,7 +431,6 @@
             document.getElementById('topIhsgDesc').innerText = "Gagal memuat data dari server.";
         }
 
-        // 3. Fetch Top 10 EOD Dari GAS Database V4.2
         const grid = document.getElementById("top10Grid");
         const badgeScan = document.getElementById("lastScanBadge");
         
@@ -485,7 +440,6 @@
 
             if(top10Res.status === 'success' && top10Res.data && top10Res.data.length > 0) {
                 badgeScan.innerText = `🔄 Last Update: ${top10Res.lastUpdate}`;
-                
                 grid.innerHTML = top10Res.data.map((item, idx) => `
                     <div class="radar-card skeleton" id="card-${idx}" style="min-height: 100px;"></div>
                 `).join('');
@@ -493,7 +447,6 @@
                 top10Res.data.forEach(async (item, idx) => {
                     const cardEl = document.getElementById(`card-${idx}`);
                     try {
-                        // Ambil harga realtime untuk akurasi intraday
                         const quote = await fetchYahooData(item.ticker);
                         const data = extractValidData(quote);
                         const curr = data.closes[data.closes.length - 1];
@@ -543,7 +496,6 @@
         logDiv.scrollTop = logDiv.scrollHeight;
     }
 
-    // ANALISA MENDALAM V4.2 (Mirroring GAS Logic)
     async function startEngine() {
         let ticker = document.getElementById("tickerInput").value.trim().toUpperCase();
         if (!ticker) return;
@@ -559,18 +511,16 @@
             document.getElementById("trackerBox").scrollIntoView({ behavior: 'smooth', block: 'center' });
 
             const stockQuote = await fetchYahooData(ticker);
-            if (!stockQuote) throw new Error(`Gagal memuat data ${ticker}.`);
+            if (!stockQuote) throw new Error(`Gagal memuat data ${ticker}. Pastikan URL Web App sudah benar.`);
             
             const stockData = extractValidData(stockQuote);
             const closes = stockData.closes;
             const volumes = stockData.volumes;
             const highs = stockData.highs;
             const lows = stockData.lows;
-            const lastIndex = closes.length - 1;
 
             if (closes.length < 120) throw new Error("Data historis tidak mencukupi (minimal 120 hari).");
 
-            // PRICE / EMA / MACD
             const currClose=closes.at(-1), prevClose=closes.at(-2);
             const return1d=prevClose?((currClose-prevClose)/prevClose)*100:0;
             const close5d=closes.at(-6), return5d=close5d?((currClose-close5d)/close5d)*100:0;
@@ -581,33 +531,26 @@
             const goldenCross=prevE5<=prevE21&&ema5>ema21, deathCross=prevE5>=prevE21&&ema5<ema21;
             const rsi=calcRSI(closes,14);
 
-            // Volume / liquidity
             const currVol=volumes.at(-1),avgVol20=average(volumes.slice(-21,-1)),volRatio=avgVol20?currVol/avgVol20:0;
-            const avgVal20=average(closes.slice(-21,-1).map((v,i)=>v*(volumes.at(-21+i)||0)));
 
-            // ATR
             const trs=[]; for(let i=Math.max(1,closes.length-20);i<closes.length;i++)
                 trs.push(Math.max(highs[i]-lows[i],Math.abs(highs[i]-closes[i-1]),Math.abs(lows[i]-closes[i-1])));
             const atr=average(trs)||currClose*.02;
 
-            // Classic S&R = swing high/low pivots
             const piv=getPivots(highs,lows,2),structure=buildStructure(piv);
             const recentH=piv.highPivots.slice(-10).map(x=>x.price),recentL=piv.lowPivots.slice(-10).map(x=>x.price);
             const classicS=nearestBelow(recentL,currClose)||lowest(lows.slice(-20));
             const classicR=nearestAbove(recentH,currClose)||highest(highs.slice(-20));
 
-            // Significant swing + Fibo (harmonic S&R)
             const win=Math.min(80,closes.length),startIdx=closes.length-win;
             let hiI=startIdx,loI=startIdx;
             for(let i=startIdx;i<closes.length;i++){if(highs[i]>highs[hiI])hiI=i;if(lows[i]<lows[loI])loI=i;}
             const swingHigh=highs[hiI],swingLow=lows[loI],fib=fibMap(swingLow,swingHigh,structure.bullish||currClose>ema21);
             const fibS=fib?nearestBelow(Object.values(fib),currClose):0, fibR=fib?nearestAbove(Object.values(fib),currClose):0;
 
-            // Dynamic S&R = EMA 21/34/99
             const dynS=nearestBelow([ema21,ema34,ema99],currClose)||Math.min(ema21,ema34,ema99);
             const dynR=nearestAbove([ema21,ema34,ema99],currClose)||Math.max(ema21,ema34,ema99);
 
-            // Dominant direction: structure first, indicators confirm
             const emaBull=ema5>ema21&&ema21>ema34, emaBear=ema5<ema21&&ema21<ema34;
             let direction="SIDEWAYS";
             if(structure.bullish&&emaBull&&currClose>ema21&&macdLine>signalLine)direction="BULLISH";
@@ -621,7 +564,6 @@
             else if(direction==="BULLISH"&&structure.bullish)setup="TREND CONTINUATION";
             else if(direction==="BEARISH")setup="DOWNTREND / NO LONG";
 
-            // SCORING /100
             let scStructure=structure.bullish?20:structure.bearish?0:structure.label==="EXPANSION / MIXED"?10:7;
             let scEma=(ema5>ema21?6:0)+(ema21>ema34?4:0)+(ema34>ema99?3:0)+(currClose>ema21?2:0);
             let scMacd=(macdLine>signalLine?5:0)+(macdLine>0?3:0)+(macdHist>0?2:0);
@@ -644,7 +586,6 @@
             updateLog("Selesai mengkalkulasi. Render panel Tactical Trading Plan...");
             await sleep(300);
 
-            // RENDER UI HASIL
             document.getElementById("trackerBox").style.display = "none";
             document.getElementById("scanBtn").disabled = false;
             document.getElementById("resultBox").style.display = "block";
@@ -698,12 +639,6 @@
                 :"Belum ada long entry; tunggu reclaim EMA21 + HL baru";
 
             document.getElementById("outStage").innerText=`STAGE: ${setup} • RSI ${rsi.toFixed(1)} • VOL ${volRatio.toFixed(2)}x`;
-
-            const scoreEl=document.getElementById("outTotalScore"); scoreEl.innerText=totalScore;
-            let scoreColor=totalScore>=75?"var(--buy)":totalScore>=60?"var(--wait)":"var(--skip)";
-            scoreEl.style.color=scoreColor;
-            document.getElementById("outScoreBar").style.width=`${totalScore}%`;
-            document.getElementById("outScoreBar").style.background=scoreColor;
             document.getElementById("resultBox").scrollIntoView({ behavior: 'smooth', block: 'start' });
 
         } catch (error) {
