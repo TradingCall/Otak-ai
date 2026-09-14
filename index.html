@@ -180,7 +180,7 @@
 
     <div class="search-box">
         <input type="text" id="tickerInput" placeholder="KODE TICKER (Misal: BBCA.JK)" autocomplete="off">
-        <button id="scanBtn" onclick="startEngine()">JALANKAN ANALISA MENDALAM V5.0</button>
+        <button id="scanBtn" onclick="startEngine()">JALANKAN ANALISA MENDALAM V4.2</button>
     </div>
     
     <div id="trackerBox" class="tracker-box">
@@ -252,9 +252,9 @@
 <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 <script>
     // =========================================================================
-    // URL WEB APP TERBARU (Sesuai Permintaan)
+    // WAJIB DIGANTI: Masukkan URL Web App terbaru kamu di antara tanda kutip di bawah ini!
     // =========================================================================
-    const GOOGLE_PROXY_URL = "https://script.google.com/macros/s/AKfycbzyqcaZ-LjXMwe5NfUNguRO1qgdWi7Z2HizO4q5iDUklwDG7CBeVk1zeEEait-ephM/exec";
+    const GOOGLE_PROXY_URL = "https://script.google.com/macros/s/AKfycbyCFWBRbCFFTisr3yEA8ZrxwLLAwFagur8KFMYrHIBQNHh4sExfvIGWmwNDLDHqZQ8/exec";
     
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     const formatNumber = num => num < 10 ? num.toFixed(2) : Math.round(num).toLocaleString('id-ID');
@@ -367,25 +367,14 @@
         if(bullish)return {0:swingHigh,.236:swingHigh-r*.236,.382:swingHigh-r*.382,.5:swingHigh-r*.5,.618:swingHigh-r*.618,.786:swingHigh-r*.786,1:swingLow};
         return {0:swingLow,.236:swingLow+r*.236,.382:swingLow+r*.382,.5:swingLow+r*.5,.618:swingLow+r*.618,.786:swingLow+r*.786,1:swingHigh};
     }
-    
-    // =========================================================================
-    // OPTIMASI: buildPlan diupdate agar selaras (sinkron) dengan Backend V5.0
-    // =========================================================================
     function buildPlan(price,direction,setup,supports,resistances,atr){
-        // Jika BEARISH, langsung return object UI strings tanpa hitung S & R (Hemat Komputasi)
-        if(direction==="BEARISH"){
-            return {
-                entryLow: 0, entryHigh: 0, stop: 0, tp1: 0, tp2: 0, rr: 0,
-                trigger: "NO LONG ENTRY — tunggu reclaim EMA21 + HL baru",
-                logic: "Struktur bearish (LH/LL). Engine tidak memaksakan posisi BUY."
-            };
-        }
-
         const S=supports.filter(x=>x>0&&x<price).sort((a,b)=>b-a)[0]||price-atr;
         const R=resistances.filter(x=>x>price).sort((a,b)=>a-b)[0]||price+Math.max(atr*2,price*.04);
         let entryLow=0,entryHigh=0,stop=0,tp1=0,tp2=0,trigger="",logic="";
-        
-        if(setup==="BREAKOUT"){
+        if(direction==="BEARISH"){
+            trigger="NO LONG ENTRY — tunggu reclaim EMA21 + HL baru";
+            logic="Struktur bearish (LH/LL). Engine tidak memaksakan posisi BUY.";
+        }else if(setup==="BREAKOUT"){
             const breakoutR = resistances.filter(x=>x>0).sort((a,b)=>b-a).find(x=>Math.abs(x-price)/price<.03)||R;
             entryLow=breakoutR*.995;entryHigh=breakoutR*1.005;
             stop=Math.min(breakoutR-Math.max(atr*.7,price*.015),S-atr*.25);
@@ -518,7 +507,7 @@
         document.getElementById("trackerLog").innerHTML = "";
         
         try {
-            updateLog(`Memindai $${ticker} dengan Engine V5.0...`);
+            updateLog(`Memindai $${ticker} dengan Engine V4.2...`);
             document.getElementById("trackerBox").scrollIntoView({ behavior: 'smooth', block: 'center' });
 
             const stockQuote = await fetchYahooData(ticker);
