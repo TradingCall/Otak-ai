@@ -576,20 +576,65 @@
         }
     }
 
+function scanFromRadar(ticker) {
+        document.getElementById("tickerInput").value = ticker;
+        startEngine();
+        window.scrollTo({ top: document.getElementById('tickerInput').offsetTop - 20, behavior: 'smooth' });
+    }
+
     window.onload = async function() {
         checkAuth();
+        
+        // Load TradingView
         new TradingView.widget({
-            "autosize": true,
-            "symbol": "IDX:COMPOSITE",
-            "interval": "D",
-            "theme": "dark",
-            "style": "1",
-            "locale": "id",
-            "hide_top_toolbar": true,
-            "hide_legend": true,
-            "container_id": "tv_chart_container",
-            "backgroundColor": "rgba(17, 24, 39, 0)"
+            "autosize": true, "symbol": "IDX:COMPOSITE", "interval": "D",
+            "theme": "dark", "style": "1", "locale": "id",
+            "hide_top_toolbar": true, "hide_legend": true,
+            "container_id": "tv_chart_container", "backgroundColor": "rgba(17, 24, 39, 0)"
         });
+
+        // 1. Minta Data Market Weather
+        try {
+            const outReq = await fetch(`${GOOGLE_PROXY_URL}?action=getMarketOutlook`);
+            const outRes = await outReq.json();
+            if (outRes.status === 'success' && outRes.data) {
+                document.getElementById('topIhsgLevel').innerText = formatNumber(outRes.data.level);
+                let trendEl = document.getElementById('topIhsgTrend');
+                trendEl.innerText = `${outRes.data.trend} (MA20: ${outRes.data.ma20})`;
+                if (outRes.data.trend === "BULLISH") trendEl.style.color = '#34d399'; 
+                else if (outRes.data.trend === "BEARISH") trendEl.style.color = '#f43f5e';
+                else trendEl.style.color = '#f59e0b'; 
+                document.getElementById('topIhsgDesc').innerText = outRes.data.summary;
+            }
+        } catch(e) {
+            document.getElementById('topIhsgDesc').innerText = "Gagal memuat Market Weather dari server.";
+        }
+
+        // 2. Minta Data Top 10 Radar
+        const grid = document.getElementById("top10Grid");
+        const badgeScan = document.getElementById("lastScanBadge");
+        try {
+            const req = await fetch(`${GOOGLE_PROXY_URL}?action=getTop10`);
+            const top10Res = await req.json();
+            if(top10Res.status === 'success' && top10Res.data && top10Res.data.length > 0) {
+                badgeScan.innerText = `🔄 Updated: ${top10Res.lastUpdate}`;
+                grid.innerHTML = top10Res.data.map((item, idx) => `
+                    <div class="radar-card" onclick="scanFromRadar('${item.ticker}')">
+                        <div class="rc-head">
+                            <div class="rc-ticker">${item.ticker.replace('.JK', '')}</div>
+                            <div class="rc-score">⭐ ${item.score}</div>
+                        </div>
+                        <div style="color: var(--accent); font-size:10px; margin-top: 5px;">🎯 ${item.setup}</div>
+                    </div>
+                `).join('');
+            } else {
+                badgeScan.innerText = `⚠️ Menunggu Eksekusi`;
+                grid.innerHTML = `<div style="grid-column: 1 / -1; padding: 20px; text-align: center; color: #94a3b8;">Menunggu backend mengeksekusi algoritma...</div>`;
+            }
+        } catch(err) {
+            badgeScan.innerText = `❌ Error API`;
+            grid.innerHTML = `<div style="grid-column: 1 / -1; padding: 20px; text-align: center; color: #f43f5e;">Koneksi gagal.</div>`;
+        }
     };
 </script>
 
