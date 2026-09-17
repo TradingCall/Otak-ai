@@ -86,7 +86,6 @@
         .tracker-box { background: #020617; border: 1px solid #3b82f6; padding: 20px; border-radius: 12px; display: none; margin-top: 25px; color: #3b82f6; font-family: 'JetBrains Mono', monospace; }
         .result-dashboard { display: none; margin-top: 35px; animation: slideUp 0.5s ease-out; }
         
-        /* RESPONSIVE GRID AGAR TAMPILAN 1 KOLOM DI HP (SEPERTI GAMBAR 2) */
         .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         @media (max-width: 768px) { .result-grid { grid-template-columns: 1fr; } }
         
@@ -109,11 +108,15 @@
                 <button id="tabLogin" onclick="switchAuthTab('login')" class="tab-btn tab-active">LOGIN</button>
                 <button id="tabReg" onclick="switchAuthTab('register')" class="tab-btn tab-inactive">DAFTAR (10x FREE)</button>
             </div>
+            
+            <!-- FORM LOGIN (Hanya Minta Username & Password) -->
             <div id="formLogin">
-                <input type="text" id="logId" class="input-pro" placeholder="Email / Username" autocomplete="off">
+                <input type="text" id="logId" class="input-pro" placeholder="Username" autocomplete="off">
                 <input type="password" id="logPass" class="input-pro" placeholder="Password">
                 <button onclick="doLogin()" id="btnLogin" class="btn-pro" style="background: var(--accent-grad); color: #000;">Masuk Sistem</button>
             </div>
+            
+            <!-- FORM DAFTAR -->
             <div id="formReg" style="display: none;">
                 <input type="email" id="regEmail" class="input-pro" placeholder="Email Aktif" autocomplete="off">
                 <input type="text" id="regUser" class="input-pro" placeholder="Buat Username" autocomplete="off">
@@ -123,8 +126,6 @@
         </div>
 
         <div id="userProfileBox" style="display: none; text-align: center;">
-            
-            <!-- INFORMASI USER & OFFLINE MODE DISEMBUNYIKAN SEPENUHNYA -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
                 <div style="background: rgba(0,0,0,0.4); padding: 15px; border-radius: 12px; border: 1px solid #1e293b;">
                     <div style="font-size: 11px; color: #94a3b8; margin-bottom: 5px;">SISA KUOTA FREE</div>
@@ -273,7 +274,7 @@
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     const formatNumber = num => num < 10 ? num.toFixed(2) : Math.round(num).toLocaleString('id-ID');
 
-    // 1. SISTEM AUTENTIKASI DENGAN SANITASI KETAT (ANTI UNDEFINED / NaN)
+    // 1. SISTEM AUTENTIKASI DENGAN PRIORITAS USERNAME
     function switchAuthTab(tab) {
         if(tab === 'login') {
             document.getElementById('formLogin').style.display = "block"; document.getElementById('formReg').style.display = "none";
@@ -292,7 +293,8 @@
             let res = await fetch(`${GOOGLE_PROXY_URL}?action=auth&type=register&email=${encodeURIComponent(em)}&username=${encodeURIComponent(us)}&password=${encodeURIComponent(pw)}`);
             let data = await res.json();
             if(data.status === "success") {
-                localStorage.setItem("gacor_email", data.email); 
+                localStorage.setItem("gacor_email", data.email || em); 
+                localStorage.setItem("gacor_user", data.username || us); 
                 localStorage.setItem("gacor_pass", pw);
                 localStorage.setItem("gacor_kuota", data.kuota !== undefined ? data.kuota : 10);
                 localStorage.setItem("gacor_saldo", data.saldo !== undefined ? data.saldo : 0);
@@ -303,44 +305,60 @@
         document.getElementById('btnReg').innerText = "Daftar & Klaim Akses";
     }
 
+    // PERBAIKAN: Login murni dari Username, sistem tidak akan menendang user meskipun email kosong
     async function doLogin() {
-        let id = document.getElementById('logId').value.trim(), pw = document.getElementById('logPass').value.trim();
-        if(!id || !pw) return alert("Isi ID dan Password!");
-        document.getElementById('btnLogin').innerText = "MEMERIKSA KREDENSIAL...";
+        let id = document.getElementById('logId').value.trim();
+        let pw = document.getElementById('logPass').value.trim();
+        if(!id || !pw) return alert("Isi Username dan Password Anda!");
+        
+        let btn = document.getElementById('btnLogin');
+        btn.innerText = "MEMERIKSA KREDENSIAL...";
+        
         try {
             let res = await fetch(`${GOOGLE_PROXY_URL}?action=auth&type=login&login_id=${encodeURIComponent(id)}&password=${encodeURIComponent(pw)}`);
             let data = await res.json();
+            
             if(data.status === "success") {
-                localStorage.setItem("gacor_email", data.email); 
+                // Simpan email yang dikembalikan server (jika ada), kalau tidak gunakan fallback username-nya
+                localStorage.setItem("gacor_email", data.email || id); 
+                localStorage.setItem("gacor_user", data.username || id); 
                 localStorage.setItem("gacor_pass", pw); 
                 localStorage.setItem("gacor_kuota", data.kuota !== undefined ? data.kuota : 10);
                 localStorage.setItem("gacor_saldo", data.saldo !== undefined ? data.saldo : 0);
-                checkAuth();
-            } else { alert(data.message); }
-        } catch(e) { alert("Gagal terhubung ke server."); }
-        document.getElementById('btnLogin').innerText = "Masuk Sistem";
+                
+                await checkAuth(); // Tunggu sampai validasi UI selesai
+            } else { 
+                alert(data.message || "Username atau Password salah!"); 
+            }
+        } catch(e) { 
+            alert("Gagal terhubung ke server. Coba lagi."); 
+        }
+        btn.innerText = "Masuk Sistem";
     }
 
     function doLogout() { 
-        localStorage.removeItem("gacor_email"); localStorage.removeItem("gacor_pass"); 
-        localStorage.removeItem("gacor_kuota"); localStorage.removeItem("gacor_saldo");
+        localStorage.removeItem("gacor_email"); 
+        localStorage.removeItem("gacor_user"); 
+        localStorage.removeItem("gacor_pass"); 
+        localStorage.removeItem("gacor_kuota"); 
+        localStorage.removeItem("gacor_saldo");
         
         document.getElementById('authBox').style.display = "block"; 
         document.getElementById('userProfileBox').style.display = "none";
     }
     
     async function checkAuth() {
+        let savedUser = localStorage.getItem("gacor_user");
         let savedEmail = localStorage.getItem("gacor_email");
         let savedPass = localStorage.getItem("gacor_pass");
         
-        // PEMBERSIH CACHE: Pastikan Angka Selalu Solid (Bukan Teks "undefined")
         let k = parseInt(localStorage.getItem("gacor_kuota"));
         let s = parseInt(localStorage.getItem("gacor_saldo"));
         let savedKuota = isNaN(k) ? 10 : k;
         let savedSaldo = isNaN(s) ? 0 : s;
 
-        // Jika cache korup/kosong, paksa keluar ke form login
-        if (!savedEmail || savedEmail === "undefined" || savedEmail === "null") {
+        // KUNCI PERBAIKAN: Sistem hanya mementingkan ada password & user yang tersimpan di memori browser
+        if (!savedPass || savedPass === "undefined") {
             document.getElementById('authBox').style.display = "block"; 
             document.getElementById('userProfileBox').style.display = "none";
             return false;
@@ -354,7 +372,9 @@
         document.getElementById('uiSaldo').innerText = formatNumber(savedSaldo);
 
         try {
-            let res = await fetch(`${GOOGLE_PROXY_URL}?action=auth&type=login&login_id=${encodeURIComponent(savedEmail)}&password=${encodeURIComponent(savedPass)}`);
+            // Gunakan User / Email sebagai kunci verifikasi ke server
+            let loginId = savedUser || savedEmail;
+            let res = await fetch(`${GOOGLE_PROXY_URL}?action=auth&type=login&login_id=${encodeURIComponent(loginId)}&password=${encodeURIComponent(savedPass)}`);
             let data = await res.json();
             
             if (data.status === "success") {
@@ -369,27 +389,30 @@
                 
                 localStorage.setItem("gacor_kuota", liveKuota);
                 localStorage.setItem("gacor_saldo", liveSaldo);
+                // Jaga-jaga simpan ulang username/email
+                localStorage.setItem("gacor_user", data.username || savedUser);
+                localStorage.setItem("gacor_email", data.email || savedEmail);
                 return true;
             } else { 
                 doLogout(); 
                 return false;
             }
         } catch (e) { 
-            // Jika Google Script menolak request (CORS/Timeout), biarkan UI pakai data cache terakhir
+            // Jika Google Script telat merespon (misal karena jaringan), berikan keringanan login via cache
             return true;
         }
     }
     
     function konfirmasiWA() {
-        let email = localStorage.getItem("gacor_email") || "Belum Login";
+        let username = localStorage.getItem("gacor_user") || "Belum Login";
         let nominal = document.getElementById("nominalTopup").value;
         if(!nominal || nominal < 10000) return alert("Minimal top-up Rp 10.000");
-        let pesan = `Halo Admin Gacor Hunter,\n\nSaya mau konfirmasi Top-Up Saldo Analisa.\n📧 Email Akun: *${email}*\n💰 Nominal: *Rp${nominal}*\n\nBerikut lampiran screenshot bukti transfer QRIS.`;
+        let pesan = `Halo Admin Gacor Hunter,\n\nSaya mau konfirmasi Top-Up Saldo Analisa.\n👤 Username Akun: *${username}*\n💰 Nominal: *Rp${nominal}*\n\nBerikut lampiran screenshot bukti transfer QRIS.`;
         window.open(`https://wa.me/6281462364686?text=${encodeURIComponent(pesan)}`, '_blank');
         document.getElementById('topupModal').style.display='none';
     }
 
-    // 2. LOGIKA TRADING ENGINE (ALGORITMA TETAP SAMA)
+    // 2. LOGIKA TRADING ENGINE (ALGORITMA TETAP SAMA SEPERTI ASLINYA)
     const average = arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0;
     const highest = arr => arr.length ? Math.max(...arr) : 0;
     const lowest = arr => arr.length ? Math.min(...arr) : 0;
@@ -510,7 +533,10 @@
 
     async function startEngine() {
         let email = localStorage.getItem("gacor_email");
-        if (!email || email === "undefined" || email === "null") {
+        let username = localStorage.getItem("gacor_user");
+        let identitas = email || username; // Pakai salah satu yang aman di memori
+
+        if (!identitas || identitas === "undefined" || identitas === "null") {
             document.getElementById('authWarning').style.display = "block"; window.scrollTo(0, 0); return;
         }
 
@@ -532,14 +558,13 @@
             if (!stockQuote) throw new Error("Data saham tidak ditemukan.");
             
             updateLog("Data bursa sukses ditarik. Memverifikasi kuota user...");
-            let resAuth = await fetch(`${GOOGLE_PROXY_URL}?action=auth&type=use_quota&email=${encodeURIComponent(email)}`);
+            let resAuth = await fetch(`${GOOGLE_PROXY_URL}?action=auth&type=use_quota&email=${encodeURIComponent(identitas)}`);
             let dataAuth = await resAuth.json();
             if (dataAuth.status !== "success") throw new Error("❌ Kuota habis dan saldo tidak mencukupi. Silakan Top Up Saldo.");
             
             document.getElementById('uiKuota').innerText = dataAuth.remain_kuota;
             document.getElementById('uiSaldo').innerText = formatNumber(dataAuth.remain_saldo);
             
-            // Simpan Data Terbaru ke Cache dengan Aman
             if(dataAuth.remain_kuota !== undefined) localStorage.setItem("gacor_kuota", dataAuth.remain_kuota);
             if(dataAuth.remain_saldo !== undefined) localStorage.setItem("gacor_saldo", dataAuth.remain_saldo);
 
@@ -679,10 +704,9 @@
         window.scrollTo({ top: document.getElementById('tickerInput').offsetTop - 20, behavior: 'smooth' });
     }
 
-    // 3. PENGATURAN ANTRIAN REQUEST AGAR SERVER GOOGLE SCRIPT TIDAK BENTROK
     async function initDashboard() {
         await checkAuth();
-        await sleep(600); // Jeda agar Google Script tidak overload
+        await sleep(600); // Jeda agar Google Script tidak bertabrakan
         
         try {
             const outReq = await fetch(`${GOOGLE_PROXY_URL}?action=getMarketOutlook`);
@@ -696,7 +720,7 @@
             }
         } catch(e) { document.getElementById('topIhsgDesc').innerText = "Gagal load data bursa."; }
 
-        await sleep(600); // Jeda kedua
+        await sleep(600);
 
         const grid = document.getElementById("top10Grid");
         const badgeScan = document.getElementById("lastScanBadge");
@@ -729,7 +753,7 @@
             "container_id": "tv_chart_container", "backgroundColor": "rgba(17, 24, 39, 0)"
         });
 
-        initDashboard(); // Jalankan fungsi antrian
+        initDashboard(); 
     };
 </script>
 </body>
