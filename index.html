@@ -79,14 +79,21 @@
         .ihsg-weather { padding: 25px; display: flex; flex-direction: column; justify-content: center; gap: 20px; }
         .ihsg-val { font-family: 'JetBrains Mono', monospace; font-size: 32px; font-weight: bold; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
 
-        /* Top 10 Radar */
-        .radar-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 15px; }
+        /* Top 10 Radar - COMPACT MOBILE VERSION */
+        .radar-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(135px, 1fr)); /* Diperkecil dari 190px */
+            gap: 10px; /* Jarak dirapatkan */
+        }
         .radar-card {
-            background: rgba(0,0,0,0.5); border: 1px solid #1e293b; padding: 15px; 
-            border-radius: 12px; cursor: pointer; transition: all 0.2s ease; position: relative; overflow: hidden;
+            background: rgba(0,0,0,0.5); border: 1px solid #1e293b; 
+            padding: 10px; /* Padding dikurangi */
+            border-radius: 8px; cursor: pointer; transition: all 0.2s ease;
         }
         .radar-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 5px 20px var(--accent-glow); }
-        .rc-ticker { font-weight: 800; font-size: 18px; color: #fff; }
+        .rc-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+        .rc-ticker { font-weight: 800; font-size: 14px; color: #fff; } /* Font nama saham dikecilkan */
+        .rc-score { font-size: 10px; font-weight: bold; background: rgba(0,240,255,0.1); color: var(--accent); padding: 2px 5px; border-radius: 4px; }
         
         /* Modal Top Up */
         .modal-overlay {
