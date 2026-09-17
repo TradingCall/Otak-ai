@@ -103,11 +103,6 @@
         .action-btn { cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px; }
         .action-icon { width: 50px; height: 50px; border-radius: 50%; background: var(--bg-card); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 22px; color: var(--accent); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
         .action-btn span { font-size: 11px; font-weight: 600; color: var(--text-muted); }
-        .action-desc { font-size: 10px; color: #64748b; text-align: center; grid-column: span 3; display: grid; grid-template-columns: 1fr 1fr 1fr; }
-
-        /* QRIS FLOATING */
-        .qris-float { text-align: center; margin: 30px 0; }
-        .btn-qris { background: var(--bg-card); color: var(--accent); border: 1px solid var(--accent); padding: 8px 24px; border-radius: 20px; font-weight: 800; font-size: 12px; cursor: pointer; box-shadow: 0 0 15px rgba(0,240,255,0.2); }
 
         /* BOTTOM NAV */
         .bottom-nav {
@@ -119,7 +114,7 @@
         .nav-item.active { color: var(--accent); }
         .nav-icon { font-size: 18px; }
 
-        /* AUTH FORMS */
+        /* AUTH & FORMS */
         .input-pro { width: 100%; padding: 15px; margin-bottom: 12px; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border); color: white; border-radius: 10px; font-size: 14px; }
         .btn-pro { width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: 800; font-size: 14px; cursor: pointer; background: var(--btn-blue); color: white; }
         .tab-btn { flex: 1; padding: 12px; font-size: 13px; font-weight: bold; border: none; cursor: pointer; border-radius: 8px; background: transparent; color: var(--text-muted); }
@@ -172,7 +167,6 @@
             <div class="app-title">GACOR HUNTER<br><span>PRO</span></div>
             <div class="header-icons">
                 <span onclick="doLogout()" title="Logout">👤</span>
-                <!-- Ikon pengaturan dihapus sesuai permintaan -->
             </div>
         </div>
 
@@ -221,17 +215,13 @@
                 <div class="action-icon">👁️</div>
                 <span>Watchlist</span>
             </div>
-            <div class="action-btn">
+            <div class="action-btn" onclick="navTo('notifPage')">
                 <div class="action-icon" style="position: relative;">
                     🔔
-                    <div style="position: absolute; top: -2px; right: -2px; background: var(--skip); width: 14px; height: 14px; font-size: 9px; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;">0</div>
+                    <div style="position: absolute; top: -2px; right: -2px; background: var(--skip); width: 14px; height: 14px; font-size: 9px; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;">1</div>
                 </div>
                 <span>Alerts</span>
             </div>
-        </div>
-
-        <div class="qris-float">
-            <button class="btn-qris" onclick="document.getElementById('topupModal').style.display='block'">SCAN QRIS TOP-UP</button>
         </div>
     </div>
 
@@ -245,7 +235,7 @@
 
         <div style="background: var(--bg-card); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
             <input type="text" id="tickerInput" class="input-pro" placeholder="KODE TICKER (Misal: BBCA)" style="text-align: center; font-size: 20px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase;">
-            <button id="scanBtn" onclick="startEngine()" class="btn-pro">⚡ JALANKAN ANALISA (Rp1.000)</button>
+            <button id="scanBtn" onclick="startEngine()" class="btn-pro">⚡ JALANKAN ANALISA</button>
         </div>
 
         <!-- TRACKER -->
@@ -254,7 +244,7 @@
             <div id="trackerLog" style="margin-top: 10px; max-height: 150px; overflow-y: auto;"></div>
         </div>
 
-        <!-- RESULTS DASHBOARD (OTAK LAMA YG LENGKAP) -->
+        <!-- RESULTS DASHBOARD -->
         <div id="resultBox" style="display: none; margin-top: 20px;">
             <!-- HERO HEADER -->
             <div style="background: var(--bg-card); text-align: center; padding: 25px; border-radius: 16px; border: 1px solid var(--border); border-top: 4px solid var(--accent);">
@@ -283,7 +273,7 @@
                     <div class="stat-row" style="border:none;"><span>Setup + Risk/Reward (10)</span><span class="stat-val" id="scSetup">0</span></div>
                 </div>
 
-                <!-- PANEL 2: TRADING PLAN (Sangat Detail) -->
+                <!-- PANEL 2: TRADING PLAN -->
                 <div style="background: var(--bg-card); padding: 20px; border-radius: 16px; border: 1px solid var(--border);">
                     <div style="color: var(--accent); font-weight: 800; font-size: 12px; border-bottom: 1px dashed var(--border); padding-bottom: 10px; margin-bottom: 15px;">🎯 LOGICAL TRADING PLAN</div>
                     
@@ -326,7 +316,7 @@
                     </div>
                 </div>
 
-                <!-- PANEL 3: SENTIMEN & FUNDAMENTAL BARU -->
+                <!-- PANEL 3: SENTIMEN & FUNDAMENTAL -->
                 <div style="background: var(--bg-card); padding: 20px; border-radius: 16px; border: 1px solid var(--border);">
                     <div style="color: var(--accent); font-weight: 800; font-size: 12px; border-bottom: 1px dashed var(--border); padding-bottom: 10px; margin-bottom: 15px;">📰 SENTIMEN & BERITA HARI INI</div>
                     <div id="outNews" style="font-size: 11.5px; color: var(--text-muted); line-height: 1.6;">
@@ -337,25 +327,46 @@
             </div>
         </div>
     </div>
+    
+    <!-- ==================== HALAMAN 4: NOTIFIKASI ==================== -->
+    <div id="notifPage" class="view-section">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+            <div onclick="navTo('homePage')" style="font-size: 20px; cursor: pointer; color: var(--text-muted);">&larr;</div>
+            <h3 class="section-title" style="margin: 0; font-size: 16px;">NOTIFIKASI SISTEM</h3>
+        </div>
+        
+        <div style="background: var(--bg-card); padding: 15px; border-radius: 12px; border-left: 4px solid var(--buy); margin-bottom: 15px;">
+            <div style="font-size: 10px; color: var(--text-muted);">Informasi Kuota Harian</div>
+            <div style="font-size: 13px; font-weight: 800; margin: 6px 0;">🎉 Pembaruan Kuota Analisa</div>
+            <div style="font-size: 11px; color: var(--text-muted); line-height: 1.5;">
+                Pendaftaran baru mendapatkan gratis <b>10x Analisa</b>. Di hari-hari berikutnya, sistem akan memberikan <b>5x Kuota Gratis</b> yang direset secara otomatis.
+            </div>
+        </div>
+        
+        <div style="background: var(--bg-card); padding: 15px; border-radius: 12px; border-left: 4px solid var(--accent); margin-bottom: 15px;">
+            <div style="font-size: 10px; color: var(--text-muted);">Sistem Trading</div>
+            <div style="font-size: 13px; font-weight: 800; margin: 6px 0;">🤖 Update Algoritma V5.5</div>
+            <div style="font-size: 11px; color: var(--text-muted); line-height: 1.5;">
+                Algoritma scoring 100 poin dan Market Weather kini telah dimaksimalkan untuk performa yang lebih akurat.
+            </div>
+        </div>
+    </div>
 
 
-    <!-- ==================== BOTTOM NAVIGATION ==================== -->
+    <!-- ==================== BOTTOM NAVIGATION (Update) ==================== -->
     <nav class="bottom-nav">
         <div class="nav-item active" onclick="navTo('homePage', this)">
             <div class="nav-icon">🏠</div>
             <span>Beranda</span>
         </div>
-        <div class="nav-item" onclick="alert('Fitur Notifikasi Segera Hadir')">
+        <div class="nav-item" onclick="navTo('notifPage', this)">
             <div class="nav-icon">🔔</div>
             <span>Notifikasi</span>
         </div>
-        <div class="nav-item" onclick="alert('Fitur Profil Segera Hadir')">
-            <div class="nav-icon">👤</div>
-            <span>Profil</span>
-        </div>
-        <div class="nav-item" onclick="alert('Admin Area')">
+        <!-- Ikon Profil Dihapus. Menu Admin diubah jadi Komunitas -->
+        <div class="nav-item" onclick="document.getElementById('adminModal').style.display='block'">
             <div class="nav-icon">🛡️</div>
-            <span>Admin</span>
+            <span>Komunitas</span>
         </div>
     </nav>
     
@@ -375,17 +386,27 @@
     </div>
 </div>
 
+<!-- MODAL KOMUNITAS / ADMIN -->
+<div id="adminModal" class="modal-overlay">
+    <div class="modal-content">
+        <h3 style="margin-top: 0; color: var(--accent);">Bantuan & Komunitas</h3>
+        <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 20px;">Gabung komunitas resmi kami di Discord atau hubungi Admin via WhatsApp.</p>
+        <button onclick="window.open('https://discord.gg/tTZX5xg4y', '_blank')" class="btn-pro" style="background: #5865F2; margin-bottom: 10px;">🎮 GABUNG DISCORD</button>
+        <button onclick="window.open('https://wa.me/6281462364686', '_blank')" class="btn-pro" style="background: #25D366; margin-bottom: 10px;">📲 HUBUNGI ADMIN (WA)</button>
+        <button onclick="document.getElementById('adminModal').style.display='none'" class="btn-pro" style="background: transparent; border: 1px solid var(--skip); color: var(--skip);">TUTUP</button>
+    </div>
+</div>
+
 <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 <script>
     // =========================================================================
     // URL WEB APP ANDA
     // =========================================================================
-    const GOOGLE_PROXY_URL = "https://script.google.com/macros/s/AKfycbzCjGkQwYwSOD4yDMMNAEE8EOGEAGVKdHhGGvi_hHCJX6KHBNNN_EWuYfVZzzWoHjM/exec";
+    const GOOGLE_PROXY_URL = "https://script.google.com/macros/s/AKfycbzyqcaZ-LjXMwe5NfUNguRO1qgdWi7Z2HizO4q5iDUklwDG7CBeVk1zeEEait-ephM/exec";
     
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     const formatNumber = num => num < 10 ? num.toFixed(2) : Math.round(num).toLocaleString('id-ID');
 
-    // UI NAVIGATION LOGIC
     function navTo(pageId, navElement) {
         document.querySelectorAll('.view-section').forEach(el => el.classList.remove('view-active'));
         document.getElementById(pageId).classList.add('view-active');
@@ -397,7 +418,6 @@
         window.scrollTo(0,0);
     }
 
-    // 1. SISTEM AUTENTIKASI (Saldo Default 10rb)
     function switchAuthTab(tab) {
         if(tab === 'login') {
             document.getElementById('formLogin').style.display = "block"; document.getElementById('formReg').style.display = "none";
@@ -424,7 +444,6 @@
                 localStorage.setItem("gacor_user", data.username || us); 
                 localStorage.setItem("gacor_pass", pw);
                 localStorage.setItem("gacor_kuota", data.kuota !== undefined ? data.kuota : 10);
-                // SET DEFAULT SALDO 10.000 JIKA USER BARU
                 localStorage.setItem("gacor_saldo", data.saldo !== undefined ? data.saldo : 10000); 
                 
                 alert("Pendaftaran Berhasil! Kuota & Saldo awal siap digunakan.");
@@ -482,7 +501,6 @@
             return false;
         }
 
-        // Tampilkan Home
         navTo('homePage');
         document.querySelector('.bottom-nav').style.display = "flex";
         document.getElementById('uiKuota').innerText = savedKuota; 
@@ -497,7 +515,7 @@
                 let liveKuota = (data.kuota !== undefined && data.kuota !== null) ? parseInt(data.kuota) : savedKuota;
                 let liveSaldo = (data.saldo !== undefined && data.saldo !== null) ? parseInt(data.saldo) : savedSaldo;
                 
-                if(isNaN(liveKuota)) liveKuota = 10; if(isNaN(liveSaldo)) liveSaldo = 10000;
+                if(isNaN(liveKuota)) liveKuota = 5; if(isNaN(liveSaldo)) liveSaldo = 10000;
                 document.getElementById('uiKuota').innerText = liveKuota; 
                 document.getElementById('uiSaldo').innerText = formatNumber(liveSaldo);
                 
@@ -518,7 +536,7 @@
     }
 
     // =========================================================================
-    // 2. LOGIKA TRADING ENGINE (KEMBALI KE V5.0 FULL DETAIL)
+    // TRADING ENGINE
     // =========================================================================
     const average = arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0;
     const highest = arr => arr.length ? Math.max(...arr) : 0;
@@ -654,26 +672,23 @@
         
         try {
             updateLog(`Menghubungkan ke bursa untuk $${ticker}...`);
-
-            // 1. DATA BURSA
             const stockQuote = await fetchYahooData(ticker);
             if (stockQuote && stockQuote.error) throw new Error("⚠️ Server IDX gangguan. Coba lagi nanti.");
             if (!stockQuote) throw new Error("Data saham tidak ditemukan.");
             
-            // 2. CEK KUOTA (Dipotong Rp 1.000 / Analisa)
-            updateLog("Memverifikasi kuota user...");
+            updateLog("Memverifikasi kuota & saldo harian user...");
             let resAuth = await fetch(`${GOOGLE_PROXY_URL}?action=auth&type=use_quota&email=${encodeURIComponent(identitas)}`);
             let dataAuth = await resAuth.json();
-            if (dataAuth.status !== "success") throw new Error("❌ Kuota habis dan saldo tidak mencukupi.");
+            
+            if (dataAuth.status !== "success") throw new Error("❌ " + dataAuth.message);
             
             document.getElementById('uiKuota').innerText = dataAuth.remain_kuota;
             document.getElementById('uiSaldo').innerText = formatNumber(dataAuth.remain_saldo);
             localStorage.setItem("gacor_kuota", dataAuth.remain_kuota);
             localStorage.setItem("gacor_saldo", dataAuth.remain_saldo);
 
-            updateLog(`Akses diizinkan via jalur: ${dataAuth.type}. Kalkulasi V5.0...`);
+            updateLog(`Akses diizinkan via jalur: ${dataAuth.type}. Kalkulasi V5.5...`);
 
-            // 3. ENGINE V5.0 CORE 
             const stockData = extractValidData(stockQuote);
             const closes = stockData.closes, volumes = stockData.volumes, highs = stockData.highs, lows = stockData.lows;
             if (closes.length < 120) throw new Error("Data historis tidak mencukupi (minimal 120 hari).");
@@ -720,7 +735,6 @@
             else if(direction==="BULLISH"&&structure.bullish)setup="TREND CONTINUATION";
             else if(direction==="BEARISH")setup="DOWNTREND / NO LONG";
 
-            // V5.0 SCORING LOGIC
             let scStructure=structure.bullish?20:structure.bearish?0:structure.label==="EXPANSION / MIXED"?10:7;
             let scEma=(ema5>ema21?6:0)+(ema21>ema34?4:0)+(ema34>ema99?3:0)+(currClose>ema21?2:0);
             let scMacd=(macdLine>signalLine?5:0)+(macdLine>0?3:0)+(macdHist>0?2:0);
@@ -744,7 +758,6 @@
             updateLog("Selesai mengkalkulasi. Render panel...");
             await sleep(300);
 
-            // 4. BINDING KE UI BARU (DENGAN DETAIL LAMA)
             document.getElementById("trackerBox").style.display = "none";
             document.getElementById("scanBtn").disabled = false;
             document.getElementById("resultBox").style.display = "block";
@@ -798,16 +811,14 @@
                 ?"TP1/TP2 bertahap; full exit bila close < EMA21 dan HL terakhir gagal"
                 :"Belum ada long entry; tunggu reclaim EMA21 + HL baru";
 
-            // SIMULASI BERITA & SENTIMEN MENGGUNAKAN AI SCORING
             let sentimentHtml = "";
             if (totalScore >= 75) {
-                sentimentHtml = `<b>🔥 Sentimen Positif (Bullish Bias)</b><br>Berdasarkan pergerakan teknikal yang agresif, emiten kemungkinan sedang diakumulasi institusi atau memiliki katalis positif (seperti rilis laporan keuangan bagus atau aksi korporasi). Disarankan untuk <i>hold</i> mengikuti garis tren MA20.`;
+                sentimentHtml = `<b>🔥 Sentimen Positif (Bullish Bias)</b><br>Berdasarkan pergerakan teknikal yang agresif, emiten kemungkinan sedang diakumulasi institusi atau memiliki katalis positif. Disarankan untuk <i>hold</i> mengikuti garis tren MA20.`;
             } else if (totalScore <= 40) {
-                sentimentHtml = `<b>🩸 Sentimen Negatif (Bearish Bias)</b><br>Volume distribusi lebih dominan. Emiten mungkin sedang terkena <i>downgrade</i> target harga atau merespons berita negatif di pasar/sektornya. Hindari gaya trading menangkap pisau jatuh <i>(catch falling knife)</i>.`;
+                sentimentHtml = `<b>🩸 Sentimen Negatif (Bearish Bias)</b><br>Volume distribusi lebih dominan. Emiten mungkin sedang terkena <i>downgrade</i> atau merespons berita negatif di pasar/sektornya.`;
             } else {
-                sentimentHtml = `<b>⚖️ Sentimen Netral (Wait & See)</b><br>Emiten sedang dalam fase konsolidasi atau absennya sentimen penggerak <i>(lack of catalyst)</i>. Pergerakan harga cenderung dipengaruhi oleh fluktuasi IHSG secara umum. Tunggu sinyal <i>breakout</i>.`;
+                sentimentHtml = `<b>⚖️ Sentimen Netral (Wait & See)</b><br>Emiten sedang dalam fase konsolidasi. Pergerakan harga cenderung dipengaruhi oleh fluktuasi IHSG secara umum. Tunggu sinyal <i>breakout</i>.`;
             }
-            sentimentHtml += `<br><br><i style="color:var(--accent); font-size:10px;">*Berita realtime & koneksi ke IDX News sedang dalam masa pengembangan API backend.</i>`;
             
             document.getElementById("outNews").innerHTML = sentimentHtml;
 
@@ -828,9 +839,8 @@
         let isAuthenticated = await checkAuth();
         if(!isAuthenticated) return;
         
-        await sleep(600); // Jeda anti-limit
+        await sleep(600); 
         
-        // Load IHSG & Chart
         try {
             const outReq = await fetch(`${GOOGLE_PROXY_URL}?action=getMarketOutlook`);
             const outRes = await outReq.json();
@@ -843,9 +853,8 @@
             }
         } catch(e) {}
 
-        await sleep(600); // Jeda anti-limit
+        await sleep(600); 
 
-        // Load Top 10
         const grid = document.getElementById("top10Grid");
         try {
             const req = await fetch(`${GOOGLE_PROXY_URL}?action=getTop10`);
