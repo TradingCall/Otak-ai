@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trading Call V1.1 - Structured Trading Engine</title>
+    <title>GACOR HUNTER PRO - Structured Trading Engine</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
 
         :root { 
             --bg-base: #050505; 
             --bg-grad: radial-gradient(circle at top, #111827, #050505);
-            --glass-panel: rgba(17, 24, 39, 0.75); 
+            --glass-panel: rgba(17, 24, 39, 0.65); 
             --glass-border: rgba(0, 240, 255, 0.2); 
             --text: #f8fafc; 
             --accent: #00f0ff; 
@@ -25,16 +25,18 @@
         body { 
             font-family: 'Inter', sans-serif; 
             background: var(--bg-base); background-image: var(--bg-grad); 
-            color: var(--text); margin: 0; padding: 15px 10px; min-height: 100vh;
+            color: var(--text); margin: 0; padding: 20px 15px; min-height: 100vh;
         }
         
-        .container { max-width: 650px; margin: auto; }
+        .container { max-width: 1050px; margin: auto; }
         
-        .app-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 20px; padding: 10px 5px; border-bottom: 1px solid rgba(255,255,255,0.1);
+        h1 { 
+            text-align: center; font-size: 36px; font-weight: 800; text-transform: uppercase; 
+            letter-spacing: 3px; margin-bottom: 5px; 
+            background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px var(--accent-glow));
         }
-        .app-title { font-size: 18px; font-weight: 800; color: #fff; letter-spacing: 1px; }
+        p.subtitle { text-align: center; color: #94a3b8; font-family: 'JetBrains Mono', monospace; font-size: 11px; margin-bottom: 25px; letter-spacing: 2px; }
 
         .glass {
             background: var(--glass-panel); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
@@ -42,32 +44,33 @@
         }
 
         /* User Profile & Auth Section */
-        .auth-container { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
+        .auth-container { display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px; }
         .tab-btn { flex: 1; padding: 12px; font-size: 14px; font-weight: bold; border: none; cursor: pointer; border-radius: 8px; transition: 0.3s; }
         .tab-active { background: var(--accent-grad); color: #000; box-shadow: 0 0 15px var(--accent-glow); }
         .tab-inactive { background: rgba(255,255,255,0.05); color: #94a3b8; border: 1px solid rgba(255,255,255,0.1); }
         .input-pro {
-            width: 100%; padding: 14px; margin-bottom: 12px;
+            width: 100%; padding: 16px; margin-bottom: 15px;
             background: rgba(0, 0, 0, 0.4); border: 1px solid #334155; 
             color: white; font-family: 'Inter', sans-serif; font-size: 14px;
             border-radius: 10px; transition: all 0.3s ease; text-transform: none;
         }
         .input-pro:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
         .btn-pro {
-            width: 100%; padding: 14px; border: none; border-radius: 10px;
+            width: 100%; padding: 16px; border: none; border-radius: 10px;
             font-weight: 800; font-size: 14px; text-transform: uppercase; cursor: pointer; transition: all 0.3s ease;
         }
         .btn-pro:hover { transform: translateY(-2px); }
 
-        /* Layout Grids - STACKED 1 COLUMN LIKE IMAGE 2 */
-        .ihsg-container { display: grid; grid-template-columns: 1fr; gap: 15px; margin-bottom: 25px; }
-        .tv-chart-box { overflow: hidden; height: 250px; }
-        .ihsg-weather { padding: 20px; display: flex; flex-direction: column; gap: 12px; }
-        .ihsg-val { font-family: 'JetBrains Mono', monospace; font-size: 24px; font-weight: bold; color: #fff; }
+        /* Layout Grids */
+        .ihsg-container { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 35px; }
+        @media (max-width: 768px) { .ihsg-container { grid-template-columns: 1fr; } }
+        .tv-chart-box { overflow: hidden; height: 350px; }
+        .ihsg-weather { padding: 25px; display: flex; flex-direction: column; justify-content: center; gap: 20px; }
+        .ihsg-val { font-family: 'JetBrains Mono', monospace; font-size: 32px; font-weight: bold; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
 
-        /* Top 10 Radar - COMPACT MOBILE VERSION */
-        .radar-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
-        .radar-card { background: rgba(0,0,0,0.5); border: 1px solid #1e293b; padding: 10px; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; }
+        /* Top 10 Radar */
+        .radar-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(135px, 1fr)); gap: 10px; }
+        .radar-card { background: rgba(0,0,0,0.5); border: 1px solid #1e293b; padding: 10px; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; position: relative; overflow: hidden; }
         .radar-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 5px 20px var(--accent-glow); }
         .rc-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
         .rc-ticker { font-weight: 800; font-size: 14px; color: #fff; }
@@ -75,35 +78,34 @@
 
         /* Modal Top Up */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px); z-index: 1000; }
-        .modal-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 400px; padding: 25px; text-align: center; }
-        .qris-box { background: white; padding: 12px; border-radius: 12px; margin-bottom: 15px; }
+        .modal-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 420px; padding: 30px; text-align: center; }
+        .qris-box { background: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; }
         .qris-box img { width: 100%; border-radius: 8px; }
 
-        /* Dashboard Results - STACKED VERTICALLY (1 KOLOM) */
-        .tracker-box { background: #020617; border: 1px solid #3b82f6; padding: 15px; border-radius: 12px; display: none; margin-top: 20px; color: #3b82f6; font-family: 'JetBrains Mono', monospace; }
-        .result-dashboard { display: none; margin-top: 25px; animation: slideUp 0.5s ease-out; }
+        /* Dashboard Results */
+        .tracker-box { background: #020617; border: 1px solid #3b82f6; padding: 20px; border-radius: 12px; display: none; margin-top: 25px; color: #3b82f6; font-family: 'JetBrains Mono', monospace; }
+        .result-dashboard { display: none; margin-top: 35px; animation: slideUp 0.5s ease-out; }
+        
+        /* PERBAIKAN GRID RESPONSIVE UNTUK HASIL (AGAR SEPERTI GAMBAR KE 2) */
+        .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 768px) { .result-grid { grid-template-columns: 1fr; } }
+        
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        .grid-dash { display: grid; grid-template-columns: 1fr; gap: 20px; } /* Diubah jadi 1 kolom ke bawah */
-        .card { background: var(--glass-panel); border: 1px solid var(--glass-border); padding: 20px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .card-title { color: var(--accent); font-weight: 800; font-size: 13px; border-bottom: 1px dashed rgba(0, 240, 255, 0.3); padding-bottom: 10px; margin-bottom: 15px; letter-spacing: 1px; }
-        
-        .stat-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 13px; }
+        .stat-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 13px; }
         .stat-val { font-weight: bold; color: #f8fafc; font-family: 'JetBrains Mono', monospace; text-align: right; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="app-header">
-        <div class="app-title">Trading Call V1.1</div>
-        <div style="font-size: 11px; color: var(--accent); font-family: 'JetBrains Mono';">PRO ENGINE</div>
-    </div>
+    <h1>GACOR HUNTER PRO</h1>
+    <p class="subtitle">AI-DRIVEN ALGORITHMIC TRADING SYSTEM V5.5</p>
 
     <!-- KOTAK AUTHENTIKASI & PROFIL USER -->
-    <div class="auth-container glass" style="padding: 20px;">
+    <div class="auth-container glass" style="padding: 25px;">
         <div id="authBox">
-            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
                 <button id="tabLogin" onclick="switchAuthTab('login')" class="tab-btn tab-active">LOGIN</button>
                 <button id="tabReg" onclick="switchAuthTab('register')" class="tab-btn tab-inactive">DAFTAR (10x FREE)</button>
             </div>
@@ -121,24 +123,28 @@
         </div>
 
         <div id="userProfileBox" style="display: none; text-align: center;">
-            <div style="font-size: 11px; color: var(--accent); letter-spacing: 1px; text-transform: uppercase;">Akses Diberikan</div>
-            <div id="uiUsername" style="font-size: 20px; font-weight: 800; margin: 4px 0;">-</div>
-            <div id="uiEmail" style="font-size: 11px; color: #94a3b8; margin-bottom: 15px;">-</div>
             
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
-                <div style="background: rgba(0,0,0,0.4); padding: 12px; border-radius: 10px; border: 1px solid #1e293b;">
-                    <div style="font-size: 10px; color: #94a3b8; margin-bottom: 4px;">SISA KUOTA FREE</div>
-                    <div style="font-size: 18px; font-weight: bold; color: var(--accent); font-family: 'JetBrains Mono';"><span id="uiKuota">0</span> <span style="font-size: 10px; color: #64748b;">/ 10</span></div>
+            <!-- INFORMASI USER DISEMBUNYIKAN SESUAI PERMINTAAN -->
+            <div style="display: none;">
+                <div style="font-size: 12px; color: var(--accent); letter-spacing: 1px; text-transform: uppercase;">Akses Diberikan</div>
+                <div id="uiUsername" style="font-size: 24px; font-weight: 800; margin: 5px 0;">-</div>
+                <div id="uiEmail" style="font-size: 12px; color: #94a3b8; margin-bottom: 20px;">-</div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                <div style="background: rgba(0,0,0,0.4); padding: 15px; border-radius: 12px; border: 1px solid #1e293b;">
+                    <div style="font-size: 11px; color: #94a3b8; margin-bottom: 5px;">SISA KUOTA FREE</div>
+                    <div style="font-size: 22px; font-weight: bold; color: var(--accent); font-family: 'JetBrains Mono';"><span id="uiKuota">0</span> <span style="font-size: 12px; color: #64748b;">/ 10</span></div>
                 </div>
-                <div style="background: rgba(0,0,0,0.4); padding: 12px; border-radius: 10px; border: 1px solid #1e293b;">
-                    <div style="font-size: 10px; color: #94a3b8; margin-bottom: 4px;">SALDO BERBAYAR</div>
-                    <div style="font-size: 18px; font-weight: bold; color: var(--buy); font-family: 'JetBrains Mono';">Rp <span id="uiSaldo">0</span></div>
+                <div style="background: rgba(0,0,0,0.4); padding: 15px; border-radius: 12px; border: 1px solid #1e293b;">
+                    <div style="font-size: 11px; color: #94a3b8; margin-bottom: 5px;">SALDO BERBAYAR</div>
+                    <div style="font-size: 22px; font-weight: bold; color: var(--buy); font-family: 'JetBrains Mono';">Rp <span id="uiSaldo">0</span></div>
                 </div>
             </div>
             
-            <div style="display: flex; gap: 8px;">
-                <button onclick="document.getElementById('topupModal').style.display='block'" class="btn-pro" style="background: var(--buy); color: white; flex: 2; padding: 12px;">💳 TOP UP SALDO</button>
-                <button onclick="doLogout()" class="btn-pro" style="background: transparent; border: 1px solid var(--skip); color: var(--skip); flex: 1; padding: 12px;">LOGOUT</button>
+            <div style="display: flex; gap: 10px;">
+                <button onclick="document.getElementById('topupModal').style.display='block'" class="btn-pro" style="background: var(--buy); color: white; flex: 2;">💳 TOP UP SALDO</button>
+                <button onclick="doLogout()" class="btn-pro" style="background: transparent; border: 1px solid var(--skip); color: var(--skip); flex: 1;">LOGOUT</button>
             </div>
         </div>
     </div>
@@ -147,80 +153,83 @@
     <div class="ihsg-container">
         <div class="glass tv-chart-box" id="tv_chart_container"></div>
         <div class="glass ihsg-weather">
-            <div style="font-size: 11px; color: var(--accent); font-weight: 800; letter-spacing: 1px;">🌍 MARKET WEATHER</div>
+            <div style="font-size: 12px; color: var(--accent); font-weight: 800; letter-spacing: 2px;">🌍 ALGORITHMIC MARKET WEATHER</div>
             <div>
-                <div style="font-size: 10px; color: #94a3b8; margin-bottom: 3px;">IHSG LEVEL</div>
+                <div style="font-size: 11px; color: #94a3b8; margin-bottom: 5px;">IHSG LATEST LEVEL</div>
                 <div class="ihsg-val" id="topIhsgLevel">Syncing...</div>
             </div>
             <div>
-                <div style="font-size: 10px; color: #94a3b8; margin-bottom: 3px;">TREND (MA20)</div>
-                <div class="ihsg-val" id="topIhsgTrend" style="font-size: 16px;">-</div>
+                <div style="font-size: 11px; color: #94a3b8; margin-bottom: 5px;">TREND STATUS (MA20)</div>
+                <div class="ihsg-val" id="topIhsgTrend" style="font-size: 22px;">-</div>
             </div>
-            <div style="font-size: 12px; color: #cbd5e1; line-height: 1.5; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid #1e293b;" id="topIhsgDesc">
-                Memuat data dari server...
+            <div style="font-size: 13px; color: #cbd5e1; line-height: 1.6; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; border: 1px solid #1e293b;" id="topIhsgDesc">
+                Memuat data dari server backend...
             </div>
         </div>
     </div>
 
-    <!-- RADAR -->
-    <div style="margin-bottom: 25px;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 12px;">
-            <div style="font-size: 15px; font-weight: 800;">🔥 TOP 10 RADAR (EOD)</div>
-            <div id="lastScanBadge" style="font-size: 10px; color: var(--accent); background: rgba(0,240,255,0.1); border: 1px solid rgba(0,240,255,0.3); padding: 4px 8px; border-radius: 6px;">🔄 Syncing...</div>
+    <!-- RADAR MOBILE COMPACT -->
+    <div style="margin-bottom: 35px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 15px;">
+            <div style="font-size: 18px; font-weight: 800;">🔥 TOP 10 RADAR (EOD)</div>
+            <div id="lastScanBadge" style="font-size: 11px; color: var(--accent); background: rgba(0,240,255,0.1); border: 1px solid rgba(0,240,255,0.3); padding: 5px 10px; border-radius: 6px;">🔄 Syncing...</div>
         </div>
         <div class="radar-grid" id="top10Grid">
-            <div class="radar-card" style="min-height: 60px;"></div>
+            <div class="radar-card" style="min-height: 70px;"></div>
         </div>
     </div>
 
     <!-- SEARCH ENGINE -->
-    <div class="glass" style="padding: 20px; text-align: center; margin-bottom: 25px;">
-        <input type="text" id="tickerInput" class="input-pro" placeholder="KODE TICKER (Misal: BBCA.JK)" style="text-align: center; font-size: 16px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase;">
-        <button id="scanBtn" onclick="startEngine()" class="btn-pro" style="background: var(--accent-grad); color: #000; font-size: 14px; padding: 16px;">⚡ JALANKAN ANALISA MENDALAM</button>
-        <div id="authWarning" style="color: var(--skip); font-size: 11px; margin-top: 10px; display: none;">⚠️ Anda harus Login untuk menggunakan fitur analisa.</div>
+    <div class="glass" style="padding: 25px; text-align: center;">
+        <input type="text" id="tickerInput" class="input-pro" placeholder="KODE TICKER (Misal: BBCA.JK)" style="text-align: center; font-size: 18px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase;">
+        <button id="scanBtn" onclick="startEngine()" class="btn-pro" style="background: var(--accent-grad); color: #000; font-size: 16px; padding: 20px;">⚡ JALANKAN ANALISA MENDALAM V5.0</button>
+        <div id="authWarning" style="color: var(--skip); font-size: 12px; margin-top: 15px; display: none;">⚠️ Anda harus Login untuk menggunakan fitur analisa.</div>
     </div>
     
     <!-- TRACKER -->
     <div id="trackerBox" class="tracker-box">
         <div style="font-weight:bold; color: var(--accent);">> SYSTEM INITIALIZING...</div>
-        <div id="trackerLog" style="font-size: 11px; color: #60a5fa; margin-top: 10px; max-height: 150px; overflow-y: auto;"></div>
+        <div id="trackerLog" style="font-size: 12px; color: #60a5fa; margin-top: 15px; max-height: 200px; overflow-y: auto;"></div>
     </div>
     
-    <!-- DASHBOARD HASIL - STACKED KE BAWAH (PERSIS GAMBAR 2) -->
+    <!-- DASHBOARD HASIL (SUDAH DIPERBAIKI RESPONSIVE GRIDNYA) -->
     <div id="resultBox" class="result-dashboard">
-        <div class="grid-dash">
-            
-            <!-- 1. STRUCTURED SCORING CARD -->
-            <div class="card">
-                <div class="card-title">⚙️ STRUCTURED SCORING V5.0 (100)</div>
-                <div style="text-align:center; margin-bottom:20px;">
-                    <div style="font-size:48px; font-weight:800; font-family:'JetBrains Mono';" id="outTotalScore">37</div>
-                    <div style="width: 100%; background: #0f172a; height: 10px; border-radius: 5px; margin-top: 10px; overflow: hidden;">
-                        <div id="outScoreBar" style="height: 100%; background: var(--accent-grad); transition: width 1s; width: 37%;"></div>
+        <div class="glass" style="text-align: center; padding: 30px; margin-bottom: 25px; border-top: 5px solid var(--accent);">
+            <h2 id="outTicker" style="margin: 0; font-size: 48px;">$TICKER</h2>
+            <div style="font-size: 16px; color: var(--accent); font-weight: bold; margin-top: 10px;" id="outStage">MOMENTUM STAGE: -</div>
+            <div style="margin-top: 20px;"><span id="outStatus" style="padding: 8px 20px; border-radius: 8px; font-weight: 800; font-size: 18px; color: #fff;">N/A</span></div>
+        </div>
+
+        <div class="result-grid">
+            <div class="glass" style="padding: 25px;">
+                <div style="color: var(--accent); font-weight: 800; border-bottom: 1px dashed var(--glass-border); padding-bottom: 10px; margin-bottom: 20px;">⚙️ STRUCTURED SCORING V5.0 (100)</div>
+                <div style="text-align:center; margin-bottom:25px;">
+                    <div style="font-size:56px; font-weight:800; font-family:'JetBrains Mono';" id="outTotalScore">0</div>
+                    <div style="width: 100%; background: #0f172a; height: 12px; border-radius: 6px; margin-top: 10px; overflow: hidden;">
+                        <div id="outScoreBar" style="height: 100%; background: var(--accent-grad); transition: width 1s; width: 0%;"></div>
                     </div>
                 </div>
-                <div class="stat-row"><span>Structure HH/HL/LH/LL (20)</span><span class="stat-val" id="scStructure">7</span></div>
-                <div class="stat-row"><span>EMA 5 / 21 + Trend (15)</span><span class="stat-val" id="scEma">7</span></div>
+                <div class="stat-row"><span>Structure HH/HL/LH/LL (20)</span><span class="stat-val" id="scStructure">0</span></div>
+                <div class="stat-row"><span>EMA 5 / 21 + Trend (15)</span><span class="stat-val" id="scEma">0</span></div>
                 <div class="stat-row"><span>MACD Momentum (10)</span><span class="stat-val" id="scMacd">0</span></div>
-                <div class="stat-row"><span>Fibonacci / Harmonic S&R (10)</span><span class="stat-val" id="scFibo">10</span></div>
-                <div class="stat-row"><span>Classic S&R (10)</span><span class="stat-val" id="scClassic">4</span></div>
-                <div class="stat-row"><span>Dynamic S&R EMA 21/34/99 (10)</span><span class="stat-val" id="scDynamic">3</span></div>
-                <div class="stat-row"><span>Momentum + Volume (15)</span><span class="stat-val" id="scMomentum">6</span></div>
+                <div class="stat-row"><span>Fibonacci / Harmonic S&R (10)</span><span class="stat-val" id="scFibo">0</span></div>
+                <div class="stat-row"><span>Classic S&R (10)</span><span class="stat-val" id="scClassic">0</span></div>
+                <div class="stat-row"><span>Dynamic S&R EMA 21/34/99 (10)</span><span class="stat-val" id="scDynamic">0</span></div>
+                <div class="stat-row"><span>Momentum + Volume (15)</span><span class="stat-val" id="scMomentum">0</span></div>
                 <div class="stat-row" style="border:none;"><span>Setup + Risk/Reward (10)</span><span class="stat-val" id="scSetup">0</span></div>
             </div>
 
-            <!-- 2. LOGICAL TRADING PLAN CARD -->
-            <div class="card">
-                <div class="card-title">🎯 LOGICAL TRADING PLAN</div>
-                <div class="stat-row"><span>Realtime Price</span><span class="stat-val" style="color:var(--accent); font-size:15px;" id="outPrice">370</span></div>
-                <div class="stat-row"><span>Arah Dominan</span><span class="stat-val" id="outDirection" style="color: var(--skip);">BEARISH</span></div>
-                <div class="stat-row"><span>Struktur Swing</span><span class="stat-val" id="outStruct">RANGE / TRANSITION</span></div>
-                <div class="stat-row"><span>EMA 5 / EMA 21</span><span class="stat-val" id="outEma">400 / 428</span></div>
-                <div class="stat-row"><span>MACD</span><span class="stat-val" id="outMacd">BEARISH • Hist -9.30</span></div>
-                <div class="stat-row" style="border: none;"><span>Golden / Death Cross</span><span class="stat-val" id="outCross">BEARISH ALIGNMENT</span></div>
+            <div class="glass" style="padding: 25px;">
+                <div style="color: var(--accent); font-weight: 800; border-bottom: 1px dashed var(--glass-border); padding-bottom: 10px; margin-bottom: 20px;">🎯 LOGICAL TRADING PLAN</div>
+                <div class="stat-row"><span>Realtime Price</span><span class="stat-val" style="color:var(--accent); font-size:16px;" id="outPrice">0</span></div>
+                <div class="stat-row"><span>Arah Dominan</span><span class="stat-val" id="outDirection">-</span></div>
+                <div class="stat-row"><span>Struktur Swing</span><span class="stat-val" id="outStruct">-</span></div>
+                <div class="stat-row"><span>EMA 5 / EMA 21</span><span class="stat-val" id="outEma">-</span></div>
+                <div class="stat-row"><span>MACD</span><span class="stat-val" id="outMacd">-</span></div>
+                <div class="stat-row"><span>Golden / Death Cross</span><span class="stat-val" id="outCross">-</span></div>
 
-                <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 10px; border: 1px solid #1e293b; margin: 15px 0;">
-                    <div style="font-size: 10px; color: #94a3b8; margin-bottom: 8px;">📍 SUPPORT / RESISTANCE MAP</div>
+                <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px; border: 1px solid #1e293b; margin: 20px 0;">
+                    <div style="font-size: 11px; color: #94a3b8; margin-bottom: 10px;">📍 SUPPORT / RESISTANCE MAP</div>
                     <div class="stat-row" style="border:none; padding:3px 0;"><span>Classic Support</span><span class="stat-val" id="outClassicS">-</span></div>
                     <div class="stat-row" style="border:none; padding:3px 0;"><span>Classic Resistance</span><span class="stat-val" id="outClassicR">-</span></div>
                     <div class="stat-row" style="border:none; padding:3px 0;"><span>Dynamic Support</span><span class="stat-val" id="outDynamicS">-</span></div>
@@ -228,14 +237,14 @@
                     <div class="stat-row" style="border:none; padding:3px 0;"><span>Fibo Support / Resistance</span><span class="stat-val" id="outFibo">-</span></div>
                 </div>
 
-                <div style="background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); padding: 12px; border-radius: 10px; margin-bottom: 10px;">
+                <div style="background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); padding: 15px; border-radius: 12px; margin-bottom: 10px;">
                     <div class="stat-row" style="border:none; padding:0;"><span>🛒 STRICT ENTRY ZONE</span><span class="stat-val" style="color:var(--buy)" id="outBuy">-</span></div>
-                    <div style="font-size:11px; color:#94a3b8; margin-top:6px;" id="outEntryLogic">-</div>
+                    <div style="font-size:11px; color:#94a3b8; margin-top:8px;" id="outEntryLogic">-</div>
                 </div>
-                <div style="background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); padding: 12px; border-radius: 10px; margin-bottom: 10px;">
+                <div style="background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); padding: 15px; border-radius: 12px; margin-bottom: 10px;">
                     <div class="stat-row" style="border:none; padding:0;"><span>⚡ ENTRY TRIGGER</span><span class="stat-val" id="outEntryTrigger" style="text-align: right; max-width: 60%;">-</span></div>
                 </div>
-                <div style="background: rgba(244,63,94,0.1); border: 1px solid rgba(244,63,94,0.3); padding: 12px; border-radius: 10px; margin-bottom: 15px;">
+                <div style="background: rgba(244,63,94,0.1); border: 1px solid rgba(244,63,94,0.3); padding: 15px; border-radius: 12px; margin-bottom: 20px;">
                     <div class="stat-row" style="border:none; padding:0;"><span>🛑 INVALIDATION / CUT LOSS</span><span class="stat-val" style="color:var(--skip)" id="outSl">-</span></div>
                 </div>
                 
@@ -244,7 +253,6 @@
                 <div class="stat-row"><span>📐 Risk / Reward</span><span class="stat-val" id="outRR">-</span></div>
                 <div class="stat-row" style="border:none;"><span>🧭 Exit Trigger</span><span class="stat-val" id="outExitTrigger" style="text-align: right; max-width: 60%;">-</span></div>
             </div>
-
         </div>
     </div>
 </div>
@@ -252,26 +260,23 @@
 <!-- MODAL TOP UP QRIS -->
 <div id="topupModal" class="modal-overlay">
     <div class="modal-content glass">
-        <h2 style="margin-top: 0; color: var(--accent); font-size: 20px;">Top Up Saldo</h2>
-        <p style="font-size: 12px; color: #94a3b8; margin-bottom: 15px;">Scan QRIS via DANA / Gopay / M-Banking.<br>Tarif: Rp 500 / Analisa.</p>
+        <h2 style="margin-top: 0; color: var(--accent);">Top Up Saldo</h2>
+        <p style="font-size: 13px; color: #94a3b8; margin-bottom: 20px;">Scan QRIS via DANA / Gopay / M-Banking.<br>Tarif: Rp 500 / Analisa.</p>
         <div class="qris-box"><img src="image_2b56c1.jpg" alt="QRIS PAS STORE"></div>
         <input type="number" id="nominalTopup" class="input-pro" placeholder="Nominal Transfer (Min 10.000)">
-        <button onclick="konfirmasiWA()" class="btn-pro" style="background: #25D366; color: white; margin-bottom: 8px; padding: 12px;">📲 Konfirmasi via WhatsApp</button>
-        <button onclick="document.getElementById('topupModal').style.display='none'" class="btn-pro" style="background: transparent; border: 1px solid var(--skip); color: var(--skip); padding: 12px;">Batal</button>
+        <button onclick="konfirmasiWA()" class="btn-pro" style="background: #25D366; color: white; margin-bottom: 10px;">📲 Konfirmasi via WhatsApp</button>
+        <button onclick="document.getElementById('topupModal').style.display='none'" class="btn-pro" style="background: transparent; border: 1px solid var(--skip); color: var(--skip);">Batal</button>
     </div>
 </div>
 
 <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 <script>
-    // =========================================================================
-    // WAJIB DIGANTI: Masukkan URL Web App terbaru kamu
-    // =========================================================================
     const GOOGLE_PROXY_URL = "https://script.google.com/macros/s/AKfycbzyqcaZ-LjXMwe5NfUNguRO1qgdWi7Z2HizO4q5iDUklwDG7CBeVk1zeEEait-ephM/exec";
     
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     const formatNumber = num => num < 10 ? num.toFixed(2) : Math.round(num).toLocaleString('id-ID');
 
-    // 1. SISTEM AUTENTIKASI
+    // 1. SISTEM AUTENTIKASI (DIPERBAIKI DENGAN LOKAL CACHE AGAR TIDAK KEMBALI 10 SAAT REFRESH)
     function switchAuthTab(tab) {
         if(tab === 'login') {
             document.getElementById('formLogin').style.display = "block"; document.getElementById('formReg').style.display = "none";
@@ -289,7 +294,10 @@
             let res = await fetch(`${GOOGLE_PROXY_URL}?action=auth&type=register&email=${encodeURIComponent(em)}&username=${encodeURIComponent(us)}&password=${encodeURIComponent(pw)}`);
             let data = await res.json();
             if(data.status === "success") {
-                localStorage.setItem("gacor_email", data.email); localStorage.setItem("gacor_pass", pw);
+                localStorage.setItem("gacor_email", data.email); 
+                localStorage.setItem("gacor_pass", pw);
+                localStorage.setItem("gacor_kuota", data.kuota || 10);
+                localStorage.setItem("gacor_saldo", data.saldo || 0);
                 alert("Pendaftaran Berhasil! Kuota 10x Analisa siap digunakan."); checkAuth();
             } else { alert(data.message); }
         } catch(e) { alert("Gagal terhubung ke server."); }
@@ -303,39 +311,64 @@
             let res = await fetch(`${GOOGLE_PROXY_URL}?action=auth&type=login&login_id=${encodeURIComponent(id)}&password=${encodeURIComponent(pw)}`);
             let data = await res.json();
             if(data.status === "success") {
-                localStorage.setItem("gacor_email", data.email); localStorage.setItem("gacor_pass", pw); checkAuth();
+                localStorage.setItem("gacor_email", data.email); 
+                localStorage.setItem("gacor_pass", pw); 
+                localStorage.setItem("gacor_kuota", data.kuota);
+                localStorage.setItem("gacor_saldo", data.saldo);
+                checkAuth();
             } else { alert(data.message); }
         } catch(e) { alert("Gagal terhubung ke server."); }
         document.getElementById('btnLogin').innerText = "Masuk Sistem";
     }
-    function doLogout() { localStorage.removeItem("gacor_email"); localStorage.removeItem("gacor_pass"); checkAuth(); }
+    function doLogout() { 
+        localStorage.removeItem("gacor_email"); localStorage.removeItem("gacor_pass"); 
+        localStorage.removeItem("gacor_kuota"); localStorage.removeItem("gacor_saldo");
+        checkAuth(); 
+    }
+    
     async function checkAuth() {
         let savedEmail = localStorage.getItem("gacor_email"), savedPass = localStorage.getItem("gacor_pass");
+        let savedKuota = localStorage.getItem("gacor_kuota") || "0";
+        let savedSaldo = localStorage.getItem("gacor_saldo") || "0";
+
         if (savedEmail && savedPass) {
-            document.getElementById('authBox').style.display = "none"; document.getElementById('userProfileBox').style.display = "block"; document.getElementById('authWarning').style.display = "none";
-            document.getElementById('uiUsername').innerText = "SYNCING...";
+            document.getElementById('authBox').style.display = "none"; 
+            document.getElementById('userProfileBox').style.display = "block"; 
+            document.getElementById('authWarning').style.display = "none";
+            
+            // Tampilkan cache lokal secara instan agar tidak mereset visual ke 10 saat di-refresh
+            document.getElementById('uiKuota').innerText = savedKuota; 
+            document.getElementById('uiSaldo').innerText = formatNumber(Number(savedSaldo));
+
             try {
                 let res = await fetch(`${GOOGLE_PROXY_URL}?action=auth&type=login&login_id=${encodeURIComponent(savedEmail)}&password=${encodeURIComponent(savedPass)}`);
                 let data = await res.json();
                 if (data.status === "success") {
-                    document.getElementById('uiUsername').innerText = data.username.toUpperCase(); document.getElementById('uiEmail').innerText = data.email;
-                    document.getElementById('uiKuota').innerText = data.kuota; document.getElementById('uiSaldo').innerText = formatNumber(data.saldo);
+                    document.getElementById('uiUsername').innerText = data.username.toUpperCase(); 
+                    document.getElementById('uiEmail').innerText = data.email;
+                    document.getElementById('uiKuota').innerText = data.kuota; 
+                    document.getElementById('uiSaldo').innerText = formatNumber(data.saldo);
+                    
+                    // Perbarui cache dengan data server terbaru
+                    localStorage.setItem("gacor_kuota", data.kuota);
+                    localStorage.setItem("gacor_saldo", data.saldo);
                 } else { doLogout(); }
             } catch (e) { document.getElementById('uiUsername').innerText = "OFFLINE MODE"; }
         } else {
             document.getElementById('authBox').style.display = "block"; document.getElementById('userProfileBox').style.display = "none";
         }
     }
+    
     function konfirmasiWA() {
         let email = localStorage.getItem("gacor_email") || "Belum Login";
         let nominal = document.getElementById("nominalTopup").value;
         if(!nominal || nominal < 10000) return alert("Minimal top-up Rp 10.000");
-        let pesan = `Halo Admin Trading Call,\n\nSaya mau konfirmasi Top-Up Saldo Analisa.\n📧 Email Akun: *${email}*\n💰 Nominal: *Rp${nominal}*\n\nBerikut lampiran screenshot bukti transfer QRIS.`;
+        let pesan = `Halo Admin Gacor Hunter,\n\nSaya mau konfirmasi Top-Up Saldo Analisa.\n📧 Email Akun: *${email}*\n💰 Nominal: *Rp${nominal}*\n\nBerikut lampiran screenshot bukti transfer QRIS.`;
         window.open(`https://wa.me/6281462364686?text=${encodeURIComponent(pesan)}`, '_blank');
         document.getElementById('topupModal').style.display='none';
     }
 
-    // 2. LOGIKA TRADING ENGINE V5.0
+    // 2. LOGIKA TRADING ENGINE (TIDAK ADA YANG DIUBAH)
     const average = arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0;
     const highest = arr => arr.length ? Math.max(...arr) : 0;
     const lowest = arr => arr.length ? Math.min(...arr) : 0;
@@ -404,7 +437,7 @@
     }
     function nearestBelow(values,price){const x=values.filter(v=>Number.isFinite(v)&&v<price);return x.length?Math.max(...x):0;}
     function nearestAbove(values,price){const x=values.filter(v=>Number.isFinite(v)&&v>price);return x.length?Math.min(...x):0;}
-    function fmtRange(a,b){if(!a||!b)return "-";return `${formatNumber(Math.min(a,b))} - ${formatNumber(Math.max(a,b))}`;}
+    function fmtRange(a,b){if(!a||b===0)return "-";return `${formatNumber(Math.min(a,b))} - ${formatNumber(Math.max(a,b))}`;}
     function buildStructure(p){
         const hs=p.highPivots.slice(-3),ls=p.lowPivots.slice(-3);
         if(hs.length<2||ls.length<2)return {label:"UNDEFINED",bullish:false,bearish:false};
@@ -421,26 +454,28 @@
         return {0:swingLow,.236:swingLow+r*.236,.382:swingLow+r*.382,.5:swingLow+r*.5,.618:swingLow+r*.618,.786:swingLow+r*.786,1:swingHigh};
     }
     function buildPlan(price,direction,setup,supports,resistances,atr){
-        if (direction === "BEARISH") return { rr: 0 };
         const S=supports.filter(x=>x>0&&x<price).sort((a,b)=>b-a)[0]||price-atr;
         const R=resistances.filter(x=>x>price).sort((a,b)=>a-b)[0]||price+Math.max(atr*2,price*.04);
         let entryLow=0,entryHigh=0,stop=0,tp1=0,tp2=0,trigger="",logic="";
-        if(setup==="BREAKOUT"){
+        if(direction==="BEARISH"){
+            trigger="NO LONG ENTRY — tunggu reclaim EMA21 + HL baru";
+            logic="Struktur bearish (LH/LL). Engine tidak memaksakan posisi BUY.";
+        }else if(setup==="BREAKOUT"){
             const breakoutR = resistances.filter(x=>x>0).sort((a,b)=>b-a).find(x=>Math.abs(x-price)/price<.03)||R;
             entryLow=breakoutR*.995;entryHigh=breakoutR*1.005;
             stop=Math.min(breakoutR-Math.max(atr*.7,price*.015),S-atr*.25);
             tp1=R>entryHigh?R:entryHigh+Math.max(atr*2,price*.04);
             tp2=tp1+Math.max(atr*1.5,price*.03);
-            trigger=`Close > ${formatNumber(breakoutR)} + vol ≥ 1.5x`;
-            logic=`Entry di area retest level ${formatNumber(breakoutR)}.`;
+            trigger=`Close > ${formatNumber(breakoutR)} + volume ≥ 1.5x, lalu retest bertahan`;
+            logic=`Entry hanya di area retest level breakout ${formatNumber(breakoutR)}; tidak mengejar harga.`;
         }else{
             entryLow=Math.max(S*.995,S+atr*.15);entryHigh=Math.min(S*1.01,price);
             if(entryLow>entryHigh){entryLow=Math.max(S*.995,price*.985);entryHigh=price;}
             stop=S-Math.max(atr*.7,price*.015);
             tp1=R>entryHigh?R:entryHigh+Math.max(atr*2,price*.04);
             tp2=tp1+Math.max(atr*1.5,price*.03);
-            trigger=`Pantulan ${formatNumber(S)} + close EMA21`;
-            logic=`Entry dekat support terdekat (${formatNumber(S)}).`;
+            trigger=`Pantulan ${formatNumber(S)} + candle bullish + close kembali di atas EMA21`;
+            logic=`Entry ditempatkan dekat support terdekat (${formatNumber(S)}), bukan range arbitrer yang menjauh dari harga.`;
         }
         const mid=entryLow&&entryHigh?(entryLow+entryHigh)/2:0, rr=mid&&stop&&tp1>mid?(tp1-mid)/(mid-stop):0;
         return {entryLow,entryHigh,stop,tp1,tp2,rr,trigger,logic};
@@ -472,17 +507,22 @@
             document.getElementById("trackerBox").scrollIntoView({ behavior: 'smooth', block: 'center' });
 
             const stockQuote = await fetchYahooData(ticker);
-            if (stockQuote && stockQuote.error) throw new Error("⚠️ Server IDX / Yahoo Finance sedang gangguan. Kuota Anda AMAN.");
+            if (stockQuote && stockQuote.error) throw new Error("⚠️ Server IDX / Yahoo Finance sedang gangguan. Kuota Anda AMAN. Coba lagi nanti.");
             if (!stockQuote) throw new Error("Data saham tidak ditemukan.");
             
-            updateLog("Data bursa sukses. Memverifikasi kuota user...");
+            updateLog("Data bursa sukses ditarik. Memverifikasi kuota user...");
             let resAuth = await fetch(`${GOOGLE_PROXY_URL}?action=auth&type=use_quota&email=${encodeURIComponent(email)}`);
             let dataAuth = await resAuth.json();
-            if (dataAuth.status !== "success") throw new Error("❌ Kuota habis atau saldo tidak mencukupi. Silakan Top Up Saldo.");
+            if (dataAuth.status !== "success") throw new Error("❌ Kuota habis dan saldo tidak mencukupi. Silakan Top Up Saldo.");
             
             document.getElementById('uiKuota').innerText = dataAuth.remain_kuota;
             document.getElementById('uiSaldo').innerText = formatNumber(dataAuth.remain_saldo);
-            updateLog(`Akses diizinkan (${dataAuth.type}). Memulai kalkulasi V5.0...`);
+            
+            // Simpan Data Terbaru ke Cache agar tidak mereset
+            localStorage.setItem("gacor_kuota", dataAuth.remain_kuota);
+            localStorage.setItem("gacor_saldo", dataAuth.remain_saldo);
+
+            updateLog(`Akses diizinkan via jalur: ${dataAuth.type}. Memulai kalkulasi algoritma V5.0...`);
 
             const stockData = extractValidData(stockQuote);
             const closes = stockData.closes, volumes = stockData.volumes, highs = stockData.highs, lows = stockData.lows;
@@ -549,12 +589,20 @@
             const crossLabel=goldenCross?"GOLDEN CROSS":deathCross?"DEATH CROSS":(ema5>ema21?"BULLISH ALIGNMENT":"BEARISH ALIGNMENT");
             const macdLabel=`${macdLine>=signalLine?"BULLISH":"BEARISH"} • Hist ${macdHist>=0?"+":""}${macdHist.toFixed(2)}`;
 
-            updateLog("Kalkulasi selesai. Menampilkan hasil...");
+            updateLog("Selesai mengkalkulasi. Render panel Tactical Trading Plan...");
             await sleep(300);
 
             document.getElementById("trackerBox").style.display = "none";
             document.getElementById("scanBtn").disabled = false;
             document.getElementById("resultBox").style.display = "block";
+
+            document.getElementById("outTicker").innerText = `$${ticker}`;
+            document.getElementById("outStage").innerText = `STAGE: ${setup} • RSI ${rsi.toFixed(1)} • VOL ${volRatio.toFixed(2)}x`;
+            
+            let stBadge = document.getElementById("outStatus");
+            stBadge.innerText = finalStatus;
+            stBadge.style.background = finalStatus === "BUY" ? "var(--buy)" : (finalStatus === "WAIT" ? "var(--wait)" : "var(--skip)");
+            stBadge.style.boxShadow = finalStatus === "BUY" ? "0 0 20px var(--buy-glow)" : "none";
 
             document.getElementById("outTotalScore").innerText = totalScore;
             let color = totalScore >= 75 ? 'var(--buy)' : (totalScore >= 65 ? 'var(--wait)' : 'var(--skip)');
@@ -585,16 +633,15 @@
             document.getElementById("outDynamicR").innerText=formatNumber(dynR);
             document.getElementById("outFibo").innerText=`${formatNumber(fibS)} / ${formatNumber(fibR)}`;
 
-            let planData = buildPlan(currClose, direction, setup, [classicS, dynS, fibS, ema21, ema34], [classicR, dynR, fibR], atr);
-            document.getElementById("outBuy").innerText=planData.entryLow?fmtRange(planData.entryLow,planData.entryHigh):"NO LONG ENTRY";
-            document.getElementById("outEntryLogic").innerText=planData.logic;
-            document.getElementById("outEntryTrigger").innerText=planData.trigger;
-            document.getElementById("outSl").innerText=planData.stop?formatNumber(planData.stop):"STRUCTURE INVALIDATION";
-            document.getElementById("outTp1").innerText=planData.tp1?formatNumber(planData.tp1):"-";
-            document.getElementById("outTp2").innerText=planData.tp2?formatNumber(planData.tp2):"-";
-            document.getElementById("outRR").innerText=planData.rr?`${planData.rr.toFixed(2)}R`:"-";
+            document.getElementById("outBuy").innerText=plan.entryLow?fmtRange(plan.entryLow,plan.entryHigh):"NO LONG ENTRY";
+            document.getElementById("outEntryLogic").innerText=plan.logic;
+            document.getElementById("outEntryTrigger").innerText=plan.trigger;
+            document.getElementById("outSl").innerText=plan.stop?formatNumber(plan.stop):"STRUCTURE INVALIDATION";
+            document.getElementById("outTp1").innerText=plan.tp1?formatNumber(plan.tp1):"-";
+            document.getElementById("outTp2").innerText=plan.tp2?formatNumber(plan.tp2):"-";
+            document.getElementById("outRR").innerText=plan.rr?`${plan.rr.toFixed(2)}R`:"-";
             document.getElementById("outExitTrigger").innerText=direction==="BULLISH"
-                ?"TP1/TP2 bertahap; full exit bila close < EMA21"
+                ?"TP1/TP2 bertahap; full exit bila close < EMA21 dan HL terakhir gagal"
                 :"Belum ada long entry; tunggu reclaim EMA21 + HL baru";
 
             document.getElementById("resultBox").scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -650,9 +697,9 @@
                 `).join('');
             } else {
                 badgeScan.innerText = `⚠️ Data Kosong`;
-                grid.innerHTML = `<div style="grid-column: 1 / -1; padding: 15px; text-align: center; color: #94a3b8; font-size: 11px;">Menunggu backend mengeksekusi EOD scan...</div>`;
+                grid.innerHTML = `<div style="grid-column: 1 / -1; padding: 20px; text-align: center; color: #94a3b8; font-size: 12px;">Menunggu backend mengeksekusi algoritma...</div>`;
             }
-        } catch(err) { badgeScan.innerText = `❌ Error API`; grid.innerHTML = `<div style="grid-column: 1 / -1; padding: 15px; text-align: center; color: #f43f5e; font-size: 11px;">Koneksi gagal.</div>`; }
+        } catch(err) { badgeScan.innerText = `❌ Error API`; grid.innerHTML = `<div style="grid-column: 1 / -1; padding: 20px; text-align: center; color: #f43f5e; font-size: 12px;">Koneksi gagal.</div>`; }
     };
 </script>
 </body>
