@@ -86,7 +86,7 @@
         .tracker-box { background: #020617; border: 1px solid #3b82f6; padding: 20px; border-radius: 12px; display: none; margin-top: 25px; color: #3b82f6; font-family: 'JetBrains Mono', monospace; }
         .result-dashboard { display: none; margin-top: 35px; animation: slideUp 0.5s ease-out; }
         
-        /* PERBAIKAN GRID RESPONSIVE UNTUK HASIL (AGAR SEPERTI GAMBAR KE 2) */
+        /* RESPONSIVE GRID AGAR TAMPILAN 1 KOLOM DI HP (SEPERTI GAMBAR 2) */
         .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         @media (max-width: 768px) { .result-grid { grid-template-columns: 1fr; } }
         
@@ -124,17 +124,11 @@
 
         <div id="userProfileBox" style="display: none; text-align: center;">
             
-            <!-- INFORMASI USER DISEMBUNYIKAN SESUAI PERMINTAAN -->
-            <div style="display: none;">
-                <div style="font-size: 12px; color: var(--accent); letter-spacing: 1px; text-transform: uppercase;">Akses Diberikan</div>
-                <div id="uiUsername" style="font-size: 24px; font-weight: 800; margin: 5px 0;">-</div>
-                <div id="uiEmail" style="font-size: 12px; color: #94a3b8; margin-bottom: 20px;">-</div>
-            </div>
-            
+            <!-- INFORMASI USER & OFFLINE MODE DISEMBUNYIKAN SEPENUHNYA -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
                 <div style="background: rgba(0,0,0,0.4); padding: 15px; border-radius: 12px; border: 1px solid #1e293b;">
                     <div style="font-size: 11px; color: #94a3b8; margin-bottom: 5px;">SISA KUOTA FREE</div>
-                    <div style="font-size: 22px; font-weight: bold; color: var(--accent); font-family: 'JetBrains Mono';"><span id="uiKuota">0</span> <span style="font-size: 12px; color: #64748b;">/ 10</span></div>
+                    <div style="font-size: 22px; font-weight: bold; color: var(--accent); font-family: 'JetBrains Mono';"><span id="uiKuota">10</span> <span style="font-size: 12px; color: #64748b;">/ 10</span></div>
                 </div>
                 <div style="background: rgba(0,0,0,0.4); padding: 15px; border-radius: 12px; border: 1px solid #1e293b;">
                     <div style="font-size: 11px; color: #94a3b8; margin-bottom: 5px;">SALDO BERBAYAR</div>
@@ -192,7 +186,7 @@
         <div id="trackerLog" style="font-size: 12px; color: #60a5fa; margin-top: 15px; max-height: 200px; overflow-y: auto;"></div>
     </div>
     
-    <!-- DASHBOARD HASIL (SUDAH DIPERBAIKI RESPONSIVE GRIDNYA) -->
+    <!-- DASHBOARD HASIL -->
     <div id="resultBox" class="result-dashboard">
         <div class="glass" style="text-align: center; padding: 30px; margin-bottom: 25px; border-top: 5px solid var(--accent);">
             <h2 id="outTicker" style="margin: 0; font-size: 48px;">$TICKER</h2>
@@ -271,12 +265,15 @@
 
 <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 <script>
+    // =========================================================================
+    // URL WEB APP ANDA
+    // =========================================================================
     const GOOGLE_PROXY_URL = "https://script.google.com/macros/s/AKfycbzyqcaZ-LjXMwe5NfUNguRO1qgdWi7Z2HizO4q5iDUklwDG7CBeVk1zeEEait-ephM/exec";
     
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     const formatNumber = num => num < 10 ? num.toFixed(2) : Math.round(num).toLocaleString('id-ID');
 
-    // 1. SISTEM AUTENTIKASI (DIPERBAIKI DENGAN LOKAL CACHE AGAR TIDAK KEMBALI 10 SAAT REFRESH)
+    // 1. SISTEM AUTENTIKASI DENGAN SANITASI KETAT (ANTI UNDEFINED / NaN)
     function switchAuthTab(tab) {
         if(tab === 'login') {
             document.getElementById('formLogin').style.display = "block"; document.getElementById('formReg').style.display = "none";
@@ -286,6 +283,7 @@
             document.getElementById('tabReg').classList.replace('tab-inactive', 'tab-active'); document.getElementById('tabLogin').classList.replace('tab-active', 'tab-inactive');
         }
     }
+
     async function doRegister() {
         let em = document.getElementById('regEmail').value.trim(), us = document.getElementById('regUser').value.trim(), pw = document.getElementById('regPass').value.trim();
         if(!em || !us || !pw) return alert("Semua kolom wajib diisi!");
@@ -296,13 +294,15 @@
             if(data.status === "success") {
                 localStorage.setItem("gacor_email", data.email); 
                 localStorage.setItem("gacor_pass", pw);
-                localStorage.setItem("gacor_kuota", data.kuota || 10);
-                localStorage.setItem("gacor_saldo", data.saldo || 0);
-                alert("Pendaftaran Berhasil! Kuota 10x Analisa siap digunakan."); checkAuth();
+                localStorage.setItem("gacor_kuota", data.kuota !== undefined ? data.kuota : 10);
+                localStorage.setItem("gacor_saldo", data.saldo !== undefined ? data.saldo : 0);
+                alert("Pendaftaran Berhasil! Kuota 10x Analisa siap digunakan.");
+                checkAuth();
             } else { alert(data.message); }
         } catch(e) { alert("Gagal terhubung ke server."); }
         document.getElementById('btnReg').innerText = "Daftar & Klaim Akses";
     }
+
     async function doLogin() {
         let id = document.getElementById('logId').value.trim(), pw = document.getElementById('logPass').value.trim();
         if(!id || !pw) return alert("Isi ID dan Password!");
@@ -313,49 +313,70 @@
             if(data.status === "success") {
                 localStorage.setItem("gacor_email", data.email); 
                 localStorage.setItem("gacor_pass", pw); 
-                localStorage.setItem("gacor_kuota", data.kuota);
-                localStorage.setItem("gacor_saldo", data.saldo);
+                localStorage.setItem("gacor_kuota", data.kuota !== undefined ? data.kuota : 10);
+                localStorage.setItem("gacor_saldo", data.saldo !== undefined ? data.saldo : 0);
                 checkAuth();
             } else { alert(data.message); }
         } catch(e) { alert("Gagal terhubung ke server."); }
         document.getElementById('btnLogin').innerText = "Masuk Sistem";
     }
+
     function doLogout() { 
         localStorage.removeItem("gacor_email"); localStorage.removeItem("gacor_pass"); 
         localStorage.removeItem("gacor_kuota"); localStorage.removeItem("gacor_saldo");
-        checkAuth(); 
+        
+        document.getElementById('authBox').style.display = "block"; 
+        document.getElementById('userProfileBox').style.display = "none";
     }
     
     async function checkAuth() {
-        let savedEmail = localStorage.getItem("gacor_email"), savedPass = localStorage.getItem("gacor_pass");
-        let savedKuota = localStorage.getItem("gacor_kuota") || "0";
-        let savedSaldo = localStorage.getItem("gacor_saldo") || "0";
+        let savedEmail = localStorage.getItem("gacor_email");
+        let savedPass = localStorage.getItem("gacor_pass");
+        
+        // PEMBERSIH CACHE: Pastikan Angka Selalu Solid (Bukan Teks "undefined")
+        let k = parseInt(localStorage.getItem("gacor_kuota"));
+        let s = parseInt(localStorage.getItem("gacor_saldo"));
+        let savedKuota = isNaN(k) ? 10 : k;
+        let savedSaldo = isNaN(s) ? 0 : s;
 
-        if (savedEmail && savedPass) {
-            document.getElementById('authBox').style.display = "none"; 
-            document.getElementById('userProfileBox').style.display = "block"; 
-            document.getElementById('authWarning').style.display = "none";
+        // Jika cache korup/kosong, paksa keluar ke form login
+        if (!savedEmail || savedEmail === "undefined" || savedEmail === "null") {
+            document.getElementById('authBox').style.display = "block"; 
+            document.getElementById('userProfileBox').style.display = "none";
+            return false;
+        }
+
+        // Langsung tampilkan UI dengan data lokal agar mulus saat direfresh
+        document.getElementById('authBox').style.display = "none"; 
+        document.getElementById('userProfileBox').style.display = "block"; 
+        document.getElementById('authWarning').style.display = "none";
+        document.getElementById('uiKuota').innerText = savedKuota; 
+        document.getElementById('uiSaldo').innerText = formatNumber(savedSaldo);
+
+        try {
+            let res = await fetch(`${GOOGLE_PROXY_URL}?action=auth&type=login&login_id=${encodeURIComponent(savedEmail)}&password=${encodeURIComponent(savedPass)}`);
+            let data = await res.json();
             
-            // Tampilkan cache lokal secara instan agar tidak mereset visual ke 10 saat di-refresh
-            document.getElementById('uiKuota').innerText = savedKuota; 
-            document.getElementById('uiSaldo').innerText = formatNumber(Number(savedSaldo));
+            if (data.status === "success") {
+                let liveKuota = (data.kuota !== undefined && data.kuota !== null) ? parseInt(data.kuota) : savedKuota;
+                let liveSaldo = (data.saldo !== undefined && data.saldo !== null) ? parseInt(data.saldo) : savedSaldo;
+                
+                if(isNaN(liveKuota)) liveKuota = 10;
+                if(isNaN(liveSaldo)) liveSaldo = 0;
 
-            try {
-                let res = await fetch(`${GOOGLE_PROXY_URL}?action=auth&type=login&login_id=${encodeURIComponent(savedEmail)}&password=${encodeURIComponent(savedPass)}`);
-                let data = await res.json();
-                if (data.status === "success") {
-                    document.getElementById('uiUsername').innerText = data.username.toUpperCase(); 
-                    document.getElementById('uiEmail').innerText = data.email;
-                    document.getElementById('uiKuota').innerText = data.kuota; 
-                    document.getElementById('uiSaldo').innerText = formatNumber(data.saldo);
-                    
-                    // Perbarui cache dengan data server terbaru
-                    localStorage.setItem("gacor_kuota", data.kuota);
-                    localStorage.setItem("gacor_saldo", data.saldo);
-                } else { doLogout(); }
-            } catch (e) { document.getElementById('uiUsername').innerText = "OFFLINE MODE"; }
-        } else {
-            document.getElementById('authBox').style.display = "block"; document.getElementById('userProfileBox').style.display = "none";
+                document.getElementById('uiKuota').innerText = liveKuota; 
+                document.getElementById('uiSaldo').innerText = formatNumber(liveSaldo);
+                
+                localStorage.setItem("gacor_kuota", liveKuota);
+                localStorage.setItem("gacor_saldo", liveSaldo);
+                return true;
+            } else { 
+                doLogout(); 
+                return false;
+            }
+        } catch (e) { 
+            // Jika Google Script menolak request (CORS/Timeout), biarkan UI pakai data cache terakhir
+            return true;
         }
     }
     
@@ -368,7 +389,7 @@
         document.getElementById('topupModal').style.display='none';
     }
 
-    // 2. LOGIKA TRADING ENGINE (TIDAK ADA YANG DIUBAH)
+    // 2. LOGIKA TRADING ENGINE (ALGORITMA TETAP SAMA)
     const average = arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0;
     const highest = arr => arr.length ? Math.max(...arr) : 0;
     const lowest = arr => arr.length ? Math.min(...arr) : 0;
@@ -489,7 +510,7 @@
 
     async function startEngine() {
         let email = localStorage.getItem("gacor_email");
-        if (!email) {
+        if (!email || email === "undefined" || email === "null") {
             document.getElementById('authWarning').style.display = "block"; window.scrollTo(0, 0); return;
         }
 
@@ -518,9 +539,9 @@
             document.getElementById('uiKuota').innerText = dataAuth.remain_kuota;
             document.getElementById('uiSaldo').innerText = formatNumber(dataAuth.remain_saldo);
             
-            // Simpan Data Terbaru ke Cache agar tidak mereset
-            localStorage.setItem("gacor_kuota", dataAuth.remain_kuota);
-            localStorage.setItem("gacor_saldo", dataAuth.remain_saldo);
+            // Simpan Data Terbaru ke Cache dengan Aman
+            if(dataAuth.remain_kuota !== undefined) localStorage.setItem("gacor_kuota", dataAuth.remain_kuota);
+            if(dataAuth.remain_saldo !== undefined) localStorage.setItem("gacor_saldo", dataAuth.remain_saldo);
 
             updateLog(`Akses diizinkan via jalur: ${dataAuth.type}. Memulai kalkulasi algoritma V5.0...`);
 
@@ -658,15 +679,11 @@
         window.scrollTo({ top: document.getElementById('tickerInput').offsetTop - 20, behavior: 'smooth' });
     }
 
-    window.onload = async function() {
-        checkAuth();
-        new TradingView.widget({
-            "autosize": true, "symbol": "IDX:COMPOSITE", "interval": "D",
-            "theme": "dark", "style": "1", "locale": "id",
-            "hide_top_toolbar": true, "hide_legend": true,
-            "container_id": "tv_chart_container", "backgroundColor": "rgba(17, 24, 39, 0)"
-        });
-
+    // 3. PENGATURAN ANTRIAN REQUEST AGAR SERVER GOOGLE SCRIPT TIDAK BENTROK
+    async function initDashboard() {
+        await checkAuth();
+        await sleep(600); // Jeda agar Google Script tidak overload
+        
         try {
             const outReq = await fetch(`${GOOGLE_PROXY_URL}?action=getMarketOutlook`);
             const outRes = await outReq.json();
@@ -678,6 +695,8 @@
                 document.getElementById('topIhsgDesc').innerText = outRes.data.summary;
             }
         } catch(e) { document.getElementById('topIhsgDesc').innerText = "Gagal load data bursa."; }
+
+        await sleep(600); // Jeda kedua
 
         const grid = document.getElementById("top10Grid");
         const badgeScan = document.getElementById("lastScanBadge");
@@ -700,6 +719,17 @@
                 grid.innerHTML = `<div style="grid-column: 1 / -1; padding: 20px; text-align: center; color: #94a3b8; font-size: 12px;">Menunggu backend mengeksekusi algoritma...</div>`;
             }
         } catch(err) { badgeScan.innerText = `❌ Error API`; grid.innerHTML = `<div style="grid-column: 1 / -1; padding: 20px; text-align: center; color: #f43f5e; font-size: 12px;">Koneksi gagal.</div>`; }
+    }
+
+    window.onload = function() {
+        new TradingView.widget({
+            "autosize": true, "symbol": "IDX:COMPOSITE", "interval": "D",
+            "theme": "dark", "style": "1", "locale": "id",
+            "hide_top_toolbar": true, "hide_legend": true,
+            "container_id": "tv_chart_container", "backgroundColor": "rgba(17, 24, 39, 0)"
+        });
+
+        initDashboard(); // Jalankan fungsi antrian
     };
 </script>
 </body>
