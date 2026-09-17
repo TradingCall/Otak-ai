@@ -656,10 +656,10 @@
     }
 
     async function startEngine() {
-        let username = localStorage.getItem("gacor_user");
-        let identitas = username || localStorage.getItem("gacor_email");
+    // Paksa sistem untuk selalu menggunakan Email ke backend
+    let identitas = localStorage.getItem("gacor_email");
 
-        if (!identitas) { alert("Harap login kembali"); return doLogout(); }
+    if (!identitas) { alert("Harap login kembali"); return doLogout(); }
 
         let ticker = document.getElementById("tickerInput").value.trim().toUpperCase();
         if (!ticker) return;
