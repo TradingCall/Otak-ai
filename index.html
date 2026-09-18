@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>GACOR HUNTER PRO V6.5 - LIQUID GLASS</title>
+    <title>GACOR HUNTER PRO V6.0 - DUAL BRAIN AI</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
 
@@ -18,7 +18,6 @@
             --neon-purple: #8B5CF6;
             --neon-pink: #ec4899;
             --ai-gradient: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
-            --ai-glow: 0 0 20px rgba(139, 92, 246, 0.5);
             --buy: #10b981; 
             --wait: #f59e0b; 
             --skip: #f43f5e; 
@@ -32,19 +31,20 @@
         .orb-2 { bottom: 10%; right: -20%; width: 250px; height: 250px; background: rgba(0, 240, 255, 0.3); }
 
         .app-wrapper { width: 100%; max-width: 480px; min-height: 100vh; position: relative; z-index: 1; padding-bottom: calc(90px + env(safe-area-inset-bottom)); }
-        .view-section { display: none; padding: 15px; animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-        .view-active { display: block; }
-        @keyframes slideUpFade { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-
-        .glass-card {
-            background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border-radius: 20px; border-top: 1px solid var(--glass-border-light); border-left: 1px solid var(--glass-border-light);
-            border-right: 1px solid var(--glass-border-dark); border-bottom: 1px solid var(--glass-border-dark);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); padding: 18px; margin-bottom: 20px;
+        
+        @media (min-width: 768px) {
+            .app-wrapper { max-width: 800px; padding: 20px; }
+            .bottom-nav { max-width: 600px; }
+            .scanner-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
         }
 
-        .app-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 5px 20px; }
+        .view-section { display: none; padding: 15px; animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        .view-active { display: block; }
+        @keyframes slideUpFade { from { opacity: 0; transform: translateY(20px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+        .glass-card { background: var(--glass-bg); backdrop-filter: blur(20px); border-radius: 20px; border-top: 1px solid var(--glass-border-light); border-left: 1px solid var(--glass-border-light); border-right: 1px solid var(--glass-border-dark); border-bottom: 1px solid var(--glass-border-dark); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); padding: 18px; margin-bottom: 20px; }
         .gradient-text { background: var(--ai-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900;}
+        .section-title { font-size: 14px; font-weight: 800; color: #fff; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
 
         /* SEARCH & QUICK MENU */
         .ai-search-container { background: rgba(20, 25, 40, 0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 6px; display: flex; align-items: center; margin-bottom: 25px; }
@@ -56,31 +56,51 @@
         .quick-icon { width: 55px; height: 55px; border-radius: 18px; background: linear-gradient(145deg, rgba(30,35,50,0.6), rgba(15,18,30,0.8)); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 22px; }
         .quick-text { font-size: 11px; color: var(--text-muted); font-weight: 600; text-align: center; }
 
-        .section-title { font-size: 14px; font-weight: 800; color: #fff; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        /* LIST & CARDS */
         .radar-list { display: flex; flex-direction: column; gap: 12px; }
         .radar-card { background: rgba(20, 25, 40, 0.4); border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); padding: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
 
+        /* BUTTONS */
         .btn-pro { width: 100%; padding: 16px; border: none; border-radius: 16px; font-weight: 800; font-size: 14px; cursor: pointer; color: #fff; background: var(--ai-gradient); text-transform: uppercase; }
         .input-pro { width: 100%; padding: 16px; margin-bottom: 15px; background: rgba(10, 12, 20, 0.6); color: white; font-size: 14px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); outline: none; }
 
-        .stat-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed rgba(255, 255, 255, 0.08); font-size: 12.5px; }
-        .stat-val { font-weight: 800; color: #fff; font-family: 'JetBrains Mono', monospace; text-align: right; }
-
-        /* BOTTOM NAV (5 Menu Utama) */
-        .bottom-nav-container { position: fixed; bottom: 0; left: 0; width: 100%; padding-bottom: env(safe-area-inset-bottom); display: flex; justify-content: center; z-index: 100; background: linear-gradient(to top, rgba(5,5,10,0.95) 20%, transparent); }
-        .bottom-nav { width: calc(100% - 20px); max-width: 460px; margin-bottom: 15px; background: rgba(20, 25, 40, 0.85); backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.2); border-radius: 24px; display: flex; justify-content: space-around; padding: 10px 4px; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 9px; font-weight: 600; color: #64748b; cursor: pointer; width: 20%; }
+        /* BOTTOM NAV (Diupdate menjadi 5 menu) */
+        .bottom-nav-container { position: fixed; bottom: 0; left: 0; width: 100%; padding-bottom: env(safe-area-inset-bottom); display: flex; justify-content: center; z-index: 100; background: linear-gradient(to top, rgba(5,5,10,0.9) 20%, transparent); }
+        .bottom-nav { width: calc(100% - 30px); margin-bottom: 15px; background: rgba(20, 25, 40, 0.65); backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.2); border-radius: 24px; display: flex; justify-content: space-around; padding: 10px 5px; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 10px; font-weight: 600; color: #64748b; cursor: pointer; width: 20%; }
         .nav-item.active { color: #fff; }
-        .nav-icon { font-size: 20px; transition: 0.3s; }
+        .nav-icon { font-size: 22px; transition: 0.3s; }
         .nav-item.active .nav-icon { color: var(--neon-cyan); filter: drop-shadow(0 0 8px var(--neon-cyan)); transform: translateY(-3px); }
 
-        /* CHATBOT UI TERPISAH */
-        .chat-container { display: flex; flex-direction: column; height: calc(100vh - 160px); justify-content: space-between; }
-        .chat-messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-bottom: 10px; }
-        .msg { max-width: 85%; padding: 12px 15px; border-radius: 14px; font-size: 13px; line-height: 1.5; }
-        .msg-ai { background: rgba(139, 92, 246, 0.15); border: 1px solid rgba(139, 92, 246, 0.3); align-self: flex-start; border-bottom-left-radius: 4px; }
-        .msg-user { background: rgba(0, 240, 255, 0.15); border: 1px solid rgba(0, 240, 255, 0.3); align-self: flex-end; border-bottom-right-radius: 4px; }
-        .chat-input-area { display: flex; gap: 8px; background: rgba(10, 12, 20, 0.8); padding: 10px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); }
+        /* UPLOAD & BADGE */
+        .upload-dropzone { border: 2px dashed rgba(0, 240, 255, 0.4); border-radius: 16px; padding: 15px; text-align: center; background: rgba(0, 240, 255, 0.05); cursor: pointer; margin-bottom: 15px;}
+        #fileInput { display: none; }
+        #previewContainer { display: none; position: relative; margin-top: 10px; }
+        #imagePreview { max-width: 100%; max-height: 120px; border-radius: 8px; border: 1px solid var(--neon-cyan); }
+        .style-badge { display: inline-block; padding: 5px 12px; border-radius: 12px; font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-top: 8px; border: 1px solid transparent; }
+        .badge-swing { color: var(--neon-cyan); border-color: var(--neon-cyan); background: rgba(0, 240, 255, 0.1); }
+
+        /* CHAT UI */
+        .terminal-box { display: none; background: rgba(5,5,15,0.8); border: 1px solid var(--neon-cyan); padding: 20px; border-radius: 16px; margin-top: 15px; color: var(--neon-cyan); font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+        .chat-bubble { font-size: 12.5px; color: var(--text-main); line-height: 1.6; padding: 12px; background: rgba(0,0,0,0.3); border-radius: 12px; border-left: 3px solid var(--neon-purple); margin-top: 10px; transition: 0.3s;}
+        .chat-typing:after { content: '▋'; animation: blink 1s step-start infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* STATS & RISK SIZER */
+        .stat-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed rgba(255, 255, 255, 0.08); font-size: 12px; }
+        .stat-val { font-weight: 800; font-family: 'JetBrains Mono', monospace; }
+        .risk-selector { display: flex; gap: 8px; margin-bottom: 12px; }
+        .risk-btn { flex: 1; padding: 10px 5px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: transparent; color: var(--text-muted); font-size: 10px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .risk-btn.active[data-risk="0.02"] { background: rgba(245, 158, 11, 0.2); border-color: var(--wait); color: var(--wait); }
+
+        /* MURNI AI CHATBOT STYLES */
+        .ai-chat-window { display: flex; flex-direction: column; height: 65vh; background: rgba(10, 12, 20, 0.6); border-radius: 16px; border: 1px solid var(--glass-border-light); padding: 15px; }
+        .ai-chat-history { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-right: 5px; }
+        .bot-msg, .user-msg { max-width: 85%; padding: 12px; border-radius: 12px; font-size: 13px; line-height: 1.5; }
+        .bot-msg { background: rgba(0, 240, 255, 0.1); border-left: 3px solid var(--neon-cyan); align-self: flex-start; border-bottom-left-radius: 4px; }
+        .user-msg { background: rgba(139, 92, 246, 0.2); border-right: 3px solid var(--neon-purple); align-self: flex-end; text-align: right; border-bottom-right-radius: 4px; }
+        .ai-chat-input-area { display: flex; gap: 8px; margin-top: 15px; }
+        .ai-chat-input-box { flex: 1; padding: 12px 15px; border-radius: 12px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); color: white; outline: none; font-size: 13px; }
     </style>
 </head>
 <body>
@@ -98,27 +118,25 @@
 
         <div class="ai-search-container">
             <div style="padding: 0 10px; font-size: 16px;">✨</div>
-            <input type="text" id="homeSearchInput" class="ai-search-input" placeholder="Cari emiten (cth: BBCA)..." onkeypress="if(event.key==='Enter') scanFromHome()">
+            <input type="text" id="homeSearchInput" class="ai-search-input" placeholder="Ketik emiten (Scan) atau Tanya AI..." onkeypress="if(event.key==='Enter') scanFromHome()">
             <button onclick="scanFromHome()" class="ai-search-btn">➔</button>
         </div>
 
         <div class="quick-menu">
-            <div class="quick-item" onclick="navTo('scannerPage', document.querySelectorAll('.nav-item')[1])"><div class="quick-icon" style="color:var(--neon-cyan)">🤖</div><span class="quick-text">Scan AI</span></div>
-            <div class="quick-item" onclick="navTo('watchlistPage', document.querySelectorAll('.nav-item')[2])"><div class="quick-icon" style="color:var(--neon-purple)">⭐</div><span class="quick-text">Watchlist</span></div>
-            <div class="quick-item" onclick="window.open('https://discord.gg/tTZX5xg4y', '_blank')"><div class="quick-icon" style="color:var(--neon-purple)">👾</div><span class="quick-text">Discord</span></div>
-            <div class="quick-item" onclick="window.open('https://wa.me/6281462364686?text=Halo%20Admin,%20saya%20ingin%20konfirmasi%20pengisian%20saldo.', '_blank')"><div class="quick-icon" style="color:var(--buy)">💬</div><span class="quick-text">Topup WA</span></div>
+            <div class="quick-item" onclick="navTo('scannerPage', document.querySelectorAll('.nav-item')[2])"><div class="quick-icon" style="color:var(--neon-cyan)">📊</div><span class="quick-text">Scan Manual</span></div>
+            <div class="quick-item" onclick="navTo('watchlistPage', document.querySelectorAll('.nav-item')[1])"><div class="quick-icon" style="color:var(--neon-purple)">⭐</div><span class="quick-text">Watchlist</span></div>
+            <div class="quick-item" onclick="navTo('aiChatPage', document.querySelectorAll('.nav-item')[3])"><div class="quick-icon" style="color:var(--neon-cyan)">🤖</div><span class="quick-text">Tanya AI</span></div>
+            <div class="quick-item" onclick="window.open('https://wa.me/6281462364686?text=Halo%20Admin,%20saya%20ingin%20konfirmasi%20pengisian%20saldo%20akun%20Gacor%20Hunter%20saya.', '_blank')"><div class="quick-icon" style="color:var(--buy)">💬</div><span class="quick-text">Topup WA</span></div>
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px;">
             <div class="glass-card" style="margin-bottom: 0;">
                 <div style="font-size:10px; color:var(--text-muted); font-weight:bold; margin-bottom:8px;">IHSG TREND</div>
                 <div style="font-size: 24px; font-weight: 800; color: #fff; font-family:'JetBrains Mono';">7,243</div>
-                <div style="font-size: 10px; color: var(--neon-cyan); margin-top: 8px;">BULLISH PHASE</div>
             </div>
             <div class="glass-card" style="margin-bottom: 0;">
                 <div style="font-size:10px; color:var(--text-muted); font-weight:bold; margin-bottom:8px;">AI KUOTA</div>
-                <div style="font-size: 24px; font-weight: 800; color: var(--neon-purple);">15x</div>
-                <div style="font-size: 10px; color: #fff; margin-top: 8px;">Auto Reset Harian</div>
+                <div style="font-size: 24px; font-weight: 800; color: var(--neon-purple);"><span id="uiKuota">15</span>x</div>
             </div>
         </div>
 
@@ -126,125 +144,121 @@
         <div style="height: 320px; background: #080A10; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 20px;" id="tv_chart_container"></div>
     </div>
 
-    <!-- TAB 2: SCANNER MANUAL (Desain Asli V5.5 Sempurna) -->
-    <div id="scannerPage" class="view-section">
-        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px;">
-            <div onclick="navTo('homePage', document.querySelectorAll('.nav-item')[0])" style="width:40px; height:40px; border-radius:12px; background:var(--glass-bg); display:flex; align-items:center; justify-content:center; cursor: pointer; color: #fff; font-size: 20px;">&larr;</div>
-            <h3 class="section-title" style="margin: 0; font-size: 18px;">AI ENGINE CORE</h3>
-        </div>
-
-        <div class="glass-card" style="text-align: center; padding: 25px;">
-            <input type="text" id="tickerInput" class="input-pro" placeholder="KODE TICKER (Misal: GOTO)" style="text-align: center; font-size: 22px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase;">
-            <button onclick="startEngine()" class="btn-pro">⚡ ANALISA SEKARANG</button>
-        </div>
-
-        <div id="trackerBox" style="display: none; background: rgba(5,5,15,0.8); border: 1px solid var(--neon-cyan); padding: 20px; border-radius: 16px; margin-top: 25px; color: var(--neon-cyan); font-family: 'JetBrains Mono'; font-size: 11px;">
-            <div style="font-weight:bold; margin-bottom:10px;">> SYSTEM INITIALIZING...</div>
-            <div id="trackerLog" style="max-height: 150px; overflow-y: auto; display:flex; flex-direction:column; gap:6px;"></div>
-        </div>
-
-        <div id="resultBox" style="display: none; margin-top: 25px;">
-            <div class="glass-card" style="text-align: center; padding: 40px 20px; position: relative; overflow: hidden;">
-                <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:150px; height:150px; background:var(--neon-purple); filter:blur(80px); opacity:0.4; z-index:0;"></div>
-                <h2 id="outTicker" style="margin: 0; font-size: 48px; color: #fff; font-weight: 900; position:relative; z-index:1; letter-spacing: 2px;">...</h2>
-                <div style="font-size: 13px; color: var(--neon-cyan); margin-top: 8px; font-weight: 700; position:relative; z-index:1;" id="outStage">STAGE: BULLISH ACCUMULATION</div>
-                <div style="margin-top: 25px; position:relative; z-index:1;"><span id="outStatus" style="padding: 10px 30px; border-radius: 12px; font-weight: 800; font-size: 16px; color: #fff; background:var(--buy);">STRONG BUY</span></div>
-            </div>
-
-            <div style="display: flex; flex-direction: column; gap: 20px; margin-top: 20px;">
-                <div class="glass-card">
-                    <div style="color: var(--neon-purple); font-weight: 800; font-size: 12px; margin-bottom: 20px;">🕵️‍♂️ SMART MONEY & BANDARMOLOGI</div>
-                    <div class="stat-row"><span>Status Akumulasi</span><span class="stat-val" style="color:var(--buy);">BIG ACCUMULATION</span></div>
-                    <div class="stat-row"><span>Foreign Flow (5 Hari)</span><span class="stat-val" style="color:var(--buy);">+ Rp 150 Miliar</span></div>
-                    <div class="stat-row" style="border:none;"><span>Dominant Broker</span><span class="stat-val">BK, YU, AK</span></div>
-                </div>
-
-                <div class="glass-card">
-                    <div style="color: var(--neon-cyan); font-weight: 800; font-size: 12px; margin-bottom: 25px;">⚙️ AI MATRIKS (100 POIN)</div>
-                    <div style="text-align:center; margin-bottom:30px;">
-                        <div style="position: relative; display: inline-block;">
-                            <svg width="140" height="140" viewBox="0 0 140 140">
-                                <circle cx="70" cy="70" r="60" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="12"></circle>
-                                <circle id="scoreCircle" cx="70" cy="70" r="60" fill="none" stroke="var(--neon-purple)" stroke-width="12" stroke-dasharray="377" stroke-dashoffset="90" stroke-linecap="round" style="transform: rotate(-90deg); transform-origin: 50% 50%;"></circle>
-                            </svg>
-                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size:40px; font-weight:900; font-family:'JetBrains Mono';" id="outTotalScore">85</div>
-                        </div>
-                    </div>
-                    <div class="stat-row"><span>Price Structure</span><span class="stat-val">Bullish (HH/HL)</span></div>
-                    <div class="stat-row"><span>Momentum (MACD/RSI)</span><span class="stat-val">Strong</span></div>
-                </div>
-
-                <div class="glass-card">
-                    <div style="color: var(--neon-pink); font-weight: 800; font-size: 12px; margin-bottom: 25px;">🎯 TRADING PLAN & MONEY MANAGEMENT</div>
-                    <div style="background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3); padding: 15px; border-radius: 12px; margin-bottom: 15px;">
-                        <div class="stat-row" style="border:none; padding:0;"><span>🛒 ENTRY ZONE</span><span class="stat-val" style="color:var(--buy)" id="outBuy">Rp 1.000</span></div>
-                    </div>
-                    <div style="background: rgba(244,63,94,0.15); border: 1px solid rgba(244,63,94,0.3); padding: 15px; border-radius: 12px; margin-bottom: 15px;">
-                        <div class="stat-row" style="border:none; padding:0;"><span>🛑 CUT LOSS (SL)</span><span class="stat-val" style="color:var(--skip)" id="outSl">Rp 950</span></div>
-                    </div>
-                    <div class="stat-row"><span>🎯 Target Profit (TP)</span><span class="stat-val" id="outTp1">Rp 1.100</span></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- TAB 3: WATCHLIST / TOP RADAR -->
+    <!-- TAB 2: WATCHLIST -->
     <div id="watchlistPage" class="view-section">
-        <h3 class="section-title"><span class="gradient-text">⭐</span> AI Watchlist (Top Radar)</h3>
-        <div class="radar-list">
-            <div class="radar-card" onclick="scanFromRadar('BBCA')">
-                <div style="display:flex; gap:12px; align-items:center;">
-                    <div style="width:45px; height:45px; background:rgba(0,240,255,0.1); color:var(--neon-cyan); border-radius:14px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px;">BB</div>
-                    <div><div style="font-weight:800; font-size:15px; color:#fff;">BBCA</div><div style="font-size:11px; color:var(--text-muted);">Breakout Volume</div></div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+            <h3 class="section-title" style="margin:0;"><span class="gradient-text">⭐</span> Top 10 Radar</h3>
+            <!-- TOMBOL ADMIN UPDATE RADAR -->
+            <button id="btnUpdateRadar" onclick="forceUpdateRadar()" style="background: rgba(139,92,246,0.2); border: 1px solid var(--neon-purple); color: #fff; border-radius: 8px; padding: 6px 10px; font-size: 10px; cursor: pointer; font-weight: bold;">🔄 Update Radar (Admin)</button>
+        </div>
+        <div class="radar-list" id="fullWatchlistGrid">
+            <div class="glass-card" style="text-align:center; padding:30px; color:var(--text-muted);">Menunggu tarikan data bursa...</div>
+        </div>
+    </div>
+
+    <!-- TAB 3: SCANNER MANUAL (SAMA PERSIS DENGAN SEBELUMNYA) -->
+    <div id="scannerPage" class="view-section">
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+            <div onclick="navTo('homePage', document.querySelectorAll('.nav-item')[0])" style="width:40px; height:40px; border-radius:12px; background:var(--glass-bg); display:flex; align-items:center; justify-content:center; cursor: pointer; color: #fff; font-size: 20px;">&larr;</div>
+            <h3 class="section-title" style="margin: 0;">SCANNER MANUAL (CORE)</h3>
+        </div>
+
+        <div class="scanner-grid">
+            <div>
+                <div class="glass-card" style="text-align: center;">
+                    <input type="text" id="tickerInput" class="input-pro" placeholder="KODE TICKER (Cth: GOTO)" style="text-align: center; font-size: 20px; font-weight: 800; text-transform: uppercase;">
+                    <div class="upload-dropzone" id="dropzone" onclick="document.getElementById('fileInput').click()">
+                        <div style="font-size: 20px; margin-bottom: 5px;">📸</div>
+                        <div style="font-size: 11px; color: var(--text-muted);" id="uploadText">Opsional: Upload Screenshot Broker<br>(Vision AI)</div>
+                        <input type="file" id="fileInput" accept="image/*" onchange="handleImage(event)">
+                        <div id="previewContainer"><img id="imagePreview" src=""><div class="remove-img" onclick="removeImage(event)">X</div></div>
+                    </div>
+                    <button onclick="startEngine()" class="btn-pro" id="btnScan">⚡ ANALISA SEKARANG</button>
                 </div>
-                <div style="text-align:right;"><div style="font-weight:900; font-size:20px; color:var(--neon-cyan);">85%</div><div style="font-size:9px; color:var(--text-muted);">AI SCORE</div></div>
+                <div id="trackerBox" class="terminal-box"></div>
             </div>
-            <div class="radar-card" onclick="scanFromRadar('BMRI')">
-                <div style="display:flex; gap:12px; align-items:center;">
-                    <div style="width:45px; height:45px; background:rgba(139,92,246,0.1); color:var(--neon-purple); border-radius:14px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px;">BM</div>
-                    <div><div style="font-weight:800; font-size:15px; color:#fff;">BMRI</div><div style="font-size:11px; color:var(--text-muted);">Uptrend Channel</div></div>
+
+            <div id="resultBox" style="display: none;">
+                <div class="glass-card" style="text-align: center; position: relative; overflow: hidden;">
+                    <h2 id="outTicker" style="margin: 0; font-size: 40px; color: #fff; font-weight: 900; position:relative; z-index:1;">...</h2>
+                    <div id="outBadge" class="style-badge badge-swing" style="position: relative; z-index: 1;">🌊 SWING TRADE</div>
                 </div>
-                <div style="text-align:right;"><div style="font-weight:900; font-size:20px; color:var(--neon-cyan);">82%</div><div style="font-size:9px; color:var(--text-muted);">AI SCORE</div></div>
+
+                <!-- CHATBOT & DEVIL'S ADVOCATE -->
+                <div class="glass-card">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                        <div style="font-weight:bold; font-size:12px; color:#fff; display:flex; align-items:center; gap:8px;"><span style="font-size:16px;">🤖</span> Analisa Dual-Brain</div>
+                        <!-- DEVIL'S ADVOCATE -->
+                        <button id="devilBtn" onclick="toggleDevilMode()" style="background: rgba(236,72,153,0.15); border: 1px solid var(--skip); color: var(--skip); border-radius: 8px; padding: 4px 10px; font-size: 9px; font-weight: bold; cursor: pointer;">🛡️ Risiko</button>
+                    </div>
+                    <div id="aiChatConclusion" class="chat-bubble chat-typing"></div>
+                </div>
+
+                <!-- MATRIKS & DATA BARU -->
+                <div class="glass-card">
+                    <div style="color: var(--neon-cyan); font-weight: 800; font-size: 12px; margin-bottom: 15px;">⚙️ MATRIKS & INDIKATOR</div>
+                    <div style="text-align:center; margin-bottom:15px;"><div style="font-size:32px; font-weight:900; font-family:'JetBrains Mono'; color:var(--neon-cyan)" id="outTotalScore">0</div><div style="font-size:9px; color:var(--text-muted)">SKOR (100)</div></div>
+                    
+                    <div class="stat-row"><span>MACD Trend</span><span class="stat-val" id="outMacd">-</span></div>
+                    <div class="stat-row"><span>Foreign Flow</span><span class="stat-val" id="outForeign">-</span></div>
+                    <div class="stat-row"><span>Classic SR (Res/Sup)</span><span class="stat-val" id="outSR">-</span></div>
+                </div>
+
+                <!-- TRADING PLAN & RISK SIZER -->
+                <div class="glass-card">
+                    <div style="color: var(--neon-pink); font-weight: 800; font-size: 12px; margin-bottom: 15px;">🎯 TRADING PLAN & SIZER</div>
+                    <div class="stat-row"><span>🛒 Entry Zone</span><span class="stat-val" style="color:var(--buy)" id="outBuy">-</span></div>
+                    <div class="stat-row"><span>🛑 Stop Loss (SL)</span><span class="stat-val" style="color:var(--skip)" id="outSl">-</span></div>
+                    <div class="stat-row"><span>🎯 Target Profit (TP)</span><span class="stat-val" style="color:var(--neon-cyan)" id="outTp1">-</span></div>
+
+                    <div style="background: rgba(0,0,0,0.5); padding: 15px; border-radius: 12px; margin-top: 15px; border: 1px dashed var(--glass-border-light);">
+                        <div style="font-size: 10px; margin-bottom: 8px;">Pilih Profil Risiko:</div>
+                        <div class="risk-selector" id="riskSelector">
+                            <button class="risk-btn" data-risk="0.01" onclick="setRisk(this)">Aman (1%)</button>
+                            <button class="risk-btn active" data-risk="0.02" onclick="setRisk(this)">Normal (2%)</button>
+                            <button class="risk-btn" data-risk="0.05" onclick="setRisk(this)">Agresif (5%)</button>
+                        </div>
+                        <input type="number" id="capitalInput" class="input-pro" style="padding:10px; margin-bottom:10px;" placeholder="Modal (Rp) Cth: 10000000">
+                        <button onclick="calculateLots()" class="btn-pro" style="padding:10px; font-size:12px;">Hitung Lot Maksimal</button>
+                        <div class="stat-row" style="border:none; padding-bottom:0;"><span>Maks. Beli</span><span class="stat-val" id="calcLot" style="color:var(--neon-cyan)">0 Lot</span></div>
+                        <div class="stat-row" style="border:none; padding-bottom:0;"><span>Max Loss (Rp)</span><span class="stat-val" id="calcRisk" style="color:var(--skip)">Rp 0</span></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- TAB 4: ASISTEN AI CHATBOT (Murni Ruang Chat Tanya Jawab Saham) -->
+    <!-- TAB 4: MURNI AI CHATBOT (FITUR BARU) -->
     <div id="aiChatPage" class="view-section">
-        <h3 class="section-title"><span class="gradient-text">🤖</span> Tanya Asisten Saham AI</h3>
-        <div class="chat-container">
-            <div class="chat-messages" id="chatMessages">
-                <div class="msg msg-ai">Halo! Saya asisten AI pribadi Anda khusus bursa saham Indonesia. Tanyakan apa saja seputar analisis emiten, psikologi trading, manajemen risiko, atau istilah pasar saham.</div>
+        <h3 class="section-title"><span class="gradient-text">🤖</span> AI Asisten Edukasi Saham</h3>
+        <div class="ai-chat-window">
+            <div class="ai-chat-history" id="aiChatHistory">
+                <div class="bot-msg">Halo! Saya adalah AI khusus dunia persahaman. Ada pertanyaan seputar investasi, trading, saham, atau pasar modal yang ingin didiskusikan hari ini?</div>
             </div>
-            <div class="chat-input-area">
-                <input type="text" id="chatInput" class="input-pro" placeholder="Tanya sesuatu tentang saham..." style="margin-bottom:0; border:none; background:transparent;" onkeypress="if(event.key==='Enter') sendChatMessage()">
-                <button onclick="sendChatMessage()" class="ai-search-btn">➔</button>
+            <div class="ai-chat-input-area">
+                <input type="text" id="aiChatInput" class="ai-chat-input-box" placeholder="Ketik pertanyaan Anda di sini..." onkeypress="if(event.key==='Enter') sendGeneralChat()">
+                <button class="ai-search-btn" onclick="sendGeneralChat()">➔</button>
             </div>
         </div>
     </div>
 
-    <!-- TAB 5: JURNAL & RIWAYAT -->
-    <div id="riwayatPage" class="view-section">
-        <h3 class="section-title"><span class="gradient-text">🕒</span> Jurnal & Riwayat Analisa</h3>
-        <div class="radar-list" id="riwayatList">
-            <div class="glass-card" style="text-align:center; padding:30px; color:var(--text-muted);">Belum ada riwayat hari ini.</div>
-        </div>
-    </div>
-
-    <!-- BOTTOM NAV (5 Menu Lengkap Seimbang) -->
+    <!-- BOTTOM NAV (Diperbarui Menjadi 5 Tab Jelas & Terpisah) -->
     <div class="bottom-nav-container">
         <nav class="bottom-nav">
             <div class="nav-item active" onclick="navTo('homePage', this)"><div class="nav-icon">🏠</div><span>Home</span></div>
-            <div class="nav-item" onclick="navTo('scannerPage', this)"><div class="nav-icon">🤖</div><span>Scanner</span></div>
             <div class="nav-item" onclick="navTo('watchlistPage', this)"><div class="nav-icon">⭐</div><span>Radar</span></div>
-            <div class="nav-item" onclick="navTo('aiChatPage', this)"><div class="nav-icon">💬</div><span>AI Chat</span></div>
-            <div class="nav-item" onclick="navTo('riwayatPage', this)"><div class="nav-icon">🕒</div><span>Jurnal</span></div>
+            <div class="nav-item" onclick="navTo('scannerPage', this)"><div class="nav-icon">📊</div><span>Manual</span></div>
+            <div class="nav-item" onclick="navTo('aiChatPage', this)"><div class="nav-icon">🤖</div><span>Chat AI</span></div>
+            <div class="nav-item" onclick="window.open('https://wa.me/6281462364686?text=Halo%20Admin,%20saya%20ingin%20konfirmasi%20pengisian%20saldo%20akun%20Gacor%20Hunter%20saya.', '_blank')"><div class="nav-icon">💎</div><span>Topup</span></div>
         </nav>
     </div>
 </div>
 
 <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 <script>
+    // 🔴 GANTI URL INI DENGAN WEB APP URL ANDA!
+    const GAS_URL = "URL_GAS_ANDA_DISINI";
+
     function navTo(pageId, navElement) {
         document.querySelectorAll('.view-section').forEach(el => el.classList.remove('view-active'));
         document.getElementById(pageId).classList.add('view-active');
@@ -253,63 +267,234 @@
             navElement.classList.add('active');
         }
         window.scrollTo(0,0);
+        if(pageId === 'watchlistPage') loadTop10();
     }
 
     function scanFromHome() {
         let val = document.getElementById('homeSearchInput').value.trim();
         if(!val) return;
-        navTo('scannerPage', document.querySelectorAll('.nav-item')[1]);
-        document.getElementById('tickerInput').value = val;
-        startEngine();
-    }
-    
-    function scanFromRadar(ticker) {
-        navTo('scannerPage', document.querySelectorAll('.nav-item')[1]);
-        document.getElementById('tickerInput').value = ticker;
-        startEngine();
+        
+        // Logika sederhana: Jika input <= 4 huruf (kode saham), lempar ke Scanner. Jika panjang, lempar ke Chat AI
+        if(val.length <= 4) {
+            navTo('scannerPage', document.querySelectorAll('.nav-item')[2]);
+            document.getElementById('tickerInput').value = val;
+            startEngine();
+        } else {
+            navTo('aiChatPage', document.querySelectorAll('.nav-item')[3]);
+            document.getElementById('aiChatInput').value = val;
+            sendGeneralChat();
+        }
     }
 
-    function startEngine() {
+    let hasImage = false;
+    function handleImage(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('imagePreview').src = e.target.result;
+                document.getElementById('previewContainer').style.display = 'inline-block';
+                document.getElementById('uploadText').style.display = 'none';
+                hasImage = true;
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+    
+    function removeImage(e) {
+        e.stopPropagation();
+        document.getElementById('fileInput').value = "";
+        document.getElementById('imagePreview').src = "";
+        document.getElementById('previewContainer').style.display = 'none';
+        document.getElementById('uploadText').style.display = 'block';
+        hasImage = false;
+    }
+
+    // --- FITUR FORCE UPDATE RADAR (ADMIN) ---
+    function forceUpdateRadar() {
+        let btn = document.getElementById('btnUpdateRadar');
+        btn.innerText = "🔄 Memindai... Tunggu 30 Detik";
+        fetch(GAS_URL + "?action=forceRunEOD").then(r=>r.json()).then(res => {
+            alert(res.message);
+            btn.innerText = "🔄 Update Radar (Admin)";
+            loadTop10();
+        }).catch(err => { alert("Gagal koneksi ke server."); btn.innerText = "🔄 Update Radar (Admin)"; });
+    }
+
+    function loadTop10() {
+        fetch(GAS_URL + "?action=getTop10").then(r=>r.json()).then(res => {
+            let html = "";
+            res.data.forEach(d => {
+                html += `<div class="radar-card" onclick="document.getElementById('tickerInput').value='${d.ticker}'; startEngine(); navTo('scannerPage', document.querySelectorAll('.nav-item')[2]);">
+                    <div style="display:flex; gap:12px; align-items:center;">
+                        <div style="width:45px; height:45px; background:rgba(139,92,246,0.1); color:var(--neon-purple); border-radius:14px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:12px;">${d.ticker.substring(0,2)}</div>
+                        <div><div style="font-weight:800; font-size:15px; color:#fff;">${d.ticker}</div><div style="font-size:11px; color:var(--text-muted);">${d.setup}</div></div>
+                    </div>
+                    <div style="text-align:right;"><div style="font-weight:900; font-size:20px; color:var(--buy);">${d.score}</div></div>
+                </div>`;
+            });
+            document.getElementById('fullWatchlistGrid').innerHTML = html || "<div class='glass-card'>Data belum tersedia. Admin perlu Update Radar.</div>";
+        });
+    }
+
+    // --- ENGINE SCAN MANUAL (SAMA PERSIS) ---
+    const formatRp = num => "Rp " + Math.round(num).toLocaleString('id-ID');
+    let currentEntry = 0, currentSL = 0, baseAnalysis = "", devilAnalysis = "", isDevilMode = false;
+
+    async function startEngine() {
         let ticker = document.getElementById("tickerInput").value.trim().toUpperCase();
         if (!ticker) return;
 
         document.getElementById("resultBox").style.display = "none";
         document.getElementById("trackerBox").style.display = "block";
-        let log = document.getElementById("trackerLog");
-        log.innerHTML = `<div>> Menghubungkan ke server bursa...</div>`;
+        document.getElementById('btnScan').innerText = "MEMPROSES...";
+        
+        let log = document.getElementById("trackerBox");
+        const steps = [
+            "> Menginisiasi Dual-Brain AI (Gemini & OpenAI)...",
+            "> Menarik level Fibonacci & Support/Resistance...",
+            "> Menghitung kalkulasi MACD & Moving Averages...",
+            hasImage ? "> Mengekstraksi data volume bandar via Vision AI..." : "> Cross-validasi opini antar AI (Konsensus)...",
+            "> Menulis Trading Plan & Kesimpulan akhir..."
+        ];
+        
+        log.innerHTML = `<div style="font-weight:bold; margin-bottom:10px;">> SYSTEM INITIALIZING...</div><div id="trackerLog"></div>`;
+        let logDiv = document.getElementById("trackerLog");
+        
+        for (let i=0; i<steps.length; i++) {
+            logDiv.innerHTML += `<div>${steps[i]}</div>`;
+            await new Promise(r => setTimeout(r, 600)); 
+        }
 
-        setTimeout(() => { log.innerHTML += `<div>> Mengekstrak volume & aksi harga emiten $${ticker}...</div>`; }, 800);
-        setTimeout(() => {
+        let api_url = `${GAS_URL}?ticker=${ticker}&hasImage=${hasImage}`;
+        try {
+            let response = await fetch(api_url);
+            let result = await response.json();
+            
+            if (result.status === "error") throw new Error(result.message);
+            
             document.getElementById("trackerBox").style.display = "none";
             document.getElementById("resultBox").style.display = "block";
+            document.getElementById('btnScan').innerText = "⚡ ANALISA SEKARANG";
+
+            let data = result.data;
             document.getElementById("outTicker").innerText = `$${ticker}`;
-        }, 1800);
+            document.getElementById("outTotalScore").innerText = data.score;
+            document.getElementById("outBadge").innerText = data.style;
+            
+            document.getElementById("outMacd").innerText = data.indicators.macdStatus;
+            document.getElementById("outForeign").innerText = data.indicators.foreign;
+            document.getElementById("outSR").innerText = `${data.indicators.swingHigh} / ${data.indicators.swingLow}`;
+
+            currentEntry = data.plan.entry;
+            currentSL = data.plan.sl;
+            document.getElementById("outBuy").innerText = formatRp(currentEntry);
+            document.getElementById("outSl").innerText = formatRp(currentSL);
+            document.getElementById("outTp1").innerText = formatRp(data.plan.tp);
+
+            baseAnalysis = result.ai.baseAnalysis;
+            devilAnalysis = result.ai.devilAnalysis;
+            
+            isDevilMode = true; toggleDevilMode();
+            calculateLots();
+
+        } catch (error) {
+            alert("Gagal menganalisa: " + error.message);
+            document.getElementById("trackerBox").style.display = "none";
+            document.getElementById('btnScan').innerText = "⚡ ANALISA SEKARANG";
+        }
     }
 
-    // Fungsi Murni Chatting dengan AI
-    function sendChatMessage() {
-        let input = document.getElementById('chatInput');
-        let text = input.value.trim();
+    // --- DEVIL'S ADVOCATE (SCAN MANUAL) ---
+    function toggleDevilMode() {
+        isDevilMode = !isDevilMode;
+        let btn = document.getElementById('devilBtn');
+        let box = document.getElementById('aiChatConclusion');
+        
+        if(isDevilMode) {
+            btn.innerText = "🔙 Kembali";
+            btn.style.background = "rgba(16,185,129,0.15)"; btn.style.color = "var(--buy)"; btn.style.borderColor = "var(--buy)";
+            box.style.borderLeftColor = "var(--skip)";
+            typeChat(devilAnalysis);
+        } else {
+            btn.innerText = "🛡️ Risiko";
+            btn.style.background = "rgba(236,72,153,0.15)"; btn.style.color = "var(--skip)"; btn.style.borderColor = "var(--skip)";
+            box.style.borderLeftColor = "var(--neon-purple)";
+            typeChat(baseAnalysis);
+        }
+    }
+
+    function typeChat(text) {
+        let box = document.getElementById('aiChatConclusion');
+        box.innerText = ""; box.classList.add("chat-typing"); let i = 0;
+        if(window.typingTimer) clearTimeout(window.typingTimer);
+        function type() {
+            if (i < text.length) { box.innerHTML = text.substring(0, i+1); i++; window.typingTimer = setTimeout(type, 15); } 
+            else { box.classList.remove("chat-typing"); }
+        }
+        type();
+    }
+
+    // --- RISK SIZER (SCAN MANUAL) ---
+    let currentRiskPercent = 0.02;
+    function setRisk(btnEl) {
+        document.querySelectorAll('.risk-btn').forEach(b => b.classList.remove('active'));
+        btnEl.classList.add('active');
+        currentRiskPercent = parseFloat(btnEl.getAttribute('data-risk'));
+        calculateLots(); 
+    }
+    function calculateLots() {
+        let capital = parseFloat(document.getElementById("capitalInput").value);
+        if(!capital || isNaN(capital) || currentEntry === 0) return;
+        let lossPerShare = currentEntry - currentSL;
+        if(lossPerShare <= 0) return;
+        let maxLots = Math.min(Math.floor((capital * currentRiskPercent) / (lossPerShare * 100)), Math.floor(capital / (currentEntry * 100)));
+        if (maxLots <= 0) { document.getElementById("calcLot").innerText = "Modal Kurang"; document.getElementById("calcRisk").innerText = "-"; } 
+        else { document.getElementById("calcLot").innerText = maxLots + " Lot"; document.getElementById("calcRisk").innerText = formatRp(maxLots * lossPerShare * 100); }
+    }
+
+    // ==========================================
+    // FUNGSI BARU: MURNI AI CHATBOT TANYA JAWAB
+    // ==========================================
+    async function sendGeneralChat() {
+        let inputEl = document.getElementById("aiChatInput");
+        let text = inputEl.value.trim();
         if(!text) return;
 
-        let msgContainer = document.getElementById('chatMessages');
-        msgContainer.innerHTML += `<div class="msg msg-user">${text}</div>`;
-        input.value = "";
-        msgContainer.scrollTop = msgContainer.scrollHeight;
+        let historyBox = document.getElementById("aiChatHistory");
 
-        setTimeout(() => {
-            let reply = `Menanggapi pertanyaan Anda tentang "${text}": Di pasar saham Indonesia, konsistensi psikologi dan manajemen risiko adalah kunci utama. Selalu perhatikan tren mayor IHSG sebelum memutuskan masuk ke emiten lapis kedua atau ketiga. Ada hal lain yang ingin didiskusikan?`;
-            msgContainer.innerHTML += `<div class="msg msg-ai">${reply}</div>`;
-            msgContainer.scrollTop = msgContainer.scrollHeight;
-        }, 1000);
+        // 1. Munculkan bubble user
+        let userDiv = document.createElement("div");
+        userDiv.className = "user-msg";
+        userDiv.innerText = text;
+        historyBox.appendChild(userDiv);
+        
+        inputEl.value = "";
+        historyBox.scrollTop = historyBox.scrollHeight;
+
+        // 2. Munculkan indikator AI typing
+        let botDiv = document.createElement("div");
+        botDiv.className = "bot-msg chat-typing";
+        botDiv.innerText = "Menganalisa pertanyaan...";
+        historyBox.appendChild(botDiv);
+        historyBox.scrollTop = historyBox.scrollHeight;
+
+        // 3. Panggil backend untuk ngobrol
+        try {
+            let res = await fetch(`${GAS_URL}?action=chat&message=${encodeURIComponent(text)}`);
+            let data = await res.json();
+            
+            botDiv.classList.remove("chat-typing");
+            botDiv.innerText = data.reply || "Maaf, AI sedang mengalami kendala.";
+        } catch(e) {
+            botDiv.classList.remove("chat-typing");
+            botDiv.innerText = "Error: Tidak dapat terhubung ke server.";
+        }
+        historyBox.scrollTop = historyBox.scrollHeight;
     }
 
     window.onload = function() {
-        new TradingView.widget({
-            "autosize": true, "symbol": "IDX:COMPOSITE", "interval": "D",
-            "theme": "dark", "style": "1", "hide_top_toolbar": true, "hide_legend": true,
-            "container_id": "tv_chart_container", "backgroundColor": "#080A10"
-        });
+        new TradingView.widget({ "autosize": true, "symbol": "IDX:COMPOSITE", "interval": "D", "theme": "dark", "style": "1", "hide_top_toolbar": true, "hide_legend": true, "container_id": "tv_chart_container", "backgroundColor": "#080A10" });
     };
 </script>
 </body>
