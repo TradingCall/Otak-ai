@@ -8,9 +8,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
 
         :root { 
-            --bg-base: #0B0F19; /* Latar belakang lebih gelap ala V5.5 */
-            --bg-card: #151A27; 
-            --glass-border: rgba(255, 255, 255, 0.05);
+            --bg-base: #0B0F19; --bg-card: #151A27; --glass-border: rgba(255, 255, 255, 0.05);
             --text-main: #ffffff; --text-muted: #94a3b8;
             --neon-cyan: #00f0ff; --neon-purple: #8B5CF6; 
             --buy: #10b981; --wait: #f59e0b; --skip: #f43f5e; 
@@ -28,7 +26,6 @@
         .view-active { display: block; }
         @keyframes slideUpFade { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* BASE CARD ALA V5.5 */
         .glass-card { background: var(--bg-card); border-radius: 16px; border: 1px solid var(--glass-border); padding: 18px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
         .section-title { font-size: 13px; font-weight: 800; color: #fff; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.5px;}
 
@@ -42,7 +39,6 @@
         .avatar { width: 45px; height: 45px; border-radius: 14px; background: rgba(139, 92, 246, 0.2); border: 1px solid var(--neon-purple); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; }
         .role-badge { font-size: 9px; background: var(--neon-cyan); color: #000; padding: 2px 6px; border-radius: 6px; font-weight: bold; margin-left: 6px; }
 
-        /* SEARCH & QUICK MENU */
         .ai-search-container { background: var(--bg-card); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 6px; display: flex; align-items: center; margin-bottom: 20px; }
         .ai-search-input { flex: 1; background: transparent; border: none; color: white; font-size: 13px; outline: none; padding-left: 10px; }
         .ai-search-btn { background: var(--neon-purple); border: none; color: #fff; width: 38px; height: 38px; border-radius: 10px; cursor: pointer; }
@@ -51,21 +47,18 @@
         .quick-item { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; }
         .quick-icon { width: 55px; height: 55px; border-radius: 16px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 22px; }
 
-        /* RADAR LIST */
         .radar-card { background: rgba(20, 25, 40, 0.4); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); padding: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; margin-bottom: 10px;}
 
-        /* BOTTOM NAV */
         .bottom-nav-container { position: fixed; bottom: 0; left: 0; width: 100%; padding-bottom: env(safe-area-inset-bottom); display: flex; justify-content: center; z-index: 100; background: linear-gradient(to top, rgba(11,15,25,0.95) 40%, transparent); display: none; }
         .bottom-nav { width: calc(100% - 30px); margin-bottom: 15px; background: var(--bg-card); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; display: flex; justify-content: space-around; padding: 10px 5px; }
         .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 10px; font-weight: 600; color: #64748b; cursor: pointer; width: 20%; }
         .nav-item.active { color: var(--neon-cyan); }
         .nav-icon { font-size: 22px; }
 
-        /* UPLOAD ZONE */
         .upload-dropzone { border: 2px dashed rgba(255, 255, 255, 0.2); border-radius: 12px; padding: 15px; text-align: center; background: rgba(255,255,255,0.02); cursor: pointer; margin-bottom: 15px; }
         
         /* -------------------------------------------
-           TAMPILAN UI V5.5 SPESIFIK (REPLIKA)
+           TAMPILAN UI V5.5 SPESIFIK & BUG FIX
         --------------------------------------------- */
         .v5-box { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
         .v5-title { font-size: 11px; font-weight: 800; color: #64748b; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;}
@@ -77,11 +70,16 @@
         .box-trigger { border: 1px solid var(--wait); background: rgba(245, 158, 11, 0.05); }
         .box-cutloss { border: 1px solid var(--skip); background: rgba(244, 63, 94, 0.05); }
 
+        /* PERBAIKAN BUG CSS TOMBOL RISK */
+        .risk-selector { display: flex; gap: 8px; margin-bottom: 12px; }
+        .risk-btn { flex: 1; padding: 10px 5px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: transparent; color: #94a3b8; font-size: 11px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .risk-btn.active { background: rgba(245, 158, 11, 0.2); border-color: #f59e0b; color: #f59e0b; }
+
         .chat-bubble { font-size: 12.5px; line-height: 1.6; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 12px; border-left: 3px solid var(--neon-purple); white-space: pre-line; margin-top: 10px;}
         .chat-typing:after { content: '▋'; animation: blink 1s step-start infinite; }
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* CHAT AI & MODAL */
+        /* CHAT AI */
         .ai-chat-window { display: flex; flex-direction: column; height: 65vh; background: var(--bg-card); border-radius: 16px; border: 1px solid var(--glass-border); padding: 15px; }
         .ai-chat-history { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
         .bot-msg, .user-msg { max-width: 85%; padding: 12px; border-radius: 12px; font-size: 13px; line-height: 1.5; }
@@ -149,12 +147,10 @@
             </div>
         </div>
 
-        <!-- SENTIMEN IHSG DIKEMBALIKAN -->
+        <!-- SENTIMEN IHSG REALTIME (BUG FIX) -->
         <div class="glass-card">
             <h3 class="section-title"><span style="color:var(--neon-cyan)">📰</span> SENTIMEN IHSG HARI INI</h3>
-            <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;" id="ihsgOutlook">
-                Memuat data IHSG dan sentimen terkini... (Data akan disinkronisasi saat jam bursa aktif).
-            </p>
+            <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;" id="ihsgOutlook">Memuat analisis IHSG Realtime...</p>
         </div>
 
         <h3 class="section-title">MARKET CHART IHSG</h3>
@@ -170,7 +166,7 @@
         <div id="fullWatchlistGrid"><div class="glass-card" style="text-align:center; padding:30px; color:var(--text-muted);">Menunggu data bursa...</div></div>
     </div>
 
-    <!-- 4. SCANNER MANUAL DENGAN UI V5.5 -->
+    <!-- 4. SCANNER MANUAL (UI V5.5) -->
     <div id="scannerPage" class="view-section">
         <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
             <div onclick="navTo('homePage', document.querySelectorAll('.nav-item')[0])" style="width:40px; height:40px; border-radius:12px; background:var(--bg-card); border: 1px solid rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; cursor: pointer; color: #fff; font-size: 20px;">&larr;</div>
@@ -183,7 +179,7 @@
                 <div style="font-size: 20px; margin-bottom: 5px;">📸</div>
                 <div style="font-size: 11px; color: var(--text-muted);" id="uploadText">Opsional: Upload Screenshot Broker<br>(Vision AI)</div>
                 <input type="file" id="fileInput" accept="image/*" onchange="handleImage(event)" style="display:none;">
-                <div id="previewContainer" style="display:none; position:relative; margin-top:10px;"><img id="imagePreview" src="" style="max-height:100px; border-radius:8px;"><div class="remove-img" onclick="removeImage(event)" style="position:absolute; top:-10px; right:-10px; background:var(--skip); width:25px; height:25px; border-radius:50%; color:white; font-weight:bold; cursor:pointer;">X</div></div>
+                <div id="previewContainer" style="display:none; position:relative; margin-top:10px;"><img id="imagePreview" src="" style="max-height:100px; border-radius:8px;"><div onclick="removeImage(event)" style="position:absolute; top:-10px; right:-10px; background:var(--skip); width:25px; height:25px; border-radius:50%; color:white; font-weight:bold; cursor:pointer; display:flex; align-items:center; justify-content:center;">X</div></div>
             </div>
             <button onclick="startEngine()" class="btn-pro" id="btnScan">⚡ ANALISA SEKARANG</button>
         </div>
@@ -195,9 +191,13 @@
             <div style="text-align:center; margin-bottom:20px;">
                 <div style="font-size:45px; font-weight:900; font-family:'JetBrains Mono'; color:var(--neon-cyan)" id="outTotalScore">0</div>
                 <div style="font-size:10px; color:var(--text-muted); letter-spacing:1px;">SKOR (100) - <span id="outTicker" style="color:#fff; font-weight:bold;">...</span></div>
+                <!-- BOX PENJELASAN SCORING (BUG FIX 1 & 2) -->
+                <div id="outBreakdown" style="text-align:left; font-size:11px; color:#cbd5e1; margin-top:15px; background:rgba(0,0,0,0.3); padding:12px; border-radius:8px; border:1px solid rgba(255,255,255,0.05); line-height: 1.6;">
+                    Menghitung parameter...
+                </div>
             </div>
 
-            <!-- LOGICAL TRADING PLAN (UI V5.5) -->
+            <!-- LOGICAL TRADING PLAN -->
             <div class="v5-box">
                 <div class="v5-title">🎯 LOGICAL TRADING PLAN</div>
                 <div class="v5-row"><span>Realtime Price</span><span class="v5-val" style="color:var(--neon-cyan)" id="v5Price">-</span></div>
@@ -208,7 +208,7 @@
                 <div class="v5-row"><span>Golden/Death Cross</span><span class="v5-val" id="v5Cross">-</span></div>
             </div>
 
-            <!-- SUPPORT / RESISTANCE MAP (UI V5.5) -->
+            <!-- SUPPORT / RESISTANCE MAP -->
             <div class="v5-box">
                 <div class="v5-title">📍 SUPPORT / RESISTANCE MAP</div>
                 <div class="v5-row"><span>Classic S/R</span><span class="v5-val" id="v5Classic">-</span></div>
@@ -216,7 +216,7 @@
                 <div class="v5-row"><span>Fibo S/R</span><span class="v5-val" id="v5Fibo">-</span></div>
             </div>
 
-            <!-- ENTRY & EXIT ZONES (UI V5.5) -->
+            <!-- ENTRY & EXIT ZONES -->
             <div class="v5-box box-entry">
                 <div class="v5-title" style="color:var(--buy)">🛒 STRICT ENTRY ZONE <span style="float:right;" id="v5EntryZone">-</span></div>
                 <div style="font-size:11px; color:var(--text-muted); line-height:1.4;">Entry ditempatkan dekat support atau pantulan EMA.</div>
@@ -246,10 +246,10 @@
                 <div id="aiChatConclusion" class="chat-bubble chat-typing"></div>
             </div>
 
-            <!-- RISK SIZER -->
+            <!-- RISK SIZER (BUG FIX 3: GLOBAL VARIABLES) -->
             <div class="v5-box" style="margin-top: 20px;">
                 <div class="v5-title">⚖️ KALKULATOR LOT (MONEY MANAGEMENT)</div>
-                <div style="display:flex; gap:8px; margin-bottom:12px;" id="riskSelector">
+                <div class="risk-selector" id="riskSelector">
                     <button class="risk-btn" data-risk="0.01" onclick="setRisk(this)">Risk 1%</button>
                     <button class="risk-btn active" data-risk="0.02" onclick="setRisk(this)">Risk 2%</button>
                     <button class="risk-btn" data-risk="0.05" onclick="setRisk(this)">Risk 5%</button>
@@ -306,32 +306,37 @@
 <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 <script>
     // 🔴 GANTI URL INI DENGAN WEB APP URL ANDA!
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbx4UxxtaaGG_QiZHs-UK1MJ73Q-QHIPkIpCU29YB76UO3ddWeYkYjSLuabeFNE2Gnk/exec";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycby8U1MDP55lB5p1gJmtznuaIS7K2BmIp7B0_6E5dVT3FHZJfQZlsHT0Tn6_tvC0CjuB/exec";
 
-    // --- SESSION & LOGIN SYSTEM ---
+    // GLOBAL VARIABLES (Fix Bug Hitung Lot)
+    window.currentEntry = 0; 
+    window.currentSL = 0; 
+    let baseAnalysis = "", devilAnalysis = "", isDevilMode = false;
+    let currentRiskPercent = 0.02; // Default 2%
+
     window.onload = function() {
         new TradingView.widget({ "autosize": true, "symbol": "IDX:COMPOSITE", "interval": "D", "theme": "dark", "style": "1", "hide_top_toolbar": true, "hide_legend": true, "container_id": "tv_chart_container", "backgroundColor": "#080A10" });
         checkAuth();
-        let ihsg = document.getElementById("ihsgOutlook");
-        ihsg.innerHTML = "IHSG saat ini sedang mencoba mempertahankan level <em>support</em> psikologis di area 7.200. Sentimen pasar dipengaruhi oleh rilis data inflasi global dan pergerakan aliran dana asing. Pantau ketat sektor <em>Big Banks</em>.";
+        fetchRealtimeIHSG();
     };
+
+    function fetchRealtimeIHSG() {
+        fetch(GAS_URL + "?action=getIHSG").then(r=>r.json()).then(res => {
+            if(res.status === "success") document.getElementById("ihsgOutlook").innerHTML = res.outlook;
+            else document.getElementById("ihsgOutlook").innerHTML = "IHSG saat ini gagal dimuat. Coba refresh halaman.";
+        }).catch(e => { document.getElementById("ihsgOutlook").innerHTML = "Koneksi ke server IHSG terputus."; });
+    }
 
     function checkAuth() {
         let user = localStorage.getItem("gacor_user");
-        if(user) {
-            setupDashboard(JSON.parse(user));
-            navTo('homePage', document.querySelectorAll('.nav-item')[0]);
-            document.getElementById("bottomNav").style.display = "flex";
-        } else {
-            document.getElementById("bottomNav").style.display = "none";
-            navTo('loginPage');
-        }
+        if(user) { setupDashboard(JSON.parse(user)); navTo('homePage', document.querySelectorAll('.nav-item')[0]); document.getElementById("bottomNav").style.display = "flex"; } 
+        else { document.getElementById("bottomNav").style.display = "none"; navTo('loginPage'); }
     }
 
     async function doLogin() {
         let id = document.getElementById("loginId").value.trim(), pass = document.getElementById("loginPass").value.trim();
         let btn = document.getElementById("btnLogin"), err = document.getElementById("loginError");
-        if(!id || !pass) { err.innerText = "Isi ID dan Password!"; err.style.display = "block"; return; }
+        if(!id || !pass) { err.innerText = "Isi Username dan Password!"; err.style.display = "block"; return; }
         btn.innerText = "MEMVERIFIKASI..."; err.style.display = "none";
         try {
             let res = await fetch(`${GAS_URL}?action=auth&type=login&login_id=${encodeURIComponent(id)}&password=${encodeURIComponent(pass)}`);
@@ -353,7 +358,6 @@
         else { document.getElementById("uiRoleBadge").style.display = "none"; document.getElementById("btnUpdateRadar").style.display = "none"; }
     }
 
-    // --- NAVIGATION & MODALS ---
     function navTo(pageId, navElement) {
         document.querySelectorAll('.view-section').forEach(el => el.classList.remove('view-active'));
         document.getElementById(pageId).classList.add('view-active');
@@ -383,7 +387,6 @@
     function removeImage(e) { e.stopPropagation(); document.getElementById('fileInput').value = ""; document.getElementById('imagePreview').src = ""; imageDataUrl = ""; document.getElementById('previewContainer').style.display = 'none'; document.getElementById('uploadText').style.display = 'block'; hasImage = false; }
 
     const formatRp = num => "Rp " + Math.round(num).toLocaleString('id-ID');
-    let currentEntry = 0, currentSL = 0, baseAnalysis = "", devilAnalysis = "", isDevilMode = false;
 
     async function startEngine() {
         let ticker = document.getElementById("tickerInput").value.trim().toUpperCase();
@@ -395,7 +398,7 @@
         let tb = document.getElementById("trackerBox"); tb.style.display = "block";
         document.getElementById('btnScan').innerText = "MEMPROSES...";
         
-        tb.innerHTML = `<div style="font-weight:bold; margin-bottom:10px;">> SYSTEM INITIALIZING...</div><div id="trackerLog"><div>> Menghitung teknikal & AI...</div></div>`;
+        tb.innerHTML = `<div style="font-weight:bold; margin-bottom:10px;">> SYSTEM INITIALIZING...</div><div id="trackerLog"><div>> Menarik data emiten & menghitung indikator...</div></div>`;
         let payload = { action: "scan", ticker: ticker };
         if (hasImage && imageDataUrl) payload.imageData = imageDataUrl;
 
@@ -410,6 +413,12 @@
             document.getElementById("outTicker").innerText = `$${ticker}`; 
             document.getElementById("outTotalScore").innerText = data.score; 
             
+            // Render Penjelasan Skor (Bug 1 & 2 Fix)
+            let breakdownHtml = "<b>Rincian Skor:</b><br>";
+            if(data.breakdown.length === 0) breakdownHtml += "Tidak ada sinyal dominan kuat.";
+            else { data.breakdown.forEach(b => breakdownHtml += `• ${b}<br>`); }
+            document.getElementById("outBreakdown").innerHTML = breakdownHtml;
+
             // UI V5.5 BINDING
             document.getElementById("v5Price").innerText = ind.price;
             document.getElementById("v5Arah").innerText = ind.arahDominan;
@@ -422,16 +431,21 @@
             document.getElementById("v5Dynamic").innerText = `${ind.ema21} / ${ind.ema99}`;
             document.getElementById("v5Fibo").innerText = `${ind.fib618} / ${ind.fib382}`;
 
-            currentEntry = data.plan.entry; currentSL = data.plan.sl;
-            document.getElementById("v5EntryZone").innerText = `~ ${currentEntry}`;
-            document.getElementById("v5Trigger").innerText = `Pantulan ${currentEntry} + Breakout Volume`;
-            document.getElementById("v5Sl").innerText = `${currentSL}`;
+            // Set Global Variables (Bug 3 Fix)
+            window.currentEntry = data.plan.entry; 
+            window.currentSL = data.plan.sl;
+            
+            document.getElementById("v5EntryZone").innerText = `~ ${window.currentEntry}`;
+            document.getElementById("v5Trigger").innerText = `Pantulan ${window.currentEntry} + Breakout Volume`;
+            document.getElementById("v5Sl").innerText = `${window.currentSL}`;
             document.getElementById("v5Tp1").innerText = `${data.plan.tp}`;
             document.getElementById("v5Tp2").innerText = `${data.plan.tp2}`;
             document.getElementById("v5RR").innerText = `${ind.rrRatio} R`;
 
             baseAnalysis = result.ai.baseAnalysis; devilAnalysis = result.ai.devilAnalysis;
-            isDevilMode = true; toggleDevilMode(); calculateLots();
+            isDevilMode = true; toggleDevilMode(); 
+            calculateLots(); // Auto hitung saat scan
+
         } catch (error) { alert("Error: " + error.message); tb.style.display = "none"; document.getElementById('btnScan').innerText = "⚡ SCAN ULANG"; }
     }
 
@@ -442,14 +456,27 @@
         else { btn.innerText = "🛡️ Risiko"; btn.style.background = "rgba(236,72,153,0.15)"; btn.style.color = "var(--skip)"; btn.style.borderColor = "var(--skip)"; box.style.borderLeftColor = "var(--neon-purple)"; box.innerHTML = baseAnalysis; }
     }
 
-    // --- RISK SIZER & RADAR ---
-    let currentRiskPercent = 0.02;
-    function setRisk(btnEl) { document.querySelectorAll('.risk-btn').forEach(b => b.classList.remove('active')); btnEl.classList.add('active'); currentRiskPercent = parseFloat(btnEl.getAttribute('data-risk')); calculateLots(); }
+    // --- RISK SIZER (Bug 3 Fix) ---
+    function setRisk(btnEl) { 
+        document.querySelectorAll('.risk-btn').forEach(b => b.classList.remove('active')); 
+        btnEl.classList.add('active'); 
+        currentRiskPercent = parseFloat(btnEl.getAttribute('data-risk')); 
+        calculateLots(); 
+    }
+    
     function calculateLots() {
-        let capital = parseFloat(document.getElementById("capitalInput").value); if(!capital || currentEntry === 0) return;
-        let lossPerShare = currentEntry - currentSL; if(lossPerShare <= 0) return;
-        let maxLots = Math.min(Math.floor((capital * currentRiskPercent) / (lossPerShare * 100)), Math.floor(capital / (currentEntry * 100)));
-        if (maxLots <= 0) { document.getElementById("calcLot").innerText = "Modal Kurang"; } else { document.getElementById("calcLot").innerText = maxLots + " Lot"; }
+        let inputVal = document.getElementById("capitalInput").value;
+        if(!inputVal || inputVal.trim() === "") { document.getElementById("calcLot").innerText = "Isi Modal Dulu"; return; }
+        
+        let capital = parseFloat(inputVal);
+        if(isNaN(capital) || window.currentEntry === 0) return;
+        
+        let lossPerShare = window.currentEntry - window.currentSL; 
+        if(lossPerShare <= 0) { document.getElementById("calcLot").innerText = "SL Error"; return; }
+        
+        let maxLots = Math.min(Math.floor((capital * currentRiskPercent) / (lossPerShare * 100)), Math.floor(capital / (window.currentEntry * 100)));
+        if (maxLots <= 0) { document.getElementById("calcLot").innerText = "Modal Kurang"; } 
+        else { document.getElementById("calcLot").innerText = maxLots + " Lot"; }
     }
 
     function loadTop10() {
@@ -473,7 +500,7 @@
             let res = await fetch(`${GAS_URL}?action=chat&message=${encodeURIComponent(text)}`);
             let data = await res.json();
             document.getElementById("typingMsg").remove(); historyBox.innerHTML += `<div class="bot-msg">${data.reply || "Error API"}</div>`;
-        } catch(e) { document.getElementById("typingMsg").remove(); historyBox.innerHTML += `<div class="bot-msg">Error koneksi.</div>`; }
+        } catch(e) { document.getElementById("typingMsg").remove(); historyBox.innerHTML += `<div class="bot-msg">Error koneksi ke server.</div>`; }
         historyBox.scrollTop = historyBox.scrollHeight;
     }
 </script>
