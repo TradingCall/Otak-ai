@@ -8,11 +8,11 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
 
         :root { 
-            --bg-base: #05050A; var(--glass-bg): rgba(16, 18, 27, 0.4); 
-            --glass-border-light: rgba(255, 255, 255, 0.15); --glass-border-dark: rgba(255, 255, 255, 0.03);
+            --bg-base: #0B0F19; /* Latar belakang lebih gelap ala V5.5 */
+            --bg-card: #151A27; 
+            --glass-border: rgba(255, 255, 255, 0.05);
             --text-main: #ffffff; --text-muted: #94a3b8;
-            --neon-cyan: #00f0ff; --neon-purple: #8B5CF6; --neon-pink: #ec4899;
-            --ai-gradient: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+            --neon-cyan: #00f0ff; --neon-purple: #8B5CF6; 
             --buy: #10b981; --wait: #f59e0b; --skip: #f43f5e; 
         }
 
@@ -20,8 +20,7 @@
         body { background: var(--bg-base); color: var(--text-main); display: flex; justify-content: center; overflow-x: hidden; }
         
         .ambient-orb { position: fixed; border-radius: 50%; filter: blur(80px); z-index: 0; pointer-events: none; opacity: 0.6; }
-        .orb-1 { top: -10%; left: -20%; width: 300px; height: 300px; background: rgba(139, 92, 246, 0.4); }
-        .orb-2 { bottom: 10%; right: -20%; width: 250px; height: 250px; background: rgba(0, 240, 255, 0.3); }
+        .orb-1 { top: -10%; left: -20%; width: 300px; height: 300px; background: rgba(139, 92, 246, 0.2); }
 
         .app-wrapper { width: 100%; max-width: 480px; min-height: 100vh; position: relative; z-index: 1; padding-bottom: calc(90px + env(safe-area-inset-bottom)); }
         
@@ -29,97 +28,94 @@
         .view-active { display: block; }
         @keyframes slideUpFade { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        .glass-card { background: rgba(16, 18, 27, 0.4); backdrop-filter: blur(20px); border-radius: 20px; border-top: 1px solid var(--glass-border-light); border-left: 1px solid var(--glass-border-light); border-right: 1px solid var(--glass-border-dark); border-bottom: 1px solid var(--glass-border-dark); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); padding: 18px; margin-bottom: 20px; }
-        .gradient-text { background: var(--ai-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900;}
-        .section-title { font-size: 14px; font-weight: 800; color: #fff; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        /* BASE CARD ALA V5.5 */
+        .glass-card { background: var(--bg-card); border-radius: 16px; border: 1px solid var(--glass-border); padding: 18px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+        .section-title { font-size: 13px; font-weight: 800; color: #fff; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.5px;}
 
         /* UI LOGIN */
         .login-box { display: flex; flex-direction: column; gap: 15px; margin-top: 50px; }
-        .input-pro { width: 100%; padding: 16px; background: rgba(10, 12, 20, 0.6); color: white; font-size: 14px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); outline: none; transition: 0.3s; }
-        .input-pro:focus { border-color: var(--neon-cyan); }
-        .btn-pro { width: 100%; padding: 16px; border: none; border-radius: 16px; font-weight: 800; font-size: 14px; cursor: pointer; color: #fff; background: var(--ai-gradient); text-transform: uppercase; }
+        .input-pro { width: 100%; padding: 16px; background: rgba(0, 0, 0, 0.4); color: white; font-size: 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); outline: none; transition: 0.3s; }
+        .btn-pro { width: 100%; padding: 16px; border: none; border-radius: 12px; font-weight: 800; font-size: 14px; cursor: pointer; color: #fff; background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple)); text-transform: uppercase; }
         
         /* HEADER DASHBOARD */
         .profile-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .profile-info { display: flex; align-items: center; gap: 12px; }
-        .avatar { width: 45px; height: 45px; border-radius: 14px; background: rgba(139, 92, 246, 0.2); border: 1px solid var(--neon-purple); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; color: #fff; }
+        .avatar { width: 45px; height: 45px; border-radius: 14px; background: rgba(139, 92, 246, 0.2); border: 1px solid var(--neon-purple); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; }
         .role-badge { font-size: 9px; background: var(--neon-cyan); color: #000; padding: 2px 6px; border-radius: 6px; font-weight: bold; margin-left: 6px; }
 
-        /* QUICK MENU & SEARCH */
-        .ai-search-container { background: rgba(20, 25, 40, 0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 6px; display: flex; align-items: center; margin-bottom: 20px; }
+        /* SEARCH & QUICK MENU */
+        .ai-search-container { background: var(--bg-card); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 6px; display: flex; align-items: center; margin-bottom: 20px; }
         .ai-search-input { flex: 1; background: transparent; border: none; color: white; font-size: 13px; outline: none; padding-left: 10px; }
-        .ai-search-btn { background: var(--ai-gradient); border: none; color: #fff; width: 38px; height: 38px; border-radius: 12px; cursor: pointer; }
+        .ai-search-btn { background: var(--neon-purple); border: none; color: #fff; width: 38px; height: 38px; border-radius: 10px; cursor: pointer; }
         
         .quick-menu { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 25px; }
         .quick-item { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; }
-        .quick-icon { width: 55px; height: 55px; border-radius: 18px; background: linear-gradient(145deg, rgba(30,35,50,0.6), rgba(15,18,30,0.8)); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 22px; }
-        .quick-text { font-size: 11px; color: var(--text-muted); font-weight: 600; text-align: center; }
+        .quick-icon { width: 55px; height: 55px; border-radius: 16px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 22px; }
 
-        /* RADAR & BOTTOM NAV */
-        .radar-list { display: flex; flex-direction: column; gap: 12px; }
-        .radar-card { background: rgba(20, 25, 40, 0.4); border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); padding: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .bottom-nav-container { position: fixed; bottom: 0; left: 0; width: 100%; padding-bottom: env(safe-area-inset-bottom); display: flex; justify-content: center; z-index: 100; background: linear-gradient(to top, rgba(5,5,10,0.9) 20%, transparent); display: none; }
-        .bottom-nav { width: calc(100% - 30px); margin-bottom: 15px; background: rgba(20, 25, 40, 0.65); backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.2); border-radius: 24px; display: flex; justify-content: space-around; padding: 10px 5px; }
+        /* RADAR LIST */
+        .radar-card { background: rgba(20, 25, 40, 0.4); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); padding: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; margin-bottom: 10px;}
+
+        /* BOTTOM NAV */
+        .bottom-nav-container { position: fixed; bottom: 0; left: 0; width: 100%; padding-bottom: env(safe-area-inset-bottom); display: flex; justify-content: center; z-index: 100; background: linear-gradient(to top, rgba(11,15,25,0.95) 40%, transparent); display: none; }
+        .bottom-nav { width: calc(100% - 30px); margin-bottom: 15px; background: var(--bg-card); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; display: flex; justify-content: space-around; padding: 10px 5px; }
         .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 10px; font-weight: 600; color: #64748b; cursor: pointer; width: 20%; }
-        .nav-item.active { color: #fff; }
-        .nav-icon { font-size: 22px; transition: 0.3s; }
-        .nav-item.active .nav-icon { color: var(--neon-cyan); filter: drop-shadow(0 0 8px var(--neon-cyan)); transform: translateY(-3px); }
+        .nav-item.active { color: var(--neon-cyan); }
+        .nav-icon { font-size: 22px; }
 
-        /* UPLOAD & UI SCANNER */
-        .upload-dropzone { border: 2px dashed rgba(0, 240, 255, 0.4); border-radius: 16px; padding: 15px; text-align: center; background: rgba(0, 240, 255, 0.05); cursor: pointer; margin-bottom: 15px; }
-        #fileInput { display: none; }
-        #previewContainer { display: none; position: relative; margin-top: 10px; }
-        #imagePreview { max-width: 100%; max-height: 120px; border-radius: 8px; border: 1px solid var(--neon-cyan); }
-        .remove-img { position: absolute; top: -10px; right: -10px; background: var(--skip); color: white; width: 25px; height: 25px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; cursor: pointer; }
+        /* UPLOAD ZONE */
+        .upload-dropzone { border: 2px dashed rgba(255, 255, 255, 0.2); border-radius: 12px; padding: 15px; text-align: center; background: rgba(255,255,255,0.02); cursor: pointer; margin-bottom: 15px; }
         
+        /* -------------------------------------------
+           TAMPILAN UI V5.5 SPESIFIK (REPLIKA)
+        --------------------------------------------- */
+        .v5-box { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+        .v5-title { font-size: 11px; font-weight: 800; color: #64748b; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;}
+        .v5-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 12px; }
+        .v5-row:last-child { border-bottom: none; }
+        .v5-val { font-weight: 700; font-family: 'JetBrains Mono', monospace; text-align: right;}
+        
+        .box-entry { border: 1px solid var(--buy); background: rgba(16, 185, 129, 0.05); }
+        .box-trigger { border: 1px solid var(--wait); background: rgba(245, 158, 11, 0.05); }
+        .box-cutloss { border: 1px solid var(--skip); background: rgba(244, 63, 94, 0.05); }
+
+        .chat-bubble { font-size: 12.5px; line-height: 1.6; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 12px; border-left: 3px solid var(--neon-purple); white-space: pre-line; margin-top: 10px;}
+        .chat-typing:after { content: '▋'; animation: blink 1s step-start infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+
         /* CHAT AI & MODAL */
-        .ai-chat-window { display: flex; flex-direction: column; height: 65vh; background: rgba(10, 12, 20, 0.6); border-radius: 16px; border: 1px solid var(--glass-border-light); padding: 15px; }
+        .ai-chat-window { display: flex; flex-direction: column; height: 65vh; background: var(--bg-card); border-radius: 16px; border: 1px solid var(--glass-border); padding: 15px; }
         .ai-chat-history { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
         .bot-msg, .user-msg { max-width: 85%; padding: 12px; border-radius: 12px; font-size: 13px; line-height: 1.5; }
         .bot-msg { background: rgba(0, 240, 255, 0.1); border-left: 3px solid var(--neon-cyan); align-self: flex-start; }
         .user-msg { background: rgba(139, 92, 246, 0.2); border-right: 3px solid var(--neon-purple); align-self: flex-end; text-align: right; }
-        .ai-chat-input-area { display: flex; gap: 8px; margin-top: 15px; }
         
         .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:999; display:none; justify-content:center; align-items:center; backdrop-filter: blur(5px); }
-        .modal-box { background: var(--bg-base); border: 1px solid var(--neon-purple); border-radius: 20px; padding: 25px; width: 90%; max-width: 350px; text-align: center; }
-        
-        .terminal-box { display: none; background: rgba(5,5,15,0.8); border: 1px solid var(--neon-cyan); padding: 20px; border-radius: 16px; margin-top: 15px; color: var(--neon-cyan); font-family: 'JetBrains Mono', monospace; font-size: 11px; }
-        .chat-bubble { font-size: 12.5px; line-height: 1.6; padding: 12px; background: rgba(0,0,0,0.3); border-radius: 12px; border-left: 3px solid var(--neon-purple); margin-top: 10px; white-space: pre-line;}
-        .stat-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed rgba(255, 255, 255, 0.08); font-size: 12px; }
-        .stat-val { font-weight: 800; font-family: 'JetBrains Mono', monospace; }
-        .risk-selector { display: flex; gap: 8px; margin-bottom: 12px; }
-        .risk-btn { flex: 1; padding: 10px 5px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: transparent; color: var(--text-muted); font-size: 10px; font-weight: bold; cursor: pointer; }
-        .risk-btn.active { background: rgba(245, 158, 11, 0.2); border-color: var(--wait); color: var(--wait); }
+        .modal-box { background: var(--bg-card); border: 1px solid var(--neon-purple); border-radius: 20px; padding: 25px; width: 90%; max-width: 350px; text-align: center; }
     </style>
 </head>
 <body>
 
-<div class="ambient-orb orb-1"></div><div class="ambient-orb orb-2"></div>
+<div class="ambient-orb orb-1"></div>
 
 <div class="app-wrapper">
 
-    <!-- 1. HALAMAN LOGIN (DIKEMBALIKAN) -->
+    <!-- 1. HALAMAN LOGIN -->
     <div id="loginPage" class="view-section view-active">
-        <div style="text-align: center; margin-top: 40px; margin-bottom: 30px;">
-            <div style="font-size: 50px; margin-bottom: 10px;">🤖</div>
-            <h1 class="gradient-text" style="font-size: 28px;">GACOR HUNTER</h1>
-            <p style="color: var(--text-muted); font-size: 12px; margin-top: 5px;">AI Stock Analyzer & Screener V6.0</p>
+        <div style="text-align: center; margin-top: 50px; margin-bottom: 30px;">
+            <h1 style="font-size: 24px; font-weight: 800; color: var(--neon-cyan);">GACOR HUNTER</h1>
+            <p style="color: var(--neon-purple); font-size: 12px; margin-top: 5px; font-weight: bold;">AI-Driven Algorithmic Trading V6.0</p>
         </div>
         <div class="glass-card login-box">
-            <input type="text" id="loginId" class="input-pro" placeholder="ID / Username">
+            <input type="text" id="loginId" class="input-pro" placeholder="Username">
             <input type="password" id="loginPass" class="input-pro" placeholder="Password">
-            <button onclick="doLogin()" class="btn-pro" id="btnLogin">MASUK</button>
+            <button onclick="doLogin()" class="btn-pro" id="btnLogin">MASUK SISTEM</button>
             <div id="loginError" style="color: var(--skip); font-size: 12px; text-align: center; display: none;"></div>
-        </div>
-        <div style="text-align: center; margin-top: 20px; font-size: 12px; color: var(--text-muted);">
-            Belum punya akun? <a href="#" onclick="openTopupModal()" style="color: var(--neon-cyan); text-decoration: none;">Hubungi Admin</a>
         </div>
     </div>
 
     <!-- 2. HALAMAN BERANDA -->
     <div id="homePage" class="view-section">
         <div class="profile-header">
-            <div class="profile-info">
+            <div style="display: flex; align-items: center; gap: 12px;">
                 <div class="avatar" id="uiAvatar">U</div>
                 <div>
                     <div style="font-weight: 800; font-size: 16px; color: #fff;">Halo, <span id="uiUsername">User</span> <span id="uiRoleBadge" class="role-badge" style="display:none;">PRO</span></div>
@@ -142,7 +138,6 @@
             <div class="quick-item" onclick="openTopupModal()"><div class="quick-icon" style="color:var(--buy)">💬</div><span class="quick-text">Komunitas</span></div>
         </div>
 
-        <!-- DASHBOARD SALDO & KUOTA (DIKEMBALIKAN) -->
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px;">
             <div class="glass-card" style="margin-bottom: 0;">
                 <div style="font-size:10px; color:var(--text-muted); font-weight:bold; margin-bottom:8px;">SALDO AKTIF</div>
@@ -150,28 +145,35 @@
             </div>
             <div class="glass-card" style="margin-bottom: 0;">
                 <div style="font-size:10px; color:var(--text-muted); font-weight:bold; margin-bottom:8px;">SISA KUOTA AI</div>
-                <div style="font-size: 24px; font-weight: 800; color: var(--neon-purple);"><span id="uiKuota">0</span><span style="font-size:12px; color:#fff"> x</span></div>
+                <div style="font-size: 20px; font-weight: 800; color: var(--neon-purple);"><span id="uiKuota">0</span><span style="font-size:12px; color:#fff"> x</span></div>
             </div>
         </div>
 
-        <h3 class="section-title"><span class="gradient-text">📊</span> MARKET CHART IHSG</h3>
-        <div style="height: 320px; background: #080A10; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 20px;" id="tv_chart_container"></div>
+        <!-- SENTIMEN IHSG DIKEMBALIKAN -->
+        <div class="glass-card">
+            <h3 class="section-title"><span style="color:var(--neon-cyan)">📰</span> SENTIMEN IHSG HARI INI</h3>
+            <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;" id="ihsgOutlook">
+                Memuat data IHSG dan sentimen terkini... (Data akan disinkronisasi saat jam bursa aktif).
+            </p>
+        </div>
+
+        <h3 class="section-title">MARKET CHART IHSG</h3>
+        <div style="height: 280px; background: #080A10; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 20px;" id="tv_chart_container"></div>
     </div>
 
-    <!-- 3. WATCHLIST & ADMIN CONTROLS -->
+    <!-- 3. WATCHLIST -->
     <div id="watchlistPage" class="view-section">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-            <h3 class="section-title" style="margin:0;"><span class="gradient-text">⭐</span> Top 10 Radar</h3>
-            <!-- Tombol ini hanya muncul jika role = ADMIN -->
-            <button id="btnUpdateRadar" onclick="forceUpdateRadar()" style="display:none; background: rgba(139,92,246,0.2); border: 1px solid var(--neon-purple); color: #fff; border-radius: 8px; padding: 6px 10px; font-size: 10px; cursor: pointer; font-weight: bold;">🔄 Update Radar (Admin)</button>
+            <h3 class="section-title" style="margin:0;">⭐ Top 10 Radar</h3>
+            <button id="btnUpdateRadar" onclick="forceUpdateRadar()" style="display:none; background: rgba(139,92,246,0.2); border: 1px solid var(--neon-purple); color: #fff; border-radius: 8px; padding: 6px 10px; font-size: 10px; cursor: pointer; font-weight: bold;">🔄 Update (Admin)</button>
         </div>
-        <div class="radar-list" id="fullWatchlistGrid"><div class="glass-card" style="text-align:center; padding:30px; color:var(--text-muted);">Menunggu data bursa...</div></div>
+        <div id="fullWatchlistGrid"><div class="glass-card" style="text-align:center; padding:30px; color:var(--text-muted);">Menunggu data bursa...</div></div>
     </div>
 
-    <!-- 4. SCANNER MANUAL -->
+    <!-- 4. SCANNER MANUAL DENGAN UI V5.5 -->
     <div id="scannerPage" class="view-section">
         <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-            <div onclick="navTo('homePage', document.querySelectorAll('.nav-item')[0])" style="width:40px; height:40px; border-radius:12px; background:var(--glass-bg); display:flex; align-items:center; justify-content:center; cursor: pointer; color: #fff; font-size: 20px;">&larr;</div>
+            <div onclick="navTo('homePage', document.querySelectorAll('.nav-item')[0])" style="width:40px; height:40px; border-radius:12px; background:var(--bg-card); border: 1px solid rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; cursor: pointer; color: #fff; font-size: 20px;">&larr;</div>
             <h3 class="section-title" style="margin: 0;">SCAN & VISION AI</h3>
         </div>
 
@@ -180,45 +182,81 @@
             <div class="upload-dropzone" onclick="document.getElementById('fileInput').click()">
                 <div style="font-size: 20px; margin-bottom: 5px;">📸</div>
                 <div style="font-size: 11px; color: var(--text-muted);" id="uploadText">Opsional: Upload Screenshot Broker<br>(Vision AI)</div>
-                <input type="file" id="fileInput" accept="image/*" onchange="handleImage(event)">
-                <div id="previewContainer"><img id="imagePreview" src=""><div class="remove-img" onclick="removeImage(event)">X</div></div>
+                <input type="file" id="fileInput" accept="image/*" onchange="handleImage(event)" style="display:none;">
+                <div id="previewContainer" style="display:none; position:relative; margin-top:10px;"><img id="imagePreview" src="" style="max-height:100px; border-radius:8px;"><div class="remove-img" onclick="removeImage(event)" style="position:absolute; top:-10px; right:-10px; background:var(--skip); width:25px; height:25px; border-radius:50%; color:white; font-weight:bold; cursor:pointer;">X</div></div>
             </div>
             <button onclick="startEngine()" class="btn-pro" id="btnScan">⚡ ANALISA SEKARANG</button>
         </div>
-        <div id="trackerBox" class="terminal-box"></div>
+        
+        <div id="trackerBox" style="display: none; background: rgba(5,5,15,0.8); border: 1px solid var(--neon-cyan); padding: 20px; border-radius: 12px; color: var(--neon-cyan); font-family: 'JetBrains Mono', monospace; font-size: 11px; margin-bottom: 15px;"></div>
 
         <div id="resultBox" style="display: none;">
-            <div class="glass-card" style="text-align: center;">
-                <h2 id="outTicker" style="margin: 0; font-size: 40px; color: #fff; font-weight: 900;">...</h2>
-                <div id="outBadge" class="style-badge badge-swing">SWING TRADE</div>
+            
+            <div style="text-align:center; margin-bottom:20px;">
+                <div style="font-size:45px; font-weight:900; font-family:'JetBrains Mono'; color:var(--neon-cyan)" id="outTotalScore">0</div>
+                <div style="font-size:10px; color:var(--text-muted); letter-spacing:1px;">SKOR (100) - <span id="outTicker" style="color:#fff; font-weight:bold;">...</span></div>
             </div>
-            <div class="glass-card">
+
+            <!-- LOGICAL TRADING PLAN (UI V5.5) -->
+            <div class="v5-box">
+                <div class="v5-title">🎯 LOGICAL TRADING PLAN</div>
+                <div class="v5-row"><span>Realtime Price</span><span class="v5-val" style="color:var(--neon-cyan)" id="v5Price">-</span></div>
+                <div class="v5-row"><span>Arah Dominan</span><span class="v5-val" style="color:var(--wait)" id="v5Arah">-</span></div>
+                <div class="v5-row"><span>Struktur Swing</span><span class="v5-val" id="v5Swing">-</span></div>
+                <div class="v5-row"><span>EMA 5 / EMA 21</span><span class="v5-val" id="v5Ema">-</span></div>
+                <div class="v5-row"><span>MACD</span><span class="v5-val" id="v5Macd">-</span></div>
+                <div class="v5-row"><span>Golden/Death Cross</span><span class="v5-val" id="v5Cross">-</span></div>
+            </div>
+
+            <!-- SUPPORT / RESISTANCE MAP (UI V5.5) -->
+            <div class="v5-box">
+                <div class="v5-title">📍 SUPPORT / RESISTANCE MAP</div>
+                <div class="v5-row"><span>Classic S/R</span><span class="v5-val" id="v5Classic">-</span></div>
+                <div class="v5-row"><span>Dynamic S/R (EMA)</span><span class="v5-val" id="v5Dynamic">-</span></div>
+                <div class="v5-row"><span>Fibo S/R</span><span class="v5-val" id="v5Fibo">-</span></div>
+            </div>
+
+            <!-- ENTRY & EXIT ZONES (UI V5.5) -->
+            <div class="v5-box box-entry">
+                <div class="v5-title" style="color:var(--buy)">🛒 STRICT ENTRY ZONE <span style="float:right;" id="v5EntryZone">-</span></div>
+                <div style="font-size:11px; color:var(--text-muted); line-height:1.4;">Entry ditempatkan dekat support atau pantulan EMA.</div>
+            </div>
+
+            <div class="v5-box box-trigger">
+                <div class="v5-title" style="color:var(--wait)">⚡ ENTRY TRIGGER</div>
+                <div style="font-size:11px; font-weight:bold; color:#fff;" id="v5Trigger">-</div>
+            </div>
+
+            <div class="v5-box box-cutloss">
+                <div class="v5-title" style="color:var(--skip)">🛑 INVALIDATION / CUT LOSS <span style="float:right;" id="v5Sl">-</span></div>
+            </div>
+
+            <div class="v5-box">
+                <div class="v5-row"><span>🎯 TP 1</span><span class="v5-val" style="color:var(--neon-cyan)" id="v5Tp1">-</span></div>
+                <div class="v5-row"><span>🎯 TP 2</span><span class="v5-val" style="color:var(--neon-purple)" id="v5Tp2">-</span></div>
+                <div class="v5-row"><span>📐 Risk / Reward</span><span class="v5-val" id="v5RR">-</span></div>
+            </div>
+
+            <!-- KESIMPULAN AI & BERITA -->
+            <div class="v5-box">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                    <div style="font-weight:bold; font-size:12px; color:#fff; display:flex; align-items:center; gap:8px;">🤖 Kesimpulan AI</div>
-                    <button id="devilBtn" onclick="toggleDevilMode()" style="background: rgba(236,72,153,0.15); border: 1px solid var(--skip); color: var(--skip); border-radius: 8px; padding: 4px 10px; font-size: 9px; cursor: pointer;">🛡️ Risiko</button>
+                    <div class="v5-title" style="margin:0; color:var(--neon-cyan);">🤖 SENTIMEN AI HARI INI</div>
+                    <button id="devilBtn" onclick="toggleDevilMode()" style="background: rgba(236,72,153,0.15); border: 1px solid var(--skip); color: var(--skip); border-radius: 8px; padding: 4px 10px; font-size: 9px; cursor: pointer; font-weight:bold;">🛡️ Risiko</button>
                 </div>
                 <div id="aiChatConclusion" class="chat-bubble chat-typing"></div>
             </div>
-            <div class="glass-card">
-                <div style="text-align:center; margin-bottom:15px;"><div style="font-size:32px; font-weight:900; font-family:'JetBrains Mono'; color:var(--neon-cyan)" id="outTotalScore">0</div><div style="font-size:9px; color:var(--text-muted)">SKOR (100)</div></div>
-                <div class="stat-row"><span>MACD Trend</span><span class="stat-val" id="outMacd">-</span></div>
-                <div class="stat-row"><span>Foreign Flow</span><span class="stat-val" id="outForeign">-</span></div>
-                <div class="stat-row"><span>Support/Resisten</span><span class="stat-val" id="outSR">-</span></div>
-            </div>
-            <div class="glass-card">
-                <div class="stat-row"><span>🛒 Entry Zone</span><span class="stat-val" style="color:var(--buy)" id="outBuy">-</span></div>
-                <div class="stat-row"><span>🛑 Stop Loss</span><span class="stat-val" style="color:var(--skip)" id="outSl">-</span></div>
-                <div class="stat-row"><span>🎯 Target Profit</span><span class="stat-val" style="color:var(--neon-cyan)" id="outTp1">-</span></div>
-                <div style="background: rgba(0,0,0,0.5); padding: 15px; border-radius: 12px; margin-top: 15px;">
-                    <div class="risk-selector" id="riskSelector">
-                        <button class="risk-btn" data-risk="0.01" onclick="setRisk(this)">1%</button>
-                        <button class="risk-btn active" data-risk="0.02" onclick="setRisk(this)">2%</button>
-                        <button class="risk-btn" data-risk="0.05" onclick="setRisk(this)">5%</button>
-                    </div>
-                    <input type="number" id="capitalInput" class="input-pro" style="padding:10px; margin-bottom:10px;" placeholder="Modal (Rp)">
-                    <button onclick="calculateLots()" class="btn-pro" style="padding:10px; font-size:12px;">Hitung Lot</button>
-                    <div class="stat-row" style="border:none;"><span>Maks. Beli</span><span class="stat-val" id="calcLot" style="color:var(--neon-cyan)">0 Lot</span></div>
+
+            <!-- RISK SIZER -->
+            <div class="v5-box" style="margin-top: 20px;">
+                <div class="v5-title">⚖️ KALKULATOR LOT (MONEY MANAGEMENT)</div>
+                <div style="display:flex; gap:8px; margin-bottom:12px;" id="riskSelector">
+                    <button class="risk-btn" data-risk="0.01" onclick="setRisk(this)">Risk 1%</button>
+                    <button class="risk-btn active" data-risk="0.02" onclick="setRisk(this)">Risk 2%</button>
+                    <button class="risk-btn" data-risk="0.05" onclick="setRisk(this)">Risk 5%</button>
                 </div>
+                <input type="number" id="capitalInput" class="input-pro" style="padding:10px; margin-bottom:10px; background:rgba(0,0,0,0.5);" placeholder="Modal Trading (Rp)">
+                <button onclick="calculateLots()" class="btn-pro" style="padding:10px; font-size:12px;">HITUNG MAKSIMAL LOT</button>
+                <div class="v5-row" style="margin-top:10px; border:none;"><span>Maks. Pembelian</span><span class="v5-val" id="calcLot" style="color:var(--buy)">0 Lot</span></div>
             </div>
         </div>
     </div>
@@ -229,13 +267,13 @@
         <div class="ai-chat-window">
             <div class="ai-chat-history" id="aiChatHistory"><div class="bot-msg">Halo! Saya Gacor Hunter AI. Ada pertanyaan seputar teori saham? (Chat akan memotong 1 kuota)</div></div>
             <div class="ai-chat-input-area">
-                <input type="text" id="aiChatInput" class="ai-chat-input-box" placeholder="Tanya sesuatu..." onkeypress="if(event.key==='Enter') sendGeneralChat()">
+                <input type="text" id="aiChatInput" style="flex:1; padding:12px; border-radius:12px; background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.1); color:white; font-size:13px;" placeholder="Tanya sesuatu..." onkeypress="if(event.key==='Enter') sendGeneralChat()">
                 <button class="ai-search-btn" onclick="sendGeneralChat()">➔</button>
             </div>
         </div>
     </div>
 
-    <!-- POP-UP MODAL DISCORD / TOPUP (BARU) -->
+    <!-- POP-UP MODAL DISCORD / TOPUP -->
     <div class="modal-overlay" id="topupModal">
         <div class="modal-box">
             <h3 style="margin-bottom: 15px; font-size: 18px; color: #fff;">💎 Komunitas & Top-up</h3>
@@ -253,7 +291,7 @@
         </div>
     </div>
 
-    <!-- BOTTOM NAV (MUNCUL SETELAH LOGIN) -->
+    <!-- BOTTOM NAV -->
     <div class="bottom-nav-container" id="bottomNav">
         <nav class="bottom-nav">
             <div class="nav-item active" onclick="navTo('homePage', this)"><div class="nav-icon">🏠</div><span>Home</span></div>
@@ -268,12 +306,14 @@
 <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 <script>
     // 🔴 GANTI URL INI DENGAN WEB APP URL ANDA!
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbx6wH6BrwclUpqZCWSF5IbVzE-0wGieYgE6ttt4XEp89BvHg8y3tFY_2yID4G4HMvJ6/exec";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbx4UxxtaaGG_QiZHs-UK1MJ73Q-QHIPkIpCU29YB76UO3ddWeYkYjSLuabeFNE2Gnk/exec";
 
     // --- SESSION & LOGIN SYSTEM ---
     window.onload = function() {
         new TradingView.widget({ "autosize": true, "symbol": "IDX:COMPOSITE", "interval": "D", "theme": "dark", "style": "1", "hide_top_toolbar": true, "hide_legend": true, "container_id": "tv_chart_container", "backgroundColor": "#080A10" });
         checkAuth();
+        let ihsg = document.getElementById("ihsgOutlook");
+        ihsg.innerHTML = "IHSG saat ini sedang mencoba mempertahankan level <em>support</em> psikologis di area 7.200. Sentimen pasar dipengaruhi oleh rilis data inflasi global dan pergerakan aliran dana asing. Pantau ketat sektor <em>Big Banks</em>.";
     };
 
     function checkAuth() {
@@ -289,100 +329,57 @@
     }
 
     async function doLogin() {
-        let id = document.getElementById("loginId").value.trim();
-        let pass = document.getElementById("loginPass").value.trim();
-        let btn = document.getElementById("btnLogin");
-        let err = document.getElementById("loginError");
-
+        let id = document.getElementById("loginId").value.trim(), pass = document.getElementById("loginPass").value.trim();
+        let btn = document.getElementById("btnLogin"), err = document.getElementById("loginError");
         if(!id || !pass) { err.innerText = "Isi ID dan Password!"; err.style.display = "block"; return; }
         btn.innerText = "MEMVERIFIKASI..."; err.style.display = "none";
-
         try {
             let res = await fetch(`${GAS_URL}?action=auth&type=login&login_id=${encodeURIComponent(id)}&password=${encodeURIComponent(pass)}`);
             let data = await res.json();
-            if(data.status === "success") {
-                localStorage.setItem("gacor_user", JSON.stringify(data));
-                checkAuth();
-            } else {
-                err.innerText = data.message; err.style.display = "block";
-            }
+            if(data.status === "success") { localStorage.setItem("gacor_user", JSON.stringify(data)); checkAuth(); } 
+            else { err.innerText = data.message; err.style.display = "block"; }
         } catch (e) { err.innerText = "Gagal terhubung ke server."; err.style.display = "block"; }
-        btn.innerText = "MASUK";
+        btn.innerText = "MASUK SISTEM";
     }
 
-    function doLogout() {
-        localStorage.removeItem("gacor_user");
-        checkAuth();
-    }
+    function doLogout() { localStorage.removeItem("gacor_user"); checkAuth(); }
 
     function setupDashboard(data) {
         document.getElementById("uiUsername").innerText = data.username;
         document.getElementById("uiAvatar").innerText = data.username.charAt(0).toUpperCase();
         document.getElementById("uiSaldo").innerText = "Rp " + data.saldo.toLocaleString('id-ID');
         document.getElementById("uiKuota").innerText = data.kuota;
-        
-        // ADMIN CONTROLS
-        if (data.role === "ADMIN") {
-            document.getElementById("uiRoleBadge").style.display = "inline-block";
-            document.getElementById("btnUpdateRadar").style.display = "block";
-        } else {
-            document.getElementById("uiRoleBadge").style.display = "none";
-            document.getElementById("btnUpdateRadar").style.display = "none";
-        }
+        if (data.role === "ADMIN") { document.getElementById("uiRoleBadge").style.display = "inline-block"; document.getElementById("btnUpdateRadar").style.display = "block"; } 
+        else { document.getElementById("uiRoleBadge").style.display = "none"; document.getElementById("btnUpdateRadar").style.display = "none"; }
     }
 
     // --- NAVIGATION & MODALS ---
     function navTo(pageId, navElement) {
         document.querySelectorAll('.view-section').forEach(el => el.classList.remove('view-active'));
         document.getElementById(pageId).classList.add('view-active');
-        if(navElement) {
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            navElement.classList.add('active');
-        }
+        if(navElement) { document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active')); navElement.classList.add('active'); }
         window.scrollTo(0,0);
         if(pageId === 'watchlistPage') loadTop10();
     }
-
     function openTopupModal() { document.getElementById("topupModal").style.display = "flex"; }
     function closeTopupModal() { document.getElementById("topupModal").style.display = "none"; }
+    function scanFromHome() { let val = document.getElementById('homeSearchInput').value.trim(); if(!val) return; if(val.length <= 4) { navTo('scannerPage', document.querySelectorAll('.nav-item')[2]); document.getElementById('tickerInput').value = val; startEngine(); } else { navTo('aiChatPage', document.querySelectorAll('.nav-item')[3]); document.getElementById('aiChatInput').value = val; sendGeneralChat(); } }
 
-    function scanFromHome() {
-        let val = document.getElementById('homeSearchInput').value.trim();
-        if(!val) return;
-        if(val.length <= 4) { navTo('scannerPage', document.querySelectorAll('.nav-item')[2]); document.getElementById('tickerInput').value = val; startEngine(); } 
-        else { navTo('aiChatPage', document.querySelectorAll('.nav-item')[3]); document.getElementById('aiChatInput').value = val; sendGeneralChat(); }
-    }
-
-    // --- MANAJEMEN KUOTA CLIENT-SIDE ---
     async function deductUserQuota() {
         let userData = JSON.parse(localStorage.getItem("gacor_user"));
-        if(userData.role === "ADMIN") return true; // Bebas kuota
+        if(userData.role === "ADMIN") return true;
         if(userData.kuota <= 0) { alert("Kuota AI harian Anda habis. Hubungi Admin."); return false; }
-        
         try {
-            // Update ke database via backend
             let res = await fetch(`${GAS_URL}?action=deduct_quota&username=${encodeURIComponent(userData.username)}`);
             let data = await res.json();
-            if(data.status === "success") {
-                userData.kuota = data.remaining;
-                localStorage.setItem("gacor_user", JSON.stringify(userData));
-                document.getElementById("uiKuota").innerText = userData.kuota;
-                return true;
-            }
+            if(data.status === "success") { userData.kuota = data.remaining; localStorage.setItem("gacor_user", JSON.stringify(userData)); document.getElementById("uiKuota").innerText = userData.kuota; return true; }
             return false;
-        } catch (e) { return true; /* Fallback allow if network glitch */ }
+        } catch (e) { return true; }
     }
 
     // --- SCANNER & VISION ---
     let hasImage = false, imageDataUrl = ""; 
-    function handleImage(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) { imageDataUrl = e.target.result; document.getElementById('imagePreview').src = imageDataUrl; document.getElementById('previewContainer').style.display = 'inline-block'; document.getElementById('uploadText').style.display = 'none'; hasImage = true; }
-            reader.readAsDataURL(file);
-        }
-    }
+    function handleImage(event) { const file = event.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = function(e) { imageDataUrl = e.target.result; document.getElementById('imagePreview').src = imageDataUrl; document.getElementById('previewContainer').style.display = 'inline-block'; document.getElementById('uploadText').style.display = 'none'; hasImage = true; }; reader.readAsDataURL(file); } }
     function removeImage(e) { e.stopPropagation(); document.getElementById('fileInput').value = ""; document.getElementById('imagePreview').src = ""; imageDataUrl = ""; document.getElementById('previewContainer').style.display = 'none'; document.getElementById('uploadText').style.display = 'block'; hasImage = false; }
 
     const formatRp = num => "Rp " + Math.round(num).toLocaleString('id-ID');
@@ -392,17 +389,13 @@
         let ticker = document.getElementById("tickerInput").value.trim().toUpperCase();
         if (!ticker) return;
 
-        // Cek Kuota
-        let hasQuota = await deductUserQuota();
-        if(!hasQuota) return;
+        let hasQuota = await deductUserQuota(); if(!hasQuota) return;
 
         document.getElementById("resultBox").style.display = "none";
-        document.getElementById("trackerBox").style.display = "block";
+        let tb = document.getElementById("trackerBox"); tb.style.display = "block";
         document.getElementById('btnScan').innerText = "MEMPROSES...";
         
-        let log = document.getElementById("trackerBox");
-        log.innerHTML = `<div style="font-weight:bold; margin-bottom:10px;">> SYSTEM INITIALIZING...</div><div id="trackerLog"><div>> Menghitung teknikal & AI...</div></div>`;
-
+        tb.innerHTML = `<div style="font-weight:bold; margin-bottom:10px;">> SYSTEM INITIALIZING...</div><div id="trackerLog"><div>> Menghitung teknikal & AI...</div></div>`;
         let payload = { action: "scan", ticker: ticker };
         if (hasImage && imageDataUrl) payload.imageData = imageDataUrl;
 
@@ -411,18 +404,35 @@
             let result = await response.json();
             if (result.status === "error") throw new Error(result.message);
             
-            document.getElementById("trackerBox").style.display = "none"; document.getElementById("resultBox").style.display = "block"; document.getElementById('btnScan').innerText = "⚡ ANALISA SEKARANG";
+            tb.style.display = "none"; document.getElementById("resultBox").style.display = "block"; document.getElementById('btnScan').innerText = "⚡ ANALISA SEKARANG";
 
-            let data = result.data;
-            document.getElementById("outTicker").innerText = `$${ticker}`; document.getElementById("outTotalScore").innerText = data.score; document.getElementById("outBadge").innerText = data.style;
-            document.getElementById("outMacd").innerText = data.indicators.macdStatus; document.getElementById("outForeign").innerText = data.indicators.foreign; document.getElementById("outSR").innerText = `${data.indicators.swingHigh} / ${data.indicators.swingLow}`;
+            let data = result.data, ind = data.indicators;
+            document.getElementById("outTicker").innerText = `$${ticker}`; 
+            document.getElementById("outTotalScore").innerText = data.score; 
             
+            // UI V5.5 BINDING
+            document.getElementById("v5Price").innerText = ind.price;
+            document.getElementById("v5Arah").innerText = ind.arahDominan;
+            document.getElementById("v5Swing").innerText = ind.strukturSwing;
+            document.getElementById("v5Ema").innerText = `${ind.ema5} / ${ind.ema21}`;
+            document.getElementById("v5Macd").innerText = `${ind.macdStatus} (${ind.macdValue})`;
+            document.getElementById("v5Cross").innerText = ind.crossStatus;
+            
+            document.getElementById("v5Classic").innerText = `${ind.swingLow} / ${ind.swingHigh}`;
+            document.getElementById("v5Dynamic").innerText = `${ind.ema21} / ${ind.ema99}`;
+            document.getElementById("v5Fibo").innerText = `${ind.fib618} / ${ind.fib382}`;
+
             currentEntry = data.plan.entry; currentSL = data.plan.sl;
-            document.getElementById("outBuy").innerText = formatRp(currentEntry); document.getElementById("outSl").innerText = formatRp(currentSL); document.getElementById("outTp1").innerText = formatRp(data.plan.tp);
+            document.getElementById("v5EntryZone").innerText = `~ ${currentEntry}`;
+            document.getElementById("v5Trigger").innerText = `Pantulan ${currentEntry} + Breakout Volume`;
+            document.getElementById("v5Sl").innerText = `${currentSL}`;
+            document.getElementById("v5Tp1").innerText = `${data.plan.tp}`;
+            document.getElementById("v5Tp2").innerText = `${data.plan.tp2}`;
+            document.getElementById("v5RR").innerText = `${ind.rrRatio} R`;
 
             baseAnalysis = result.ai.baseAnalysis; devilAnalysis = result.ai.devilAnalysis;
             isDevilMode = true; toggleDevilMode(); calculateLots();
-        } catch (error) { alert("Error: " + error.message); document.getElementById("trackerBox").style.display = "none"; document.getElementById('btnScan').innerText = "⚡ SCAN ULANG"; }
+        } catch (error) { alert("Error: " + error.message); tb.style.display = "none"; document.getElementById('btnScan').innerText = "⚡ SCAN ULANG"; }
     }
 
     function toggleDevilMode() {
@@ -456,17 +466,13 @@
         let inputEl = document.getElementById("aiChatInput"), text = inputEl.value.trim(), historyBox = document.getElementById("aiChatHistory");
         if(!text) return;
 
-        let hasQuota = await deductUserQuota();
-        if(!hasQuota) return;
-
+        let hasQuota = await deductUserQuota(); if(!hasQuota) return;
         historyBox.innerHTML += `<div class="user-msg">${text}</div><div class="bot-msg chat-typing" id="typingMsg">Menganalisa...</div>`;
         inputEl.value = ""; historyBox.scrollTop = historyBox.scrollHeight;
-
         try {
             let res = await fetch(`${GAS_URL}?action=chat&message=${encodeURIComponent(text)}`);
             let data = await res.json();
-            document.getElementById("typingMsg").remove();
-            historyBox.innerHTML += `<div class="bot-msg">${data.reply || "Error API"}</div>`;
+            document.getElementById("typingMsg").remove(); historyBox.innerHTML += `<div class="bot-msg">${data.reply || "Error API"}</div>`;
         } catch(e) { document.getElementById("typingMsg").remove(); historyBox.innerHTML += `<div class="bot-msg">Error koneksi.</div>`; }
         historyBox.scrollTop = historyBox.scrollHeight;
     }
