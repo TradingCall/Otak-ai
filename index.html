@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>GACOR HUNTER PRO V6.0 - DUAL BRAIN AI</title>
+    <title>GACOR HUNTER PRO V6.0 - PERFECT EDITION</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
 
@@ -46,7 +46,6 @@
         .gradient-text { background: var(--ai-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900;}
         .section-title { font-size: 14px; font-weight: 800; color: #fff; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
 
-        /* SEARCH & QUICK MENU */
         .ai-search-container { background: rgba(20, 25, 40, 0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 6px; display: flex; align-items: center; margin-bottom: 25px; }
         .ai-search-input { flex: 1; background: transparent; border: none; color: white; font-size: 13px; outline: none; padding-left: 10px; }
         .ai-search-btn { background: var(--ai-gradient); border: none; color: #fff; width: 38px; height: 38px; border-radius: 12px; cursor: pointer; }
@@ -56,15 +55,12 @@
         .quick-icon { width: 55px; height: 55px; border-radius: 18px; background: linear-gradient(145deg, rgba(30,35,50,0.6), rgba(15,18,30,0.8)); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 22px; }
         .quick-text { font-size: 11px; color: var(--text-muted); font-weight: 600; text-align: center; }
 
-        /* LIST & CARDS */
         .radar-list { display: flex; flex-direction: column; gap: 12px; }
         .radar-card { background: rgba(20, 25, 40, 0.4); border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); padding: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
 
-        /* BUTTONS */
         .btn-pro { width: 100%; padding: 16px; border: none; border-radius: 16px; font-weight: 800; font-size: 14px; cursor: pointer; color: #fff; background: var(--ai-gradient); text-transform: uppercase; }
         .input-pro { width: 100%; padding: 16px; margin-bottom: 15px; background: rgba(10, 12, 20, 0.6); color: white; font-size: 14px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); outline: none; }
 
-        /* BOTTOM NAV (Diupdate menjadi 5 menu) */
         .bottom-nav-container { position: fixed; bottom: 0; left: 0; width: 100%; padding-bottom: env(safe-area-inset-bottom); display: flex; justify-content: center; z-index: 100; background: linear-gradient(to top, rgba(5,5,10,0.9) 20%, transparent); }
         .bottom-nav { width: calc(100% - 30px); margin-bottom: 15px; background: rgba(20, 25, 40, 0.65); backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.2); border-radius: 24px; display: flex; justify-content: space-around; padding: 10px 5px; }
         .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 10px; font-weight: 600; color: #64748b; cursor: pointer; width: 20%; }
@@ -72,28 +68,26 @@
         .nav-icon { font-size: 22px; transition: 0.3s; }
         .nav-item.active .nav-icon { color: var(--neon-cyan); filter: drop-shadow(0 0 8px var(--neon-cyan)); transform: translateY(-3px); }
 
-        /* UPLOAD & BADGE */
-        .upload-dropzone { border: 2px dashed rgba(0, 240, 255, 0.4); border-radius: 16px; padding: 15px; text-align: center; background: rgba(0, 240, 255, 0.05); cursor: pointer; margin-bottom: 15px;}
+        .upload-dropzone { border: 2px dashed rgba(0, 240, 255, 0.4); border-radius: 16px; padding: 15px; text-align: center; background: rgba(0, 240, 255, 0.05); cursor: pointer; margin-bottom: 15px; transition: 0.3s;}
+        .upload-dropzone:hover { background: rgba(0, 240, 255, 0.1); }
         #fileInput { display: none; }
         #previewContainer { display: none; position: relative; margin-top: 10px; }
         #imagePreview { max-width: 100%; max-height: 120px; border-radius: 8px; border: 1px solid var(--neon-cyan); }
+        .remove-img { position: absolute; top: -10px; right: -10px; background: var(--skip); color: white; width: 25px; height: 25px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 12px; cursor: pointer; }
         .style-badge { display: inline-block; padding: 5px 12px; border-radius: 12px; font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-top: 8px; border: 1px solid transparent; }
         .badge-swing { color: var(--neon-cyan); border-color: var(--neon-cyan); background: rgba(0, 240, 255, 0.1); }
 
-        /* CHAT UI */
         .terminal-box { display: none; background: rgba(5,5,15,0.8); border: 1px solid var(--neon-cyan); padding: 20px; border-radius: 16px; margin-top: 15px; color: var(--neon-cyan); font-family: 'JetBrains Mono', monospace; font-size: 11px; }
-        .chat-bubble { font-size: 12.5px; color: var(--text-main); line-height: 1.6; padding: 12px; background: rgba(0,0,0,0.3); border-radius: 12px; border-left: 3px solid var(--neon-purple); margin-top: 10px; transition: 0.3s;}
+        .chat-bubble { font-size: 12.5px; color: var(--text-main); line-height: 1.6; padding: 12px; background: rgba(0,0,0,0.3); border-radius: 12px; border-left: 3px solid var(--neon-purple); margin-top: 10px; white-space: pre-line; transition: 0.3s;}
         .chat-typing:after { content: '▋'; animation: blink 1s step-start infinite; }
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* STATS & RISK SIZER */
         .stat-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed rgba(255, 255, 255, 0.08); font-size: 12px; }
         .stat-val { font-weight: 800; font-family: 'JetBrains Mono', monospace; }
         .risk-selector { display: flex; gap: 8px; margin-bottom: 12px; }
         .risk-btn { flex: 1; padding: 10px 5px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: transparent; color: var(--text-muted); font-size: 10px; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .risk-btn.active[data-risk="0.02"] { background: rgba(245, 158, 11, 0.2); border-color: var(--wait); color: var(--wait); }
 
-        /* MURNI AI CHATBOT STYLES */
         .ai-chat-window { display: flex; flex-direction: column; height: 65vh; background: rgba(10, 12, 20, 0.6); border-radius: 16px; border: 1px solid var(--glass-border-light); padding: 15px; }
         .ai-chat-history { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-right: 5px; }
         .bot-msg, .user-msg { max-width: 85%; padding: 12px; border-radius: 12px; font-size: 13px; line-height: 1.5; }
@@ -112,19 +106,19 @@
     <!-- TAB 1: BERANDA -->
     <div id="homePage" class="view-section view-active">
         <div class="app-header">
-            <div class="app-title"><div class="gradient-text" style="font-size: 20px;">✧ GACOR HUNTER</div></div>
+            <div class="app-title"><div class="gradient-text" style="font-size: 20px;">✧ GACOR HUNTER V6</div></div>
             <div style="background:var(--glass-bg); padding:8px; border-radius:12px; border:1px solid var(--glass-border-light); cursor:pointer;">⚙️</div>
         </div>
 
         <div class="ai-search-container">
             <div style="padding: 0 10px; font-size: 16px;">✨</div>
-            <input type="text" id="homeSearchInput" class="ai-search-input" placeholder="Ketik emiten (Scan) atau Tanya AI..." onkeypress="if(event.key==='Enter') scanFromHome()">
+            <input type="text" id="homeSearchInput" class="ai-search-input" placeholder="Ketik Kode Saham atau Tanya AI..." onkeypress="if(event.key==='Enter') scanFromHome()">
             <button onclick="scanFromHome()" class="ai-search-btn">➔</button>
         </div>
 
         <div class="quick-menu">
             <div class="quick-item" onclick="navTo('scannerPage', document.querySelectorAll('.nav-item')[2])"><div class="quick-icon" style="color:var(--neon-cyan)">📊</div><span class="quick-text">Scan Manual</span></div>
-            <div class="quick-item" onclick="navTo('watchlistPage', document.querySelectorAll('.nav-item')[1])"><div class="quick-icon" style="color:var(--neon-purple)">⭐</div><span class="quick-text">Watchlist</span></div>
+            <div class="quick-item" onclick="navTo('watchlistPage', document.querySelectorAll('.nav-item')[1])"><div class="quick-icon" style="color:var(--neon-purple)">⭐</div><span class="quick-text">Top 10</span></div>
             <div class="quick-item" onclick="navTo('aiChatPage', document.querySelectorAll('.nav-item')[3])"><div class="quick-icon" style="color:var(--neon-cyan)">🤖</div><span class="quick-text">Tanya AI</span></div>
             <div class="quick-item" onclick="window.open('https://wa.me/6281462364686?text=Halo%20Admin,%20saya%20ingin%20konfirmasi%20pengisian%20saldo%20akun%20Gacor%20Hunter%20saya.', '_blank')"><div class="quick-icon" style="color:var(--buy)">💬</div><span class="quick-text">Topup WA</span></div>
         </div>
@@ -135,8 +129,8 @@
                 <div style="font-size: 24px; font-weight: 800; color: #fff; font-family:'JetBrains Mono';">7,243</div>
             </div>
             <div class="glass-card" style="margin-bottom: 0;">
-                <div style="font-size:10px; color:var(--text-muted); font-weight:bold; margin-bottom:8px;">AI KUOTA</div>
-                <div style="font-size: 24px; font-weight: 800; color: var(--neon-purple);"><span id="uiKuota">15</span>x</div>
+                <div style="font-size:10px; color:var(--text-muted); font-weight:bold; margin-bottom:8px;">STATUS AI</div>
+                <div style="font-size: 20px; font-weight: 800; color: var(--neon-purple);">ONLINE</div>
             </div>
         </div>
 
@@ -156,23 +150,26 @@
         </div>
     </div>
 
-    <!-- TAB 3: SCANNER MANUAL (SAMA PERSIS DENGAN SEBELUMNYA) -->
+    <!-- TAB 3: SCANNER MANUAL (CORE) -->
     <div id="scannerPage" class="view-section">
         <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
             <div onclick="navTo('homePage', document.querySelectorAll('.nav-item')[0])" style="width:40px; height:40px; border-radius:12px; background:var(--glass-bg); display:flex; align-items:center; justify-content:center; cursor: pointer; color: #fff; font-size: 20px;">&larr;</div>
-            <h3 class="section-title" style="margin: 0;">SCANNER MANUAL (CORE)</h3>
+            <h3 class="section-title" style="margin: 0;">SCAN MANUAL & VISION</h3>
         </div>
 
         <div class="scanner-grid">
             <div>
                 <div class="glass-card" style="text-align: center;">
                     <input type="text" id="tickerInput" class="input-pro" placeholder="KODE TICKER (Cth: GOTO)" style="text-align: center; font-size: 20px; font-weight: 800; text-transform: uppercase;">
+                    
+                    <!-- UPLOAD AREA (STRICTLY OPTIONAL) -->
                     <div class="upload-dropzone" id="dropzone" onclick="document.getElementById('fileInput').click()">
                         <div style="font-size: 20px; margin-bottom: 5px;">📸</div>
-                        <div style="font-size: 11px; color: var(--text-muted);" id="uploadText">Opsional: Upload Screenshot Broker<br>(Vision AI)</div>
+                        <div style="font-size: 11px; color: var(--text-muted);" id="uploadText">Opsional: Upload Screenshot Broker<br>(Untuk dianalisa Gemini Vision AI)</div>
                         <input type="file" id="fileInput" accept="image/*" onchange="handleImage(event)">
                         <div id="previewContainer"><img id="imagePreview" src=""><div class="remove-img" onclick="removeImage(event)">X</div></div>
                     </div>
+                    
                     <button onclick="startEngine()" class="btn-pro" id="btnScan">⚡ ANALISA SEKARANG</button>
                 </div>
                 <div id="trackerBox" class="terminal-box"></div>
@@ -187,24 +184,23 @@
                 <!-- CHATBOT & DEVIL'S ADVOCATE -->
                 <div class="glass-card">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                        <div style="font-weight:bold; font-size:12px; color:#fff; display:flex; align-items:center; gap:8px;"><span style="font-size:16px;">🤖</span> Analisa Dual-Brain</div>
-                        <!-- DEVIL'S ADVOCATE -->
+                        <div style="font-weight:bold; font-size:12px; color:#fff; display:flex; align-items:center; gap:8px;"><span style="font-size:16px;">🤖</span> Kesimpulan AI</div>
                         <button id="devilBtn" onclick="toggleDevilMode()" style="background: rgba(236,72,153,0.15); border: 1px solid var(--skip); color: var(--skip); border-radius: 8px; padding: 4px 10px; font-size: 9px; font-weight: bold; cursor: pointer;">🛡️ Risiko</button>
                     </div>
                     <div id="aiChatConclusion" class="chat-bubble chat-typing"></div>
                 </div>
 
-                <!-- MATRIKS & DATA BARU -->
+                <!-- MATRIKS -->
                 <div class="glass-card">
                     <div style="color: var(--neon-cyan); font-weight: 800; font-size: 12px; margin-bottom: 15px;">⚙️ MATRIKS & INDIKATOR</div>
                     <div style="text-align:center; margin-bottom:15px;"><div style="font-size:32px; font-weight:900; font-family:'JetBrains Mono'; color:var(--neon-cyan)" id="outTotalScore">0</div><div style="font-size:9px; color:var(--text-muted)">SKOR (100)</div></div>
                     
                     <div class="stat-row"><span>MACD Trend</span><span class="stat-val" id="outMacd">-</span></div>
                     <div class="stat-row"><span>Foreign Flow</span><span class="stat-val" id="outForeign">-</span></div>
-                    <div class="stat-row"><span>Classic SR (Res/Sup)</span><span class="stat-val" id="outSR">-</span></div>
+                    <div class="stat-row"><span>Support/Resisten</span><span class="stat-val" id="outSR">-</span></div>
                 </div>
 
-                <!-- TRADING PLAN & RISK SIZER -->
+                <!-- TRADING PLAN & SIZER -->
                 <div class="glass-card">
                     <div style="color: var(--neon-pink); font-weight: 800; font-size: 12px; margin-bottom: 15px;">🎯 TRADING PLAN & SIZER</div>
                     <div class="stat-row"><span>🛒 Entry Zone</span><span class="stat-val" style="color:var(--buy)" id="outBuy">-</span></div>
@@ -228,28 +224,28 @@
         </div>
     </div>
 
-    <!-- TAB 4: MURNI AI CHATBOT (FITUR BARU) -->
+    <!-- TAB 4: MURNI AI CHATBOT -->
     <div id="aiChatPage" class="view-section">
-        <h3 class="section-title"><span class="gradient-text">🤖</span> AI Asisten Edukasi Saham</h3>
+        <h3 class="section-title"><span class="gradient-text">🤖</span> Asisten Edukasi Saham</h3>
         <div class="ai-chat-window">
             <div class="ai-chat-history" id="aiChatHistory">
-                <div class="bot-msg">Halo! Saya adalah AI khusus dunia persahaman. Ada pertanyaan seputar investasi, trading, saham, atau pasar modal yang ingin didiskusikan hari ini?</div>
+                <div class="bot-msg">Halo! Saya Gacor Hunter AI. Ada pertanyaan seputar teori saham, investasi, atau pasar modal yang ingin didiskusikan? (Untuk analisa emiten spesifik hari ini, gunakan fitur Scan Manual).</div>
             </div>
             <div class="ai-chat-input-area">
-                <input type="text" id="aiChatInput" class="ai-chat-input-box" placeholder="Ketik pertanyaan Anda di sini..." onkeypress="if(event.key==='Enter') sendGeneralChat()">
+                <input type="text" id="aiChatInput" class="ai-chat-input-box" placeholder="Ketik pertanyaan Anda..." onkeypress="if(event.key==='Enter') sendGeneralChat()">
                 <button class="ai-search-btn" onclick="sendGeneralChat()">➔</button>
             </div>
         </div>
     </div>
 
-    <!-- BOTTOM NAV (Diperbarui Menjadi 5 Tab Jelas & Terpisah) -->
+    <!-- BOTTOM NAV -->
     <div class="bottom-nav-container">
         <nav class="bottom-nav">
             <div class="nav-item active" onclick="navTo('homePage', this)"><div class="nav-icon">🏠</div><span>Home</span></div>
-            <div class="nav-item" onclick="navTo('watchlistPage', this)"><div class="nav-icon">⭐</div><span>Radar</span></div>
+            <div class="nav-item" onclick="navTo('watchlistPage', this)"><div class="nav-icon">⭐</div><span>Top 10</span></div>
             <div class="nav-item" onclick="navTo('scannerPage', this)"><div class="nav-icon">📊</div><span>Manual</span></div>
             <div class="nav-item" onclick="navTo('aiChatPage', this)"><div class="nav-icon">🤖</div><span>Chat AI</span></div>
-            <div class="nav-item" onclick="window.open('https://wa.me/6281462364686?text=Halo%20Admin,%20saya%20ingin%20konfirmasi%20pengisian%20saldo%20akun%20Gacor%20Hunter%20saya.', '_blank')"><div class="nav-icon">💎</div><span>Topup</span></div>
+            <div class="nav-item" onclick="window.open('https://wa.me/6281462364686?text=Halo%20Admin,%20saya%20ingin%20konfirmasi%20pengisian%20saldo%20akun%20Gacor%20Hunter.', '_blank')"><div class="nav-icon">💎</div><span>Topup</span></div>
         </nav>
     </div>
 </div>
@@ -257,7 +253,7 @@
 <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 <script>
     // 🔴 GANTI URL INI DENGAN WEB APP URL ANDA!
-    const GAS_URL = "URL_GAS_ANDA_DISINI";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbz1wLFjgsYuna3ZrWNlEuva1ZzGW_vpitOI_TdcSmGJfBz4zKDbWpuFzaE2AOhLw9yg/exec";
 
     function navTo(pageId, navElement) {
         document.querySelectorAll('.view-section').forEach(el => el.classList.remove('view-active'));
@@ -274,8 +270,7 @@
         let val = document.getElementById('homeSearchInput').value.trim();
         if(!val) return;
         
-        // Logika sederhana: Jika input <= 4 huruf (kode saham), lempar ke Scanner. Jika panjang, lempar ke Chat AI
-        if(val.length <= 4) {
+        if(val.length <= 4) { // Smart Routing
             navTo('scannerPage', document.querySelectorAll('.nav-item')[2]);
             document.getElementById('tickerInput').value = val;
             startEngine();
@@ -286,13 +281,17 @@
         }
     }
 
+    // --- UPLOAD GAMBAR (OPSIONAL) ---
     let hasImage = false;
+    let imageDataUrl = ""; 
+
     function handleImage(event) {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = function(e) {
-                document.getElementById('imagePreview').src = e.target.result;
+                imageDataUrl = e.target.result; 
+                document.getElementById('imagePreview').src = imageDataUrl;
                 document.getElementById('previewContainer').style.display = 'inline-block';
                 document.getElementById('uploadText').style.display = 'none';
                 hasImage = true;
@@ -305,6 +304,7 @@
         e.stopPropagation();
         document.getElementById('fileInput').value = "";
         document.getElementById('imagePreview').src = "";
+        imageDataUrl = ""; 
         document.getElementById('previewContainer').style.display = 'none';
         document.getElementById('uploadText').style.display = 'block';
         hasImage = false;
@@ -313,12 +313,12 @@
     // --- FITUR FORCE UPDATE RADAR (ADMIN) ---
     function forceUpdateRadar() {
         let btn = document.getElementById('btnUpdateRadar');
-        btn.innerText = "🔄 Memindai... Tunggu 30 Detik";
+        btn.innerText = "🔄 Memindai... Tunggu";
         fetch(GAS_URL + "?action=forceRunEOD").then(r=>r.json()).then(res => {
             alert(res.message);
             btn.innerText = "🔄 Update Radar (Admin)";
             loadTop10();
-        }).catch(err => { alert("Gagal koneksi ke server."); btn.innerText = "🔄 Update Radar (Admin)"; });
+        }).catch(err => { alert("Gagal koneksi ke server."); btn.innerText = "🔄 Update Radar"; });
     }
 
     function loadTop10() {
@@ -333,11 +333,11 @@
                     <div style="text-align:right;"><div style="font-weight:900; font-size:20px; color:var(--buy);">${d.score}</div></div>
                 </div>`;
             });
-            document.getElementById('fullWatchlistGrid').innerHTML = html || "<div class='glass-card'>Data belum tersedia. Admin perlu Update Radar.</div>";
+            document.getElementById('fullWatchlistGrid').innerHTML = html || "<div class='glass-card'>Data belum tersedia. Hubungi Admin.</div>";
         });
     }
 
-    // --- ENGINE SCAN MANUAL (SAMA PERSIS) ---
+    // --- ENGINE SCAN MANUAL ---
     const formatRp = num => "Rp " + Math.round(num).toLocaleString('id-ID');
     let currentEntry = 0, currentSL = 0, baseAnalysis = "", devilAnalysis = "", isDevilMode = false;
 
@@ -351,11 +351,11 @@
         
         let log = document.getElementById("trackerBox");
         const steps = [
-            "> Menginisiasi Dual-Brain AI (Gemini & OpenAI)...",
-            "> Menarik level Fibonacci & Support/Resistance...",
-            "> Menghitung kalkulasi MACD & Moving Averages...",
-            hasImage ? "> Mengekstraksi data volume bandar via Vision AI..." : "> Cross-validasi opini antar AI (Konsensus)...",
-            "> Menulis Trading Plan & Kesimpulan akhir..."
+            "> Menginisiasi Engine Matematika & AI...",
+            "> Menarik level Support/Resistance & Fibonacci...",
+            hasImage ? "> Mengirim gambar ke Vision AI (Gemini) untuk dibaca..." : "> (Bypass Vision) Murni Analisa Teknikal...",
+            "> Menyusun Kesimpulan dengan OpenAI...",
+            "> Finalisasi Trading Plan..."
         ];
         
         log.innerHTML = `<div style="font-weight:bold; margin-bottom:10px;">> SYSTEM INITIALIZING...</div><div id="trackerLog"></div>`;
@@ -366,9 +366,18 @@
             await new Promise(r => setTimeout(r, 600)); 
         }
 
-        let api_url = `${GAS_URL}?ticker=${ticker}&hasImage=${hasImage}`;
+        // Payload POST Aman
+        let payload = { action: "scan", ticker: ticker };
+        if (hasImage && imageDataUrl) {
+            payload.imageData = imageDataUrl; // Gambar hanya dikirim jika ada
+        }
+
         try {
-            let response = await fetch(api_url);
+            let response = await fetch(GAS_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(payload)
+            });
             let result = await response.json();
             
             if (result.status === "error") throw new Error(result.message);
@@ -395,7 +404,7 @@
             baseAnalysis = result.ai.baseAnalysis;
             devilAnalysis = result.ai.devilAnalysis;
             
-            isDevilMode = true; toggleDevilMode();
+            isDevilMode = true; toggleDevilMode(); // Reset ke Base Mode
             calculateLots();
 
         } catch (error) {
@@ -405,7 +414,6 @@
         }
     }
 
-    // --- DEVIL'S ADVOCATE (SCAN MANUAL) ---
     function toggleDevilMode() {
         isDevilMode = !isDevilMode;
         let btn = document.getElementById('devilBtn');
@@ -435,7 +443,7 @@
         type();
     }
 
-    // --- RISK SIZER (SCAN MANUAL) ---
+    // --- RISK SIZER ---
     let currentRiskPercent = 0.02;
     function setRisk(btnEl) {
         document.querySelectorAll('.risk-btn').forEach(b => b.classList.remove('active'));
@@ -447,15 +455,14 @@
         let capital = parseFloat(document.getElementById("capitalInput").value);
         if(!capital || isNaN(capital) || currentEntry === 0) return;
         let lossPerShare = currentEntry - currentSL;
-        if(lossPerShare <= 0) return;
+        if(lossPerShare <= 0) { document.getElementById("calcLot").innerText = "SL Error"; return; }
+        
         let maxLots = Math.min(Math.floor((capital * currentRiskPercent) / (lossPerShare * 100)), Math.floor(capital / (currentEntry * 100)));
         if (maxLots <= 0) { document.getElementById("calcLot").innerText = "Modal Kurang"; document.getElementById("calcRisk").innerText = "-"; } 
         else { document.getElementById("calcLot").innerText = maxLots + " Lot"; document.getElementById("calcRisk").innerText = formatRp(maxLots * lossPerShare * 100); }
     }
 
-    // ==========================================
-    // FUNGSI BARU: MURNI AI CHATBOT TANYA JAWAB
-    // ==========================================
+    // --- CHAT AI MANDIRI ---
     async function sendGeneralChat() {
         let inputEl = document.getElementById("aiChatInput");
         let text = inputEl.value.trim();
@@ -463,7 +470,6 @@
 
         let historyBox = document.getElementById("aiChatHistory");
 
-        // 1. Munculkan bubble user
         let userDiv = document.createElement("div");
         userDiv.className = "user-msg";
         userDiv.innerText = text;
@@ -472,14 +478,12 @@
         inputEl.value = "";
         historyBox.scrollTop = historyBox.scrollHeight;
 
-        // 2. Munculkan indikator AI typing
         let botDiv = document.createElement("div");
         botDiv.className = "bot-msg chat-typing";
         botDiv.innerText = "Menganalisa pertanyaan...";
         historyBox.appendChild(botDiv);
         historyBox.scrollTop = historyBox.scrollHeight;
 
-        // 3. Panggil backend untuk ngobrol
         try {
             let res = await fetch(`${GAS_URL}?action=chat&message=${encodeURIComponent(text)}`);
             let data = await res.json();
