@@ -122,6 +122,7 @@
                 <input type="text" id="regId" class="input-pro" placeholder="Buat Username">
                 <input type="password" id="regPass" class="input-pro" placeholder="Buat Password">
                 <input type="password" id="regPass2" class="input-pro" placeholder="Konfirmasi Password">
+                <div style="font-size: 10px; color: var(--buy); margin-bottom: 10px; text-align: center;">🎁 Gratis 10x Analisa Kuota untuk Pengguna Baru!</div>
                 <button onclick="doRegister()" class="btn-pro" id="btnRegister" style="background: linear-gradient(135deg, var(--buy), var(--neon-cyan));">BUAT AKUN</button>
             </div>
             
@@ -155,6 +156,7 @@
             <div class="quick-item" onclick="openTopupModal()"><div class="quick-icon" style="color:var(--buy)">💬</div><span class="quick-text">Komunitas</span></div>
         </div>
 
+        <!-- INFO SALDO DAN KUOTA -->
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px;">
             <div class="glass-card" style="margin-bottom: 0;">
                 <div style="font-size:10px; color:var(--text-muted); font-weight:bold; margin-bottom:8px;">SALDO AKTIF</div>
@@ -163,6 +165,7 @@
             <div class="glass-card" style="margin-bottom: 0;">
                 <div style="font-size:10px; color:var(--text-muted); font-weight:bold; margin-bottom:8px;">SISA KUOTA AI</div>
                 <div style="font-size: 20px; font-weight: 800; color: var(--neon-purple);"><span id="uiKuota">0</span><span style="font-size:12px; color:#fff"> x</span></div>
+                <div style="font-size:9px; color:var(--text-muted); margin-top:5px; line-height: 1.3;">Tarif: Rp 1.000/scan jika kuota gratis habis.</div>
             </div>
         </div>
 
@@ -184,7 +187,7 @@
         <div id="fullWatchlistGrid"><div class="glass-card" style="text-align:center; padding:30px; color:var(--text-muted);">Menunggu data bursa...</div></div>
     </div>
 
-    <!-- 4. SCANNER MANUAL (UI V5.5) -->
+    <!-- 4. SCANNER MANUAL -->
     <div id="scannerPage" class="view-section">
         <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
             <div onclick="navTo('homePage', document.querySelectorAll('.nav-item')[0])" style="width:40px; height:40px; border-radius:12px; background:var(--bg-card); border: 1px solid rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; cursor: pointer; color: #fff; font-size: 20px;">&larr;</div>
@@ -302,7 +305,7 @@
     <div id="aiChatPage" class="view-section">
         <h3 class="section-title"><span class="gradient-text">🤖</span> Asisten Edukasi Saham</h3>
         <div class="ai-chat-window">
-            <div class="ai-chat-history" id="aiChatHistory"><div class="bot-msg">Halo! Saya Gacor Hunter AI. Ada pertanyaan seputar teori saham? (Chat akan memotong 1 kuota)</div></div>
+            <div class="ai-chat-history" id="aiChatHistory"><div class="bot-msg">Halo! Saya Gacor Hunter AI. Ada pertanyaan seputar teori saham? (Chat akan memotong 1 kuota atau saldo Rp 1.000)</div></div>
             <div class="ai-chat-input-area">
                 <input type="text" id="aiChatInput" style="flex:1; padding:12px; border-radius:12px; background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.1); color:white; font-size:13px;" placeholder="Tanya sesuatu..." onkeypress="if(event.key==='Enter') sendGeneralChat()">
                 <button class="ai-search-btn" onclick="sendGeneralChat()">➔</button>
@@ -335,10 +338,9 @@
 <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 <script>
     // 🔴 GANTI URL INI DENGAN WEB APP URL ANDA!
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbyLK86fpzBJWXolHIEm4PNULPVOmj5K_-Xlp_BumjWvHy1MdmjsnZ35pl3EDMcaIDP2/exec";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbyWr2TG0E2xnzHDqVeN_swpo21wnyOPGE0MPvZuqZ-uFIOVZp5FgPd-4UuT7Ri3YFmN/exec";
 
-    window.currentEntry = 0; 
-    window.currentSL = 0; 
+    window.currentEntry = 0; window.currentSL = 0; 
     let baseAnalysis = "", devilAnalysis = "", isDevilMode = false, currentRiskPercent = 0.02;
 
     window.onload = function() {
@@ -347,9 +349,10 @@
     };
 
     function fetchRealtimeIHSG() {
+        if(GAS_URL === "URL_GAS_ANDA_DISINI") { document.getElementById("ihsgOutlook").innerHTML = "Data IHSG belum dimuat. Tolong masukkan GAS_URL di file HTML Anda."; return; }
         fetch(GAS_URL + "?action=getIHSG").then(r=>r.json()).then(res => {
             if(res.status === "success") document.getElementById("ihsgOutlook").innerHTML = res.outlook;
-            else document.getElementById("ihsgOutlook").innerHTML = "IHSG saat ini gagal dimuat. Coba refresh halaman.";
+            else document.getElementById("ihsgOutlook").innerHTML = "IHSG gagal dimuat.";
         }).catch(e => { document.getElementById("ihsgOutlook").innerHTML = "Koneksi ke server IHSG terputus."; });
     }
 
@@ -363,23 +366,18 @@
     function switchAuthTab(tab) {
         let msg = document.getElementById("authMessage"); msg.style.display = "none";
         if (tab === 'login') {
-            document.getElementById('formLogin').style.display = 'block';
-            document.getElementById('formRegister').style.display = 'none';
-            document.getElementById('tabLogin').style.color = 'var(--neon-cyan)';
-            document.getElementById('tabLogin').style.borderBottom = '2px solid var(--neon-cyan)';
-            document.getElementById('tabRegister').style.color = 'var(--text-muted)';
-            document.getElementById('tabRegister').style.borderBottom = '2px solid transparent';
+            document.getElementById('formLogin').style.display = 'block'; document.getElementById('formRegister').style.display = 'none';
+            document.getElementById('tabLogin').style.color = 'var(--neon-cyan)'; document.getElementById('tabLogin').style.borderBottom = '2px solid var(--neon-cyan)';
+            document.getElementById('tabRegister').style.color = 'var(--text-muted)'; document.getElementById('tabRegister').style.borderBottom = '2px solid transparent';
         } else {
-            document.getElementById('formLogin').style.display = 'none';
-            document.getElementById('formRegister').style.display = 'block';
-            document.getElementById('tabRegister').style.color = 'var(--neon-cyan)';
-            document.getElementById('tabRegister').style.borderBottom = '2px solid var(--neon-cyan)';
-            document.getElementById('tabLogin').style.color = 'var(--text-muted)';
-            document.getElementById('tabLogin').style.borderBottom = '2px solid transparent';
+            document.getElementById('formLogin').style.display = 'none'; document.getElementById('formRegister').style.display = 'block';
+            document.getElementById('tabRegister').style.color = 'var(--neon-cyan)'; document.getElementById('tabRegister').style.borderBottom = '2px solid var(--neon-cyan)';
+            document.getElementById('tabLogin').style.color = 'var(--text-muted)'; document.getElementById('tabLogin').style.borderBottom = '2px solid transparent';
         }
     }
 
     async function doLogin() {
+        if(GAS_URL === "URL_GAS_ANDA_DISINI") { alert("Mohon ganti teks 'URL_GAS_ANDA_DISINI' dengan Web App URL Anda di file HTML!"); return; }
         let id = document.getElementById("loginId").value.trim(), pass = document.getElementById("loginPass").value.trim();
         let btn = document.getElementById("btnLogin"), msg = document.getElementById("authMessage");
         if(!id || !pass) { msg.innerText = "Isi Username dan Password!"; msg.style.color = "var(--skip)"; msg.style.display = "block"; return; }
@@ -394,9 +392,8 @@
     }
 
     async function doRegister() {
-        let user = document.getElementById("regId").value.trim();
-        let pass1 = document.getElementById("regPass").value.trim();
-        let pass2 = document.getElementById("regPass2").value.trim();
+        if(GAS_URL === "URL_GAS_ANDA_DISINI") { alert("Mohon ganti teks 'URL_GAS_ANDA_DISINI' dengan Web App URL Anda di file HTML!"); return; }
+        let user = document.getElementById("regId").value.trim(), pass1 = document.getElementById("regPass").value.trim(), pass2 = document.getElementById("regPass2").value.trim();
         let btn = document.getElementById("btnRegister"), msg = document.getElementById("authMessage");
 
         if(!user || !pass1) { msg.innerText = "Isi semua data!"; msg.style.color = "var(--skip)"; msg.style.display = "block"; return; }
@@ -407,10 +404,8 @@
         try {
             let res = await fetch(`${GAS_URL}?action=auth&type=register&username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass1)}`);
             let data = await res.json();
-            if(data.status === "success") {
-                msg.innerText = data.message; msg.style.color = "var(--buy)"; msg.style.display = "block";
-                setTimeout(() => switchAuthTab('login'), 2000);
-            } else { msg.innerText = data.message; msg.style.color = "var(--skip)"; msg.style.display = "block"; }
+            if(data.status === "success") { msg.innerText = data.message; msg.style.color = "var(--buy)"; msg.style.display = "block"; setTimeout(() => switchAuthTab('login'), 2000); } 
+            else { msg.innerText = data.message; msg.style.color = "var(--skip)"; msg.style.display = "block"; }
         } catch (e) { msg.innerText = "Gagal terhubung ke server."; msg.style.color = "var(--skip)"; msg.style.display = "block"; }
         btn.innerText = "BUAT AKUN";
     }
@@ -437,16 +432,40 @@
     function closeTopupModal() { document.getElementById("topupModal").style.display = "none"; }
     function scanFromHome() { let val = document.getElementById('homeSearchInput').value.trim(); if(!val) return; if(val.length <= 4) { navTo('scannerPage', document.querySelectorAll('.nav-item')[2]); document.getElementById('tickerInput').value = val; startEngine(); } else { navTo('aiChatPage', document.querySelectorAll('.nav-item')[3]); document.getElementById('aiChatInput').value = val; sendGeneralChat(); } }
 
+    // --- LOGIKA POTONG KUOTA / SALDO (DIPERBAIKI) ---
     async function deductUserQuota() {
+        if(GAS_URL === "URL_GAS_ANDA_DISINI") { alert("PENTING: Masukkan Link GAS_URL Anda ke dalam file HTML."); document.getElementById('btnScan').innerText = "⚡ ANALISA SEKARANG"; return false; }
+        
         let userData = JSON.parse(localStorage.getItem("gacor_user"));
         if(userData.role === "ADMIN") return true;
-        if(userData.kuota <= 0) { alert("Kuota AI harian Anda habis. Hubungi Admin."); return false; }
+
+        if(userData.kuota <= 0 && userData.saldo < 1000) {
+            alert("Kuota gratis habis & Saldo tidak cukup (Rp 1.000/scan).\nSilakan Topup di menu Komunitas.");
+            openTopupModal(); document.getElementById('btnScan').innerText = "⚡ ANALISA SEKARANG";
+            return false;
+        }
+
+        if(userData.kuota <= 0 && userData.saldo >= 1000) {
+            let conf = confirm("Kuota gratis Anda habis.\nGunakan Saldo Rp 1.000 untuk analisa ini?");
+            if(!conf) { document.getElementById('btnScan').innerText = "⚡ ANALISA SEKARANG"; return false; }
+        }
+
         try {
             let res = await fetch(`${GAS_URL}?action=deduct_quota&username=${encodeURIComponent(userData.username)}`);
             let data = await res.json();
-            if(data.status === "success") { userData.kuota = data.remaining; localStorage.setItem("gacor_user", JSON.stringify(userData)); document.getElementById("uiKuota").innerText = userData.kuota; return true; }
-            return false;
-        } catch (e) { return true; }
+            if(data.status === "success") {
+                userData.kuota = data.remaining; userData.saldo = data.saldo;
+                localStorage.setItem("gacor_user", JSON.stringify(userData));
+                document.getElementById("uiKuota").innerText = userData.kuota;
+                document.getElementById("uiSaldo").innerText = "Rp " + userData.saldo.toLocaleString('id-ID');
+                return true;
+            } else {
+                alert(data.message); document.getElementById('btnScan').innerText = "⚡ ANALISA SEKARANG"; return false;
+            }
+        } catch (e) {
+            alert("Gagal terhubung ke server untuk memotong kuota/saldo.");
+            document.getElementById('btnScan').innerText = "⚡ ANALISA SEKARANG"; return false;
+        }
     }
 
     let hasImage = false, imageDataUrl = ""; 
@@ -457,7 +476,7 @@
         let ticker = document.getElementById("tickerInput").value.trim().toUpperCase();
         if (!ticker) return;
 
-        let hasQuota = await deductUserQuota(); if(!hasQuota) return;
+        let hasQuota = await deductUserQuota(); if(!hasQuota) return; // Stop jika saldo kurang atau user cancel
 
         document.getElementById("resultBox").style.display = "none";
         let tb = document.getElementById("trackerBox"); tb.style.display = "block";
@@ -555,7 +574,8 @@
     async function sendGeneralChat() {
         let inputEl = document.getElementById("aiChatInput"), text = inputEl.value.trim(), historyBox = document.getElementById("aiChatHistory");
         if(!text) return;
-        let hasQuota = await deductUserQuota(); if(!hasQuota) return;
+        let hasQuota = await deductUserQuota(); if(!hasQuota) return; // Stop jika saldo kurang atau user cancel
+
         historyBox.innerHTML += `<div class="user-msg">${text}</div><div class="bot-msg chat-typing" id="typingMsg">Menganalisa...</div>`;
         inputEl.value = ""; historyBox.scrollTop = historyBox.scrollHeight;
         try {
