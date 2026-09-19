@@ -2,11 +2,14 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>NEXUS AI - GACOR HUNTER V6</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>NEXUS AI - GACOR HUNTER V9</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700;900&display=swap" rel="stylesheet">
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700;900&display=swap');
-
         :root { 
             --bg-base: #03050a; 
             --bg-card: rgba(13, 17, 31, 0.55); 
@@ -20,7 +23,8 @@
             --skip: #ff2a5f; 
         }
 
-        * { box-sizing: border-box; scroll-behavior: smooth; margin: 0; padding: 0; user-select: none; font-family: 'Inter', sans-serif;}
+        * { box-sizing: border-box; scroll-behavior: smooth; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        button, .nav-item, .quick-item, .auth-tab, .r-tab, .risk-btn { user-select: none; }
         
         body { 
             background-color: var(--bg-base); 
@@ -33,7 +37,7 @@
         
         .ambient-orb { position: fixed; border-radius: 50%; filter: blur(90px); z-index: 0; pointer-events: none; opacity: 0.5; animation: float 8s ease-in-out infinite alternate; }
         .orb-1 { top: -5%; left: -20%; width: 400px; height: 400px; background: var(--neon-purple); }
-        .orb-2 { bottom: -10%; right: -20%; width: 350px; height: 350px; background: var(--neon-cyan); opacity: 0.3; animation-delay: -4s;}
+        .orb-2 { bottom: -10%; right: -20%; width: 350px; height: 350px; background: var(--neon-cyan); opacity: 0.3; animation-delay: -4s; }
         @keyframes float { 0% { transform: translateY(0) scale(1); } 100% { transform: translateY(30px) scale(1.1); } }
 
         .app-wrapper { width: 100%; max-width: 480px; min-height: 100vh; position: relative; z-index: 1; padding-bottom: calc(100px + env(safe-area-inset-bottom)); }
@@ -42,7 +46,6 @@
         .view-active { display: block; }
         @keyframes slideUpFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* KARTU GLASSMORPHISM */
         .glass-card { 
             background: var(--bg-card); 
             backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -55,14 +58,12 @@
         .section-title { font-size: 11px; font-weight: 800; color: var(--text-muted); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 1px;}
         .gradient-text { background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* INPUT & BUTTONS */
         .input-pro { width: 100%; padding: 16px; background: rgba(0, 0, 0, 0.3); color: white; font-size: 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.05); outline: none; transition: 0.3s; margin-bottom: 12px; font-family: 'JetBrains Mono', monospace;}
         .input-pro:focus { border-color: var(--neon-cyan); box-shadow: 0 0 15px rgba(0, 229, 255, 0.15); }
-        .btn-pro { width: 100%; padding: 16px; border: none; border-radius: 14px; font-weight: 900; font-size: 13px; cursor: pointer; color: #fff; background: linear-gradient(135deg, rgba(0, 229, 255, 0.15), rgba(181, 55, 242, 0.15)); border: 1px solid rgba(0, 229, 255, 0.3); text-transform: uppercase; transition: 0.3s; box-shadow: 0 0 15px rgba(0, 229, 255, 0.1); letter-spacing: 1px; font-family: 'Inter', sans-serif;}
+        .btn-pro { width: 100%; padding: 16px; border: none; border-radius: 14px; font-weight: 900; font-size: 13px; cursor: pointer; color: #fff; background: linear-gradient(135deg, rgba(0, 229, 255, 0.15), rgba(181, 55, 242, 0.15)); border: 1px solid rgba(0, 229, 255, 0.3); text-transform: uppercase; transition: 0.3s; box-shadow: 0 0 15px rgba(0, 229, 255, 0.1); letter-spacing: 1px;}
         .btn-pro:active { transform: scale(0.98); }
         .btn-pro:disabled { opacity: 0.5; filter: grayscale(1); cursor: not-allowed; }
 
-        /* METRICS & QUICK MENU */
         .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
         .metric-box { background: rgba(0,0,0,0.2); border-radius: 16px; padding: 15px; border: 1px solid rgba(255,255,255,0.03); display: flex; flex-direction: column; justify-content: center; }
         .metric-label { font-size: 9px; color: var(--text-muted); font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
@@ -72,7 +73,7 @@
         
         .ai-search-container { background: rgba(0,0,0,0.3); border: 1px solid rgba(0, 229, 255, 0.2); border-radius: 16px; padding: 6px; display: flex; align-items: center; margin-bottom: 25px; }
         .ai-search-input { flex: 1; background: transparent; border: none; color: white; font-size: 14px; outline: none; padding-left: 12px; font-family: 'JetBrains Mono';}
-        .ai-search-btn { background: var(--neon-cyan); color: #000; font-weight: bold; border: none; width: 40px; height: 40px; border-radius: 12px; cursor: pointer; transition: 0.3s;}
+        .ai-search-btn { background: var(--neon-cyan); color: #000; font-weight: bold; border: none; width: 40px; height: 40px; border-radius: 12px; cursor: pointer; }
 
         .quick-menu { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 25px; }
         .quick-item { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer;}
@@ -80,20 +81,15 @@
         .quick-item:hover .quick-icon { border-color: var(--neon-cyan); background: rgba(0, 229, 255, 0.05); }
         .quick-text { font-size: 10px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.5px;}
 
-        /* BOTTOM NAV */
-        .bottom-nav-container { position: fixed; bottom: 0; left: 0; width: 100%; padding-bottom: calc(15px + env(safe-area-inset-bottom)); display: flex; justify-content: center; z-index: 100; background: linear-gradient(to top, var(--bg-base) 20%, transparent); display: none; }
+        .bottom-nav-container { position: fixed; bottom: 0; left: 0; width: 100%; padding-bottom: calc(15px + env(safe-area-inset-bottom)); display: none; justify-content: center; z-index: 100; background: linear-gradient(to top, var(--bg-base) 20%, transparent); }
         .bottom-nav { width: 90%; max-width: 400px; background: rgba(13, 17, 31, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); border-radius: 30px; display: flex; justify-content: space-around; padding: 12px 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
         .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 9px; font-weight: 700; color: #4b5563; cursor: pointer; width: 20%; text-transform: uppercase; transition: 0.3s;}
         .nav-item.active { color: var(--neon-cyan); text-shadow: 0 0 10px rgba(0, 229, 255, 0.5); }
 
-        /* AUTH & UPLOAD */
         .auth-tabs { display: flex; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 4px; margin-bottom: 20px;}
         .auth-tab { flex: 1; text-align: center; padding: 12px; cursor: pointer; font-weight: 800; font-size: 11px; border-radius: 10px; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);}
         .auth-tab.active { background: var(--bg-card); color: var(--neon-cyan); box-shadow: 0 4px 10px rgba(0,0,0,0.3); border: 1px solid rgba(0, 229, 255, 0.2);}
         
-        .upload-dropzone { border: 1px dashed rgba(0, 229, 255, 0.3); border-radius: 16px; padding: 25px 15px; text-align: center; background: rgba(0, 229, 255, 0.02); cursor: pointer; margin-bottom: 20px; transition: 0.3s;}
-
-        /* TAB NAVIGASI INTERNAL UNTUK HASIL ANALISA */
         .result-tabs-container { display: flex; background: rgba(0,0,0,0.4); border-radius: 12px; padding: 4px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);}
         .r-tab { flex: 1; text-align: center; padding: 10px 2px; cursor: pointer; font-weight: 800; font-size: 10px; border-radius: 8px; transition: 0.3s; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;}
         .r-tab.active { background: rgba(181, 55, 242, 0.2); color: #fff; border: 1px solid rgba(181, 55, 242, 0.4); box-shadow: 0 0 10px rgba(181, 55, 242, 0.2);}
@@ -101,17 +97,15 @@
         .tab-content { display: none; animation: slideUpFade 0.3s ease-out; }
         .tab-content.active { display: block; }
 
-        /* V6 SCORE BOX & METRICS */
         .v5-box { background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 18px; margin-bottom: 15px; position: relative; overflow: hidden;}
         .v5-box::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background: rgba(255,255,255,0.1); }
         .v5-title { font-size: 10px; font-weight: 800; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 6px;}
         
-        .v5-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed rgba(255,255,255,0.05); font-size: 11px; color: #cbd5e1; font-family: 'Inter';}
+        .v5-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed rgba(255,255,255,0.05); font-size: 11px; color: #cbd5e1;}
         .v5-row:last-child { border-bottom: none; }
         .v5-val { font-weight: 700; font-family: 'JetBrains Mono', monospace; text-align: right; color: #fff;}
         
         .box-entry::before { background: var(--buy); box-shadow: 0 0 10px var(--buy); }
-        .box-trigger::before { background: var(--wait); box-shadow: 0 0 10px var(--wait); }
         .box-cutloss::before { background: var(--skip); box-shadow: 0 0 10px var(--skip); }
 
         .score-progress-bg { background: rgba(255,255,255,0.05); height: 6px; border-radius: 3px; margin: 25px 0; overflow: hidden; position: relative; }
@@ -121,8 +115,7 @@
         .risk-btn { flex: 1; padding: 10px 5px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: var(--text-muted); font-size: 10px; font-weight: 800; cursor: pointer; transition: 0.3s;}
         .risk-btn.active { background: rgba(255, 183, 3, 0.15); border-color: var(--wait); color: var(--wait); box-shadow: 0 0 10px rgba(255, 183, 3, 0.1);}
 
-        /* CHAT AI */
-        .chat-bubble { font-size: 12px; line-height: 1.6; padding: 15px; background: rgba(181, 55, 242, 0.05); border-radius: 12px; border: 1px solid rgba(181, 55, 242, 0.1); border-left: 3px solid var(--neon-purple); white-space: pre-line; margin-top: 10px; color: #e2e8f0; font-family: 'Inter';}
+        .chat-bubble { font-size: 12px; line-height: 1.6; padding: 15px; background: rgba(181, 55, 242, 0.05); border-radius: 12px; border: 1px solid rgba(181, 55, 242, 0.1); border-left: 3px solid var(--neon-purple); white-space: pre-line; margin-top: 10px; color: #e2e8f0;}
         .ai-chat-window { display: flex; flex-direction: column; height: 65vh; background: var(--bg-card); border-radius: 20px; border: 1px solid var(--glass-border); padding: 15px; }
         .ai-chat-history { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-bottom: 10px; }
         .bot-msg { background: rgba(0, 229, 255, 0.1); border-left: 3px solid var(--neon-cyan); padding: 12px; border-radius: 12px; font-size: 12px; max-width: 85%; align-self: flex-start;}
@@ -130,7 +123,6 @@
 
         .radar-card { background: rgba(0,0,0,0.2); border-radius: 14px; border: 1px solid rgba(255,255,255,0.05); padding: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; margin-bottom: 10px;}
         
-        /* TOAST NOTIF UI MENGGANTIKAN ALERT */
         .toast-notification {
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
             background: rgba(13, 17, 31, 0.95); border: 1px solid var(--neon-cyan);
@@ -144,22 +136,32 @@
         
         .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:999; display:none; justify-content:center; align-items:center; backdrop-filter: blur(10px); }
         .modal-box { background: var(--bg-card); border: 1px solid var(--neon-purple); border-radius: 24px; padding: 30px; width: 90%; max-width: 350px; text-align: center; }
+
+        .disclaimer-box {
+            background: rgba(255, 42, 95, 0.08);
+            border: 1px solid rgba(255, 42, 95, 0.25);
+            border-radius: 12px;
+            padding: 12px 14px;
+            font-size: 10px;
+            color: #fca5a5;
+            line-height: 1.5;
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
 
 <div id="toastNotif" class="toast-notification">SYSTEM MESSAGE</div>
-
 <div class="ambient-orb orb-1"></div>
 <div class="ambient-orb orb-2"></div>
 
 <div class="app-wrapper">
 
-    <!-- 1. HALAMAN LOGIN / REGISTER -->
+    <!-- LOGIN -->
     <div id="loginPage" class="view-section view-active">
         <div style="text-align: center; margin-top: 60px; margin-bottom: 40px;">
             <div style="font-size: 32px; font-weight: 900; letter-spacing: 2px;" class="gradient-text">NEXUS AI</div>
-            <p style="color: var(--text-muted); font-size: 11px; margin-top: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px;">Gacor Hunter Terminal V6</p>
+            <p style="color: var(--text-muted); font-size: 11px; margin-top: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px;">Gacor Hunter Terminal V9</p>
         </div>
         
         <div class="glass-card login-box">
@@ -169,24 +171,29 @@
             </div>
 
             <div id="formLogin">
-                <input type="text" id="loginId" class="input-pro" placeholder="ID Operator">
-                <input type="password" id="loginPass" class="input-pro" placeholder="Kode Akses">
+                <input type="text" id="loginId" class="input-pro" placeholder="ID Operator" autocomplete="username">
+                <input type="password" id="loginPass" class="input-pro" placeholder="Kode Akses" autocomplete="current-password">
                 <button onclick="doLogin()" class="btn-pro" id="btnLogin">INISIALISASI SISTEM</button>
             </div>
 
             <div id="formRegister" style="display: none;">
-                <input type="text" id="regId" class="input-pro" placeholder="Buat ID Operator">
-                <input type="password" id="regPass" class="input-pro" placeholder="Buat Kode Akses">
-                <input type="password" id="regPass2" class="input-pro" placeholder="Verifikasi Kode Akses">
-                <div style="font-size: 10px; color: var(--buy); margin-bottom: 15px; text-align: center; font-family: 'JetBrains Mono';">STATUS: +10 CREDIT DIBERIKAN UNTUK OPERATOR BARU</div>
+                <input type="text" id="regId" class="input-pro" placeholder="Buat ID Operator" autocomplete="username">
+                <input type="password" id="regPass" class="input-pro" placeholder="Buat Kode Akses" autocomplete="new-password">
+                <input type="password" id="regPass2" class="input-pro" placeholder="Verifikasi Kode Akses" autocomplete="new-password">
+                <input type="text" id="regInvite" class="input-pro" placeholder="Kode Undangan (opsional)">
+                <div style="font-size: 10px; color: var(--buy); margin-bottom: 15px; text-align: center; font-family: 'JetBrains Mono';">STATUS: +10 CREDIT UNTUK OPERATOR BARU</div>
                 <button onclick="doRegister()" class="btn-pro" id="btnRegister" style="border-color: var(--neon-purple);">BUAT AKSES</button>
             </div>
             
             <div id="authMessage" style="font-size: 11px; text-align: center; font-weight: bold; margin-top:15px; display: none; font-family: 'JetBrains Mono';"></div>
+
+            <div class="disclaimer-box">
+                <strong>DISCLAIMER:</strong> NEXUS AI hanya menyediakan analisis teknikal dan informasi edukatif. Bukan saran investasi, rekomendasi beli/jual, atau penawaran penasihat investasi terdaftar OJK. Keputusan trading sepenuhnya tanggung jawab pengguna. DYOR.
+            </div>
         </div>
     </div>
 
-    <!-- 2. HALAMAN BERANDA -->
+    <!-- HOME -->
     <div id="homePage" class="view-section">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
             <div style="display: flex; align-items: center; gap: 15px;">
@@ -207,10 +214,22 @@
         </div>
 
         <div class="quick-menu">
-            <div class="quick-item" onclick="navTo('scannerPage', document.querySelectorAll('.nav-item')[2])"><div class="quick-icon" style="color:var(--neon-cyan)">⚡</div><span class="quick-text">SCAN</span></div>
-            <div class="quick-item" onclick="navTo('watchlistPage', document.querySelectorAll('.nav-item')[1])"><div class="quick-icon" style="color:var(--buy)">◎</div><span class="quick-text">RADAR</span></div>
-            <div class="quick-item" onclick="navTo('aiChatPage', document.querySelectorAll('.nav-item')[3])"><div class="quick-icon" style="color:var(--neon-purple)">⚝</div><span class="quick-text">NEXUS</span></div>
-            <div class="quick-item" onclick="openTopupModal()"><div class="quick-icon" style="color:var(--text-muted)">◈</div><span class="quick-text">NODE</span></div>
+            <div class="quick-item" onclick="navTo('scannerPage', document.querySelectorAll('.nav-item')[2])">
+                <div class="quick-icon" style="color:var(--neon-cyan)">⚡</div>
+                <span class="quick-text">SCAN</span>
+            </div>
+            <div class="quick-item" onclick="navTo('watchlistPage', document.querySelectorAll('.nav-item')[1])">
+                <div class="quick-icon" style="color:var(--buy)">◎</div>
+                <span class="quick-text">RADAR</span>
+            </div>
+            <div class="quick-item" onclick="navTo('aiChatPage', document.querySelectorAll('.nav-item')[3])">
+                <div class="quick-icon" style="color:var(--neon-purple)">⚝</div>
+                <span class="quick-text">NEXUS</span>
+            </div>
+            <div class="quick-item" onclick="openTopupModal()">
+                <div class="quick-icon" style="color:var(--text-muted)">◈</div>
+                <span class="quick-text">NODE</span>
+            </div>
         </div>
 
         <div class="metric-grid">
@@ -228,23 +247,29 @@
         </div>
 
         <div class="glass-card ai-glow-card">
-            <h3 class="section-title"><span style="color:var(--neon-cyan); font-size:14px;">●</span> GLOBAL SENTIMENT STREAM</h3>
+            <h3 class="section-title"><span style="color:var(--neon-cyan); font-size:14px;">●</span> MARKET OVERVIEW (DELAYED)</h3>
             <p style="font-size: 11px; color: #cbd5e1; line-height: 1.6; font-family: 'JetBrains Mono', monospace;" id="ihsgOutlook">Initializing data stream...</p>
-            <!-- WIDGET CHART IHSG BARU -->
             <div id="tv_ihsg_chart" style="height: 180px; margin-top: 15px; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05);"></div>
         </div>
+
+        <div class="disclaimer-box" style="margin-top: 10px;">
+            Data bersifat tertunda (delayed). Bukan saran investasi. Keputusan sepenuhnya tanggung jawab pengguna.
+        </div>
     </div>
 
-    <!-- 3. RADAR / WATCHLIST -->
+    <!-- RADAR -->
     <div id="watchlistPage" class="view-section">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-            <h3 class="section-title" style="margin:0;"><span style="color:var(--buy)">◎</span> SMART MONEY RADAR</h3>
+            <h3 class="section-title" style="margin:0;"><span style="color:var(--buy)">◎</span> TECHNICAL RADAR</h3>
             <button id="btnUpdateRadar" onclick="forceUpdateRadar()" style="display:none; background: rgba(181, 55, 242, 0.15); border: 1px solid var(--neon-purple); color: #fff; border-radius: 8px; padding: 6px 10px; font-size: 10px; cursor: pointer; font-weight: bold;">🔄 SYNC DATA</button>
         </div>
-        <div id="fullWatchlistGrid"><div class="glass-card" style="text-align:center; padding:30px; color:var(--text-muted);">Menunggu sinkronisasi node...</div></div>
+        <div id="radarUpdated" style="font-size:10px; color:var(--text-muted); margin-bottom:12px; font-family:'JetBrains Mono';"></div>
+        <div id="fullWatchlistGrid">
+            <div class="glass-card" style="text-align:center; padding:30px; color:var(--text-muted);">Menunggu sinkronisasi...</div>
+        </div>
     </div>
 
-    <!-- 4. SCANNER MANUAL & RESULT -->
+    <!-- SCANNER -->
     <div id="scannerPage" class="view-section">
         <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px;">
             <div onclick="navTo('homePage', document.querySelectorAll('.nav-item')[0])" style="width:40px; height:40px; border-radius:12px; background:rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; cursor: pointer; color: #fff; font-size: 18px;">←</div>
@@ -253,23 +278,12 @@
 
         <div class="glass-card" style="text-align: center;">
             <input type="text" id="tickerInput" class="input-pro" placeholder="TICKER ID" style="text-align: center; font-size: 24px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px;">
-            <div class="upload-dropzone" onclick="document.getElementById('fileInput').click()">
-                <div style="font-size: 24px; margin-bottom: 10px;">👁️</div>
-                <div style="font-size: 10px; color: var(--text-muted); font-family: 'JetBrains Mono'; letter-spacing: 1px;" id="uploadText">UPLOAD BROKER SUMMARY<br>(OPTIONAL - VISION AI)</div>
-                <input type="file" id="fileInput" accept="image/*" onchange="handleImage(event)" style="display:none;">
-                <div id="previewContainer" style="display:none; position:relative; margin-top:10px;">
-                    <img id="imagePreview" src="" style="max-height:100px; border-radius:8px; border: 1px solid var(--neon-cyan);">
-                    <div onclick="removeImage(event)" style="position:absolute; top:-10px; right:-10px; background:var(--skip); width:25px; height:25px; border-radius:50%; color:white; font-weight:bold; cursor:pointer; display:flex; align-items:center; justify-content:center; z-index:10; font-size: 10px;">X</div>
-                </div>
-            </div>
             <button onclick="startEngine()" class="btn-pro" id="btnScan">EXECUTE ANALYSIS</button>
         </div>
         
         <div id="trackerBox" style="display: none; background: rgba(0, 0, 0, 0.6); border: 1px solid var(--neon-cyan); padding: 20px; border-radius: 16px; color: var(--neon-cyan); font-family: 'JetBrains Mono', monospace; font-size: 11px; margin-bottom: 20px;"></div>
 
-        <!-- HASIL ANALISIS -->
         <div id="resultBox" style="display: none;">
-            
             <div style="text-align:center; margin-bottom:15px;">
                 <div style="font-size:22px; font-weight:900; letter-spacing:2px; font-family: 'JetBrains Mono'; color: #fff; background: rgba(255,255,255,0.05); display:inline-block; padding: 8px 30px; border-radius:20px; border: 1px solid rgba(255,255,255,0.1);" id="outTicker">...</div>
             </div>
@@ -281,12 +295,17 @@
                 <div class="r-tab" onclick="switchResTab('tabAi', this)">🤖 NEXUS</div>
             </div>
 
-            <!-- TAB 1: TRADING PLAN -->
+            <!-- TAB PLAN -->
             <div id="tabPlan" class="tab-content active">
                 <div class="v5-box box-entry">
-                    <div class="v5-title" style="color:var(--buy)">STRICT ENTRY ZONE <span style="float:right; font-family:'JetBrains Mono'; font-size:14px; font-weight: 900;" id="v5EntryZone">-</span></div>
+                    <div class="v5-title" style="color:var(--buy)">
+                        ENTRY ZONE 
+                        <span style="float:right; font-family:'JetBrains Mono'; font-size:14px; font-weight: 900;" id="v5EntryZone">-</span>
+                    </div>
                     <div style="font-size:11px; color:var(--text-muted); line-height:1.5;" id="v5EntryDesc">-</div>
-                    <div style="font-size:10px; font-weight:bold; color:#fff; margin-top: 8px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px;">Trigger: <span id="v5Trigger">-</span></div>
+                    <div style="font-size:10px; font-weight:bold; color:#fff; margin-top: 8px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px;">
+                        Status: <span id="v5EntryStatus">-</span>
+                    </div>
                 </div>
 
                 <div class="metric-grid" style="margin-bottom: 15px;">
@@ -303,6 +322,7 @@
                 <div class="v5-box">
                     <div class="v5-row"><span>🎯 TP 2 (Max)</span><span class="v5-val" style="color:var(--neon-purple)" id="v5Tp2">-</span></div>
                     <div class="v5-row"><span>📐 Risk / Reward</span><span class="v5-val" id="v5RR">-</span></div>
+                    <div class="v5-row"><span>⚠️ Risk %</span><span class="v5-val" id="v5RiskPct">-</span></div>
                     <div class="v5-row" style="flex-direction: column; align-items: flex-start; gap: 8px; margin-top: 5px;">
                         <span style="color:var(--wait); font-weight:bold; font-size:10px;">🧭 Exit Trigger</span>
                         <span class="v5-val" style="color:var(--text-muted); font-size:11px; text-align:left; font-family:'Inter', sans-serif;" id="v5ExitTrigger">-</span>
@@ -323,75 +343,80 @@
                         <span class="v5-val" id="calcLot" style="color:var(--buy); font-size: 16px;">0 Lot</span>
                     </div>
                 </div>
+
+                <div class="disclaimer-box">
+                    Entry, SL, dan TP hanya bersifat edukatif berdasarkan data teknikal historis (delayed). Bukan rekomendasi investasi.
+                </div>
             </div>
 
-            <!-- TAB 2: METRICS -->
+            <!-- TAB METRICS -->
             <div id="tabMetrics" class="tab-content">
                 <div class="glass-card ai-glow-card" style="padding: 15px;">
                     <div style="text-align:center;">
-                        <div style="font-size:10px; color:var(--text-muted); letter-spacing: 1px; margin-bottom:5px;">STRUCTURED SCORING</div>
+                        <div style="font-size:10px; color:var(--text-muted); letter-spacing: 1px; margin-bottom:5px;">STRUCTURED SCORING V9</div>
                         <div style="font-size:54px; font-weight:900; font-family:'JetBrains Mono'; line-height: 1;" id="scoreTotalVal" class="gradient-text">0</div>
                     </div>
                     <div class="score-progress-bg" style="margin: 15px 0;">
                         <div class="score-progress-bar" id="scoreProgressBar" style="width: 0%; background: var(--skip);"></div>
                     </div>
                     
-                    <div class="v5-row"><span>Structure HH/HL/LL</span><span class="v5-val" id="scStruct">0</span></div>
-                    <div class="v5-row"><span>EMA 5 / 21 + Trend</span><span class="v5-val" id="scEma">0</span></div>
-                    <div class="v5-row"><span>MACD Momentum</span><span class="v5-val" id="scMacd">0</span></div>
-                    <div class="v5-row"><span>Fibo / Harmonic S&R</span><span class="v5-val" id="scFibo">0</span></div>
-                    <div class="v5-row"><span>Classic S&R</span><span class="v5-val" id="scClassic">0</span></div>
-                    <div class="v5-row"><span>Dynamic S&R (EMA)</span><span class="v5-val" id="scDynamic">0</span></div>
-                    <div class="v5-row"><span>Momentum + Vol</span><span class="v5-val" id="scMom">0</span></div>
-                    <div class="v5-row" style="border:none;"><span>Setup + R/R</span><span class="v5-val" id="scRr">0</span></div>
+                    <div class="v5-row"><span>Trend Strength</span><span class="v5-val" id="scTrend">0</span></div>
+                    <div class="v5-row"><span>Momentum Quality</span><span class="v5-val" id="scMomentum">0</span></div>
+                    <div class="v5-row"><span>Volume Confirmation</span><span class="v5-val" id="scVolume">0</span></div>
+                    <div class="v5-row"><span>Location (S/R)</span><span class="v5-val" id="scLocation">0</span></div>
+                    <div class="v5-row"><span>Price Action</span><span class="v5-val" id="scPriceAction">0</span></div>
+                    <div class="v5-row" style="border:none;"><span>Risk Structure</span><span class="v5-val" id="scRisk">0</span></div>
                 </div>
 
                 <div class="v5-box">
                     <div class="v5-title">LOGICAL PARAMETERS</div>
-                    <div class="v5-row"><span>Realtime Price</span><span class="v5-val" style="color:var(--neon-cyan)" id="v5Price">-</span></div>
+                    <div class="v5-row"><span>Price (Delayed)</span><span class="v5-val" style="color:var(--neon-cyan)" id="v5Price">-</span></div>
                     <div class="v5-row"><span>Arah Dominan</span><span class="v5-val" style="color:var(--wait)" id="v5Arah">-</span></div>
                     <div class="v5-row"><span>Struktur Swing</span><span class="v5-val" style="font-size:10px;" id="v5Swing">-</span></div>
-                    <div class="v5-row"><span>EMA 5 / 21</span><span class="v5-val" id="v5Ema">-</span></div>
-                    <div class="v5-row"><span>MACD</span><span class="v5-val" style="font-size:10px;" id="v5Macd">-</span></div>
+                    <div class="v5-row"><span>EMA 5 / 21 / 99</span><span class="v5-val" id="v5Ema">-</span></div>
+                    <div class="v5-row"><span>RSI / ADX</span><span class="v5-val" id="v5RsiAdx">-</span></div>
                     <div class="v5-row" style="border:none;"><span>Status Cross</span><span class="v5-val" style="font-size:10px;" id="v5Cross">-</span></div>
                 </div>
 
                 <div class="v5-box">
-                    <div class="v5-title" style="color:#e879f9;">📍 SUPPORT & RESISTANCE MAP</div>
+                    <div class="v5-title" style="color:#e879f9;">📍 SUPPORT & RESISTANCE</div>
                     <div class="v5-row"><span>Classic S/R</span><span class="v5-val" id="v5Classic">-</span></div>
                     <div class="v5-row"><span>Dynamic S/R (EMA)</span><span class="v5-val" id="v5Dynamic">-</span></div>
                     <div class="v5-row" style="border:none;"><span>Fibo S/R</span><span class="v5-val" id="v5Fibo">-</span></div>
                 </div>
             </div>
 
-            <!-- TAB 3: CHART (PERBAIKAN TICKER SANITASI) -->
+            <!-- TAB CHART -->
             <div id="tabChart" class="tab-content">
                 <div class="v5-box" style="padding: 10px; height: 350px;">
                     <div id="tv_mini_chart" style="width:100%; height:100%;"></div>
                 </div>
-                <div style="font-size:10px; color:var(--text-muted); text-align:center;">*Chart powered by TradingView</div>
+                <div style="font-size:10px; color:var(--text-muted); text-align:center;">*Chart powered by TradingView (data delayed)</div>
             </div>
 
-            <!-- TAB 4: NEXUS AI -->
+            <!-- TAB AI -->
             <div id="tabAi" class="tab-content">
                 <div class="glass-card">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                        <div class="v5-title" style="margin:0; color:var(--neon-purple);"><span style="font-size:14px;">✧</span> NEXUS INSIGHT</div>
+                        <div class="v5-title" style="margin:0; color:var(--neon-purple);">
+                            <span style="font-size:14px;">✧</span> NEXUS INSIGHT
+                        </div>
                         <button id="devilBtn" onclick="toggleDevilMode()" style="background: rgba(255,42,95,0.1); border: 1px solid var(--skip); color: var(--skip); border-radius: 8px; padding: 6px 12px; font-size: 9px; cursor: pointer; font-weight:900; letter-spacing: 1px;">STRESS TEST</button>
                     </div>
-                    <div id="aiChatConclusion" class="chat-bubble chat-typing"></div>
+                    <div id="aiChatConclusion" class="chat-bubble"></div>
                 </div>
             </div>
-
         </div>
     </div>
 
-    <!-- 5. CHAT AI -->
+    <!-- AI CHAT -->
     <div id="aiChatPage" class="view-section">
-        <h3 class="section-title"><span class="gradient-text" style="color:var(--neon-purple)">⚝</span> NEXUS INTELLIGENCE</h3>
+        <h3 class="section-title"><span class="gradient-text">⚝</span> NEXUS INTELLIGENCE</h3>
         <div class="ai-chat-window">
-            <div class="ai-chat-history" id="aiChatHistory"><div class="bot-msg">Sistem NEXUS Online. Ada data yang perlu saya proses? (1 Query = 1 Credit)</div></div>
-            <div class="ai-chat-input-area" style="display:flex; gap:8px; margin-top:10px;">
+            <div class="ai-chat-history" id="aiChatHistory">
+                <div class="bot-msg">Sistem NEXUS Online. Ada data yang perlu saya proses? (1 Query = 1 Credit)</div>
+            </div>
+            <div style="display:flex; gap:8px; margin-top:10px;">
                 <input type="text" id="aiChatInput" style="flex:1; padding:12px; border-radius:12px; background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.1); color:white; font-size:13px;" placeholder="Input query..." onkeypress="if(event.key==='Enter') sendGeneralChat()">
                 <button class="ai-search-btn" id="btnSendChat" onclick="sendGeneralChat()">↵</button>
             </div>
@@ -402,9 +427,9 @@
     <div class="modal-overlay" id="topupModal">
         <div class="modal-box">
             <h3 style="margin-bottom: 15px; font-size: 18px; color: #fff; font-family:'JetBrains Mono';">◈ NODE KONEKSI</h3>
-            <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 20px;">Pilih jalur enkripsi komunikasi:</p>
-            <button onclick="window.open('https://discord.gg/tTZX5xg4y', '_blank')" class="btn-pro" style="margin-bottom:12px; background: rgba(181, 55, 242, 0.15); border-color: var(--neon-purple); display:flex; justify-content:center; align-items:center; gap:8px;"><span style="font-size:16px;">👾</span> DISCORD SERVER</button>
-            <button onclick="window.open('https://wa.me/6281462364686?text=Halo%20Admin,%20saya%20ingin%20topup.', '_blank')" class="btn-pro" style="margin-bottom:20px; background: rgba(0, 255, 157, 0.15); border-color: var(--buy); display:flex; justify-content:center; align-items:center; gap:8px;"><span style="font-size:16px;">💬</span> SECURE CHAT (WA)</button>
+            <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 20px;">Pilih jalur komunikasi:</p>
+            <button onclick="window.open('https://discord.gg/tTZX5xg4y', '_blank')" class="btn-pro" style="margin-bottom:12px; background: rgba(181, 55, 242, 0.15); border-color: var(--neon-purple);">👾 DISCORD SERVER</button>
+            <button onclick="window.open('https://wa.me/6281462364686?text=Halo%20Admin,%20saya%20ingin%20topup.', '_blank')" class="btn-pro" style="margin-bottom:20px; background: rgba(0, 255, 157, 0.15); border-color: var(--buy);">💬 SECURE CHAT (WA)</button>
             <div onclick="closeTopupModal()" style="font-size: 11px; color: var(--skip); cursor: pointer; font-weight: bold; letter-spacing:1px;">[ TERMINATE ]</div>
         </div>
     </div>
@@ -421,16 +446,24 @@
     </div>
 </div>
 
-<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+<script src="https://s3.tradingview.com/tv.js"></script>
 <script>
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbzUkvjvuq4htt6VFPsMbEpnXGAWBSr_RufGp0tAcPBw1jBajlxESxwlz-6UGzJxDGCq/exec";
+    // ==================== CONFIG ====================
+    // GANTI DENGAN URL HASIL DEPLOY GOOGLE APPS SCRIPT V9
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbxiVS9I6_maUTtpSzawRyh8wflwqpBG-by8i9BOeQ_Ga93ChodJ7wbkPKojFy3X3B19/exec";
+    const SECRET_KEY = "NEXUS_V9_SK_4kP8mN2qR7vW3xY9zA1bC5dE6fG0hJ";
 
-    window.currentEntry = 0; window.currentSL = 0; 
-    let baseAnalysis = "", devilAnalysis = "", isDevilMode = false, currentRiskPercent = 0.02;
+    window.currentEntry = 0;
+    window.currentSL = 0;
+    let baseAnalysis = "";
+    let devilAnalysis = "";
+    let isDevilMode = false;
+    let currentRiskPercent = 0.02;
+    let sessionToken = null;
 
-    // FUNGSI NOTIFIKASI TOAST (PENGGANTI ALERT)
+    // ==================== HELPERS ====================
     function showToast(msg, isError = false) {
-        let toast = document.getElementById("toastNotif");
+        const toast = document.getElementById("toastNotif");
         toast.style.borderColor = isError ? "var(--skip)" : "var(--neon-cyan)";
         toast.style.boxShadow = isError ? "0 5px 20px rgba(255, 42, 95, 0.3)" : "0 5px 20px rgba(0, 229, 255, 0.3)";
         toast.innerText = msg.toUpperCase();
@@ -442,78 +475,282 @@
         const { timeout = 25000 } = options;
         const controller = new AbortController();
         const id = setTimeout(() => controller.abort(), timeout);
-        try { const response = await fetch(resource, { ...options, signal: controller.signal }); clearTimeout(id); return response; } 
-        catch (err) { clearTimeout(id); throw err; }
+        try {
+            const response = await fetch(resource, { ...options, signal: controller.signal });
+            clearTimeout(id);
+            return response;
+        } catch (err) {
+            clearTimeout(id);
+            throw err;
+        }
     }
 
+    // ==================== AUTH ====================
     window.onload = function() { checkAuth(); };
 
-    // FUNGSI CHART IHSG (BARU)
+    function checkAuth() {
+        const userStr = localStorage.getItem("gacor_user_v9");
+        if (userStr) {
+            try {
+                const user = JSON.parse(userStr);
+                if (user && user.username && user.token) {
+                    sessionToken = user.token;
+                    setupDashboard(user);
+                    navTo('homePage', document.querySelectorAll('.nav-item')[0]);
+                    document.getElementById("bottomNav").style.display = "flex";
+                    fetchRealtimeIHSG();
+                    return;
+                }
+            } catch (e) {}
+        }
+        localStorage.removeItem("gacor_user_v9");
+        sessionToken = null;
+        document.getElementById("bottomNav").style.display = "none";
+        navTo('loginPage');
+    }
+
+    function switchAuthTab(tab) {
+        document.getElementById("authMessage").style.display = "none";
+        document.getElementById('tabLogin').classList.remove('active');
+        document.getElementById('tabRegister').classList.remove('active');
+        if (tab === 'login') {
+            document.getElementById('formLogin').style.display = 'block';
+            document.getElementById('formRegister').style.display = 'none';
+            document.getElementById('tabLogin').classList.add('active');
+        } else {
+            document.getElementById('formLogin').style.display = 'none';
+            document.getElementById('formRegister').style.display = 'block';
+            document.getElementById('tabRegister').classList.add('active');
+        }
+    }
+
+    async function doLogin() {
+        const id = document.getElementById("loginId").value.trim();
+        const pass = document.getElementById("loginPass").value.trim();
+        const btn = document.getElementById("btnLogin");
+        const msg = document.getElementById("authMessage");
+
+        if (!id || !pass) {
+            msg.innerText = "INPUT REQUIRED!";
+            msg.style.color = "var(--skip)";
+            msg.style.display = "block";
+            return;
+        }
+
+        btn.innerText = "AUTHENTICATING...";
+        btn.disabled = true;
+        msg.style.display = "none";
+
+        try {
+            const res = await fetchWithTimeout(GAS_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({
+                    action: "auth",
+                    type: "login",
+                    login_id: id,
+                    password: pass,
+                    key: SECRET_KEY
+                }),
+                timeout: 15000
+            });
+            const data = await res.json();
+            
+            if (data.status === "success") {
+                sessionToken = data.token;
+                localStorage.setItem("gacor_user_v9", JSON.stringify(data));
+                checkAuth();
+            } else {
+                msg.innerText = "ACCESS DENIED: " + (data.message || "").toUpperCase();
+                msg.style.color = "var(--skip)";
+                msg.style.display = "block";
+            }
+        } catch (e) {
+            msg.innerText = "SERVER TIMEOUT.";
+            msg.style.color = "var(--skip)";
+            msg.style.display = "block";
+        } finally {
+            btn.innerText = "INISIALISASI SISTEM";
+            btn.disabled = false;
+        }
+    }
+
+    async function doRegister() {
+        const user = document.getElementById("regId").value.trim();
+        const pass1 = document.getElementById("regPass").value.trim();
+        const pass2 = document.getElementById("regPass2").value.trim();
+        const invite = document.getElementById("regInvite").value.trim();
+        const btn = document.getElementById("btnRegister");
+        const msg = document.getElementById("authMessage");
+
+        if (!user || !pass1) {
+            msg.innerText = "INPUT REQUIRED!";
+            msg.style.color = "var(--skip)";
+            msg.style.display = "block";
+            return;
+        }
+        if (pass1 !== pass2) {
+            msg.innerText = "PASSWORD MISMATCH!";
+            msg.style.color = "var(--skip)";
+            msg.style.display = "block";
+            return;
+        }
+        if (user.length < 4) {
+            msg.innerText = "MIN 4 CHARACTERS!";
+            msg.style.color = "var(--skip)";
+            msg.style.display = "block";
+            return;
+        }
+        if (pass1.length < 6) {
+            msg.innerText = "PASSWORD MIN 6 CHAR!";
+            msg.style.color = "var(--skip)";
+            msg.style.display = "block";
+            return;
+        }
+
+        btn.innerText = "PROCESSING...";
+        btn.disabled = true;
+        msg.style.display = "none";
+
+        try {
+            const res = await fetchWithTimeout(GAS_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({
+                    action: "auth",
+                    type: "register",
+                    username: user,
+                    password: pass1,
+                    invite: invite,
+                    key: SECRET_KEY
+                }),
+                timeout: 15000
+            });
+            const data = await res.json();
+            
+            if (data.status === "success") {
+                msg.innerText = "NODE CREATED! PLEASE LOGIN.";
+                msg.style.color = "var(--buy)";
+                msg.style.display = "block";
+                setTimeout(() => switchAuthTab('login'), 2000);
+            } else {
+                msg.innerText = "ERROR: " + (data.message || "").toUpperCase();
+                msg.style.color = "var(--skip)";
+                msg.style.display = "block";
+            }
+        } catch (e) {
+            msg.innerText = "TIMEOUT.";
+            msg.style.color = "var(--skip)";
+            msg.style.display = "block";
+        } finally {
+            btn.innerText = "BUAT AKSES";
+            btn.disabled = false;
+        }
+    }
+
+    function doLogout() {
+        localStorage.removeItem("gacor_user_v9");
+        sessionToken = null;
+        checkAuth();
+    }
+
+    function setupDashboard(data) {
+        document.getElementById("uiUsername").innerText = data.username.toUpperCase();
+        document.getElementById("uiAvatar").innerText = data.username.charAt(0).toUpperCase();
+        document.getElementById("uiSaldo").innerText = "Rp " + Number(data.saldo || 0).toLocaleString('id-ID');
+        document.getElementById("uiKuota").innerText = data.kuota;
+        if (data.role === "ADMIN") {
+            document.getElementById("uiRoleBadge").style.display = "inline-block";
+            document.getElementById("btnUpdateRadar").style.display = "block";
+        } else {
+            document.getElementById("uiRoleBadge").style.display = "none";
+            document.getElementById("btnUpdateRadar").style.display = "none";
+        }
+    }
+
+    function updateLocalQuota(remaining, saldo) {
+        const userStr = localStorage.getItem("gacor_user_v9");
+        if (!userStr) return;
+        try {
+            const user = JSON.parse(userStr);
+            user.kuota = remaining;
+            user.saldo = saldo;
+            localStorage.setItem("gacor_user_v9", JSON.stringify(user));
+            document.getElementById("uiKuota").innerText = remaining;
+            document.getElementById("uiSaldo").innerText = "Rp " + Number(saldo).toLocaleString('id-ID');
+        } catch (e) {}
+    }
+
+    // ==================== NAVIGATION ====================
+    function navTo(pageId, navElement) {
+        document.querySelectorAll('.view-section').forEach(el => el.classList.remove('view-active'));
+        document.getElementById(pageId).classList.add('view-active');
+        if (navElement) {
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            navElement.classList.add('active');
+        }
+        window.scrollTo(0, 0);
+        if (pageId === 'watchlistPage') loadTop10();
+    }
+
+    function openTopupModal() { document.getElementById("topupModal").style.display = "flex"; }
+    function closeTopupModal() { document.getElementById("topupModal").style.display = "none"; }
+
+    function scanFromHome() {
+        const val = document.getElementById('homeSearchInput').value.trim();
+        if (!val) return;
+        if (val.length <= 5 && !val.includes(" ")) {
+            navTo('scannerPage', document.querySelectorAll('.nav-item')[2]);
+            document.getElementById('tickerInput').value = val;
+            startEngine();
+        } else {
+            navTo('aiChatPage', document.querySelectorAll('.nav-item')[3]);
+            document.getElementById('aiChatInput').value = val;
+            sendGeneralChat();
+        }
+    }
+
+    // ==================== CHART ====================
     function renderIHSGChart() {
-        let container = document.getElementById("tv_ihsg_chart");
-        if(!container) return;
+        const container = document.getElementById("tv_ihsg_chart");
+        if (!container || typeof TradingView === "undefined") return;
         container.innerHTML = "";
         new TradingView.widget({
-          "autosize": true,
-          "symbol": "IDX:COMPOSITE",
-          "interval": "D",
-          "timezone": "Asia/Jakarta",
-          "theme": "dark",
-          "style": "2", // Mode Line (Cocok untuk Indeks)
-          "locale": "id",
-          "enable_publishing": false,
-          "hide_top_toolbar": true,
-          "hide_legend": true,
-          "save_image": false,
-          "container_id": "tv_ihsg_chart",
-          "backgroundColor": "rgba(0,0,0,0)"
+            autosize: true, symbol: "IDX:COMPOSITE", interval: "D", timezone: "Asia/Jakarta",
+            theme: "dark", style: "2", locale: "id", enable_publishing: false,
+            hide_top_toolbar: true, hide_legend: true, save_image: false,
+            container_id: "tv_ihsg_chart", backgroundColor: "rgba(0,0,0,0)"
+        });
+    }
+
+    function renderMiniChart(ticker) {
+        if (typeof TradingView === "undefined") return;
+        const cleanTicker = ticker.replace(".JK", "").trim().toUpperCase();
+        document.getElementById("tv_mini_chart").innerHTML = "";
+        new TradingView.widget({
+            autosize: true, symbol: "IDX:" + cleanTicker, interval: "D", timezone: "Asia/Jakarta",
+            theme: "dark", style: "1", locale: "id", enable_publishing: false,
+            hide_top_toolbar: true, hide_legend: true, save_image: false,
+            container_id: "tv_mini_chart", backgroundColor: "rgba(0,0,0,0)"
         });
     }
 
     async function fetchRealtimeIHSG() {
         try {
-            let res = await fetchWithTimeout(GAS_URL + "?action=getIHSG", { timeout: 10000 });
-            let data = await res.json();
-            if(data.status === "success") document.getElementById("ihsgOutlook").innerHTML = data.outlook;
-            else document.getElementById("ihsgOutlook").innerHTML = "Error fetching data stream.";
-        } catch(e) { document.getElementById("ihsgOutlook").innerHTML = "Connection timeout. Relinking node..."; }
-        renderIHSGChart(); // Render chart setelah fetch
-    }
-
-    // PROTEKSI LOCALSTORAGE CRASH
-    function checkAuth() {
-        let userStr = localStorage.getItem("gacor_user");
-        if(userStr) { 
-            try {
-                let user = JSON.parse(userStr);
-                if(user && user.username) {
-                    setupDashboard(user); 
-                    navTo('homePage', document.querySelectorAll('.nav-item')[0]); 
-                    document.getElementById("bottomNav").style.display = "flex"; 
-                    fetchRealtimeIHSG();
-                    return;
-                }
-            } catch(e) { console.log("Data session invalid, mereset..."); }
+            const res = await fetchWithTimeout(GAS_URL + "?action=getIHSG&key=" + encodeURIComponent(SECRET_KEY), { timeout: 10000 });
+            const data = await res.json();
+            if (data.status === "success") {
+                document.getElementById("ihsgOutlook").innerHTML = data.outlook;
+            } else {
+                document.getElementById("ihsgOutlook").innerHTML = "Error fetching data.";
+            }
+        } catch (e) {
+            document.getElementById("ihsgOutlook").innerHTML = "Connection timeout.";
         }
-        // Jika gagal / tidak ada user
-        localStorage.removeItem("gacor_user");
-        document.getElementById("bottomNav").style.display = "none"; 
-        navTo('loginPage'); 
+        setTimeout(renderIHSGChart, 800);
     }
 
-    function switchAuthTab(tab) {
-        let msg = document.getElementById("authMessage"); msg.style.display = "none";
-        document.getElementById('tabLogin').classList.remove('active');
-        document.getElementById('tabRegister').classList.remove('active');
-        if (tab === 'login') {
-            document.getElementById('formLogin').style.display = 'block'; document.getElementById('formRegister').style.display = 'none';
-            document.getElementById('tabLogin').classList.add('active');
-        } else {
-            document.getElementById('formLogin').style.display = 'none'; document.getElementById('formRegister').style.display = 'block';
-            document.getElementById('tabRegister').classList.add('active');
-        }
-    }
-
+    // ==================== SCAN ENGINE ====================
     function switchResTab(tabId, el) {
         document.querySelectorAll('.r-tab').forEach(t => t.classList.remove('active'));
         el.classList.add('active');
@@ -521,244 +758,337 @@
         document.getElementById(tabId).classList.add('active');
     }
 
-    async function doLogin() {
-        let id = document.getElementById("loginId").value.trim(), pass = document.getElementById("loginPass").value.trim();
-        let btn = document.getElementById("btnLogin"), msg = document.getElementById("authMessage");
-        if(!id || !pass) { msg.innerText = "INPUT REQUIRED!"; msg.style.color = "var(--skip)"; msg.style.display = "block"; return; }
-        btn.innerText = "AUTHENTICATING..."; btn.disabled = true; msg.style.display = "none";
-        try {
-            let res = await fetchWithTimeout(`${GAS_URL}?action=auth&type=login&login_id=${encodeURIComponent(id)}&password=${encodeURIComponent(pass)}`, { timeout: 15000 });
-            let data = await res.json();
-            if(data.status === "success") { localStorage.setItem("gacor_user", JSON.stringify(data)); checkAuth(); } 
-            else { msg.innerText = "ACCESS DENIED: " + data.message.toUpperCase(); msg.style.color = "var(--skip)"; msg.style.display = "block"; }
-        } catch (e) { msg.innerText = "SERVER TIMEOUT."; msg.style.color = "var(--skip)"; msg.style.display = "block"; } 
-        finally { btn.innerText = "INISIALISASI SISTEM"; btn.disabled = false; }
-    }
-
-    async function doRegister() {
-        let user = document.getElementById("regId").value.trim(), pass1 = document.getElementById("regPass").value.trim(), pass2 = document.getElementById("regPass2").value.trim();
-        let btn = document.getElementById("btnRegister"), msg = document.getElementById("authMessage");
-        if(!user || !pass1) { msg.innerText = "INPUT REQUIRED!"; msg.style.color = "var(--skip)"; msg.style.display = "block"; return; }
-        if(pass1 !== pass2) { msg.innerText = "PASSWORD MISMATCH!"; msg.style.color = "var(--skip)"; msg.style.display = "block"; return; }
-        if(user.length < 4) { msg.innerText = "MIN 4 CHARACTERS!"; msg.style.color = "var(--skip)"; msg.style.display = "block"; return; }
-        btn.innerText = "PROCESSING..."; btn.disabled = true; msg.style.display = "none";
-        try {
-            let res = await fetchWithTimeout(`${GAS_URL}?action=auth&type=register&username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass1)}`, { timeout: 15000 });
-            let data = await res.json();
-            if(data.status === "success") { msg.innerText = "NODE CREATED! PLEASE LOGIN."; msg.style.color = "var(--buy)"; msg.style.display = "block"; setTimeout(() => switchAuthTab('login'), 2000); } 
-            else { msg.innerText = "ERROR: " + data.message.toUpperCase(); msg.style.color = "var(--skip)"; msg.style.display = "block"; }
-        } catch (e) { msg.innerText = "TIMEOUT."; msg.style.color = "var(--skip)"; msg.style.display = "block"; } 
-        finally { btn.innerText = "BUAT AKSES"; btn.disabled = false; }
-    }
-
-    function doLogout() { localStorage.removeItem("gacor_user"); checkAuth(); }
-
-    function setupDashboard(data) {
-        document.getElementById("uiUsername").innerText = data.username.toUpperCase();
-        document.getElementById("uiAvatar").innerText = data.username.charAt(0).toUpperCase();
-        document.getElementById("uiSaldo").innerText = "Rp " + data.saldo.toLocaleString('id-ID');
-        document.getElementById("uiKuota").innerText = data.kuota;
-        if (data.role === "ADMIN") { document.getElementById("uiRoleBadge").style.display = "inline-block"; document.getElementById("btnUpdateRadar").style.display = "block"; } 
-        else { document.getElementById("uiRoleBadge").style.display = "none"; document.getElementById("btnUpdateRadar").style.display = "none"; }
-    }
-
-    function navTo(pageId, navElement) {
-        document.querySelectorAll('.view-section').forEach(el => el.classList.remove('view-active'));
-        document.getElementById(pageId).classList.add('view-active');
-        if(navElement) { document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active')); navElement.classList.add('active'); }
-        window.scrollTo(0,0);
-        if(pageId === 'watchlistPage') loadTop10();
-    }
-    
-    function openTopupModal() { document.getElementById("topupModal").style.display = "flex"; }
-    function closeTopupModal() { document.getElementById("topupModal").style.display = "none"; }
-    
-    function scanFromHome() { 
-        let val = document.getElementById('homeSearchInput').value.trim(); 
-        if(!val) return; 
-        if(val.length <= 4 && !val.includes(" ")) { navTo('scannerPage', document.querySelectorAll('.nav-item')[2]); document.getElementById('tickerInput').value = val; startEngine(); } 
-        else { navTo('aiChatPage', document.querySelectorAll('.nav-item')[3]); document.getElementById('aiChatInput').value = val; sendGeneralChat(); } 
-    }
-
-    async function deductUserQuota() {
-        let userData = JSON.parse(localStorage.getItem("gacor_user"));
-        if(userData.role === "ADMIN") return true;
-        if(userData.kuota <= 0 && userData.saldo < 1000) { showToast("Credit depleted & insufficient funds.", true); openTopupModal(); return false; }
-        try {
-            let res = await fetchWithTimeout(`${GAS_URL}?action=deduct_quota&username=${encodeURIComponent(userData.username)}&_t=${Date.now()}`, { timeout: 15000 });
-            let data = await res.json();
-            if(data.status === "success") {
-                userData.kuota = data.remaining; userData.saldo = data.saldo;
-                localStorage.setItem("gacor_user", JSON.stringify(userData));
-                document.getElementById("uiKuota").innerText = userData.kuota;
-                document.getElementById("uiSaldo").innerText = "Rp " + userData.saldo.toLocaleString('id-ID');
-                return true;
-            } else { showToast(data.message, true); return false; }
-        } catch (e) { showToast("Payment Timeout.", true); return false; }
-    }
-
-    let hasImage = false, imageDataUrl = ""; 
-    function handleImage(event) { 
-        const file = event.target.files[0]; if (!file) return; 
-        const reader = new FileReader(); 
-        reader.onload = function(e) { 
-            const img = new Image();
-            img.onload = function() {
-                const canvas = document.createElement('canvas');
-                let scaleSize = 600 / img.width; if(scaleSize > 1) scaleSize = 1;
-                canvas.width = img.width * scaleSize; canvas.height = img.height * scaleSize;
-                const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                imageDataUrl = canvas.toDataURL('image/jpeg', 0.6); 
-                document.getElementById('imagePreview').src = imageDataUrl; 
-                document.getElementById('previewContainer').style.display = 'inline-block'; 
-                document.getElementById('uploadText').style.display = 'none'; 
-                hasImage = true; 
-            }; img.src = e.target.result;
-        }; reader.readAsDataURL(file); 
-    }
-    function removeImage(e) { e.stopPropagation(); document.getElementById('fileInput').value = ""; document.getElementById('imagePreview').src = ""; imageDataUrl = ""; document.getElementById('previewContainer').style.display = 'none'; document.getElementById('uploadText').style.display = 'block'; hasImage = false; }
-
-    // RENDER TRADINGVIEW MINI CHART (PERBAIKAN SANITASI TICKER)
-    function renderMiniChart(ticker) {
-        let cleanTicker = ticker.replace(".JK", "").trim().toUpperCase();
-        document.getElementById("tv_mini_chart").innerHTML = "";
-        new TradingView.widget({
-          "autosize": true,
-          "symbol": "IDX:" + cleanTicker,
-          "interval": "D",
-          "timezone": "Asia/Jakarta",
-          "theme": "dark",
-          "style": "1",
-          "locale": "id",
-          "enable_publishing": false,
-          "hide_top_toolbar": true,
-          "hide_legend": true,
-          "save_image": false,
-          "container_id": "tv_mini_chart",
-          "backgroundColor": "rgba(0,0,0,0)"
-        });
-    }
-
     async function startEngine() {
-        let ticker = document.getElementById("tickerInput").value.trim().toUpperCase();
+        const ticker = document.getElementById("tickerInput").value.trim().toUpperCase();
         if (!ticker) return;
-        let btn = document.getElementById('btnScan');
-        btn.innerText = "VERIFYING CREDIT..."; btn.disabled = true;
+        if (!sessionToken) {
+            showToast("Sesi tidak valid. Silakan login ulang.", true);
+            doLogout();
+            return;
+        }
 
-        let hasQuota = await deductUserQuota(); 
-        if(!hasQuota) { btn.innerText = "EXECUTE ANALYSIS"; btn.disabled = false; return; }
+        const btn = document.getElementById('btnScan');
+        btn.innerText = "NEXUS COMPUTING...";
+        btn.disabled = true;
 
         document.getElementById("resultBox").style.display = "none";
-        let tb = document.getElementById("trackerBox"); 
+        const tb = document.getElementById("trackerBox");
         tb.style.display = "block";
-        btn.innerText = "NEXUS COMPUTING...";
-        tb.innerHTML = `<div style="font-weight:bold; margin-bottom:10px; color: #fff;">> SYSTEM INITIALIZING...</div><div id="trackerLog"><div>> Extracting Exchange Data & Running Algorithmic Scans...</div></div>`;
-        
-        let payload = { action: "scan", ticker: ticker };
-        if (hasImage && imageDataUrl) payload.imageData = imageDataUrl;
+        tb.innerHTML = `<div style="font-weight:bold; margin-bottom:10px; color: #fff;">> SYSTEM INITIALIZING...</div><div>> Extracting data & running analysis...</div>`;
 
         try {
-            let response = await fetchWithTimeout(GAS_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload), timeout: 30000 });
-            let result = await response.json();
-            if (result.status === "error") throw new Error(result.message);
-            
-            tb.style.display = "none"; document.getElementById("resultBox").style.display = "block"; 
-            
-            // Render Chart di background menggunakan format aman
+            const response = await fetchWithTimeout(GAS_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({
+                    action: "scan",
+                    ticker: ticker,
+                    token: sessionToken,
+                    key: SECRET_KEY
+                }),
+                timeout: 35000
+            });
+            const result = await response.json();
+
+            if (result.status === "error") {
+                if (result.message && result.message.includes("Sesi tidak valid")) {
+                    showToast("Sesi berakhir. Silakan login ulang.", true);
+                    doLogout();
+                    return;
+                }
+                throw new Error(result.message);
+            }
+
+            if (result.remaining !== undefined) {
+                updateLocalQuota(result.remaining, result.saldo);
+            }
+
+            tb.style.display = "none";
+            document.getElementById("resultBox").style.display = "block";
+
             renderMiniChart(result.ticker || ticker);
-            // Default kembali ke Tab Plan
             switchResTab('tabPlan', document.querySelectorAll('.r-tab')[0]);
 
-            let data = result.data, ind = data.indicators, sd = data.scoreDetails;
-            document.getElementById("outTicker").innerText = `$${result.ticker || ticker}`; 
-            
-            let scoreVal = document.getElementById("scoreTotalVal");
-            let scoreBar = document.getElementById("scoreProgressBar");
-            scoreVal.innerText = data.score; scoreBar.style.width = data.score + "%";
-            if (data.score < 50) { scoreVal.style.color = "var(--skip)"; scoreBar.style.background = "var(--skip)"; scoreBar.style.boxShadow = "0 0 10px var(--skip)"; }
-            else if (data.score < 70) { scoreVal.style.color = "var(--wait)"; scoreBar.style.background = "var(--wait)"; scoreBar.style.boxShadow = "0 0 10px var(--wait)"; }
-            else { scoreVal.style.color = "var(--buy)"; scoreBar.style.background = "var(--buy)"; scoreBar.style.boxShadow = "0 0 10px var(--buy)"; }
+            const data = result.data || {};
+            const ind = data.indicators || {};
+            const sd = data.scoreDetails || {};
 
-            document.getElementById("scStruct").innerText = sd.struct; document.getElementById("scEma").innerText = sd.ema; document.getElementById("scMacd").innerText = sd.macd;
-            document.getElementById("scFibo").innerText = sd.fibo; document.getElementById("scClassic").innerText = sd.classic; document.getElementById("scDynamic").innerText = sd.dynamic;
-            document.getElementById("scMom").innerText = sd.mom; document.getElementById("scRr").innerText = sd.rr;
-            document.getElementById("v5Price").innerText = ind.price; document.getElementById("v5Arah").innerText = ind.arahDominan; document.getElementById("v5Swing").innerText = ind.strukturSwing;
-            document.getElementById("v5Ema").innerText = `${ind.ema5} / ${ind.ema21}`; document.getElementById("v5Macd").innerText = `${ind.macdStatus} • Hist ${ind.macdValue}`; document.getElementById("v5Cross").innerText = ind.crossStatus;
-            document.getElementById("v5Classic").innerText = `${ind.swingLow} / ${ind.swingHigh}`; document.getElementById("v5Dynamic").innerText = `${ind.ema21} / ${ind.ema99}`; document.getElementById("v5Fibo").innerText = `${ind.fib618} / ${ind.fib382}`;
+            document.getElementById("outTicker").innerText = "$" + (result.ticker || ticker);
 
-            window.currentEntry = data.plan.entry; window.currentSL = data.plan.sl;
-            document.getElementById("v5EntryZone").innerText = `${Math.round(window.currentEntry*0.99)} - ${Math.round(window.currentEntry*1.01)}`;
-            document.getElementById("v5EntryDesc").innerText = ind.entryDesc; document.getElementById("v5Trigger").innerText = ind.entryTrig;
-            document.getElementById("v5Sl").innerText = `${window.currentSL}`; document.getElementById("v5Tp1").innerText = `${data.plan.tp}`;
-            document.getElementById("v5Tp2").innerText = `${data.plan.tp2}`; document.getElementById("v5RR").innerText = `${ind.rrRatio}R`; document.getElementById("v5ExitTrigger").innerText = ind.exitTrig;
+            const scoreVal = document.getElementById("scoreTotalVal");
+            const scoreBar = document.getElementById("scoreProgressBar");
+            const score = data.score || 0;
+            scoreVal.innerText = score;
+            scoreBar.style.width = score + "%";
 
-            baseAnalysis = (result.ai && result.ai.baseAnalysis) ? result.ai.baseAnalysis : "NEXUS Core offline for this ticker."; 
+            if (score < 50) {
+                scoreVal.style.color = "var(--skip)";
+                scoreBar.style.background = "var(--skip)";
+            } else if (score < 70) {
+                scoreVal.style.color = "var(--wait)";
+                scoreBar.style.background = "var(--wait)";
+            } else {
+                scoreVal.style.color = "var(--buy)";
+                scoreBar.style.background = "var(--buy)";
+            }
+
+            document.getElementById("scTrend").innerText = sd.trend || 0;
+            document.getElementById("scMomentum").innerText = sd.momentum || 0;
+            document.getElementById("scVolume").innerText = sd.volume || 0;
+            document.getElementById("scLocation").innerText = sd.location || 0;
+            document.getElementById("scPriceAction").innerText = sd.priceAction || 0;
+            document.getElementById("scRisk").innerText = sd.risk || 0;
+
+            document.getElementById("v5Price").innerText = ind.price || "-";
+            document.getElementById("v5Arah").innerText = ind.arahDominan || "-";
+            document.getElementById("v5Swing").innerText = ind.strukturSwing || "-";
+            document.getElementById("v5Ema").innerText = (ind.ema5 || "-") + " / " + (ind.ema21 || "-") + " / " + (ind.ema99 || "-");
+            document.getElementById("v5RsiAdx").innerText = "RSI " + (ind.rsi || "-") + " | ADX " + (ind.adx || "-");
+            document.getElementById("v5Cross").innerText = ind.crossStatus || "-";
+            document.getElementById("v5Classic").innerText = (ind.swingLow || "-") + " / " + (ind.swingHigh || "-");
+            document.getElementById("v5Dynamic").innerText = (ind.ema21 || "-") + " / " + (ind.ema99 || "-");
+            document.getElementById("v5Fibo").innerText = (ind.fib618 || "-") + " / " + (ind.fib382 || "-");
+
+            window.currentEntry = (data.plan && data.plan.entry) ? data.plan.entry : 0;
+            window.currentSL = (data.plan && data.plan.sl) ? data.plan.sl : 0;
+
+            document.getElementById("v5EntryZone").innerText = Math.round(window.currentEntry * 0.99) + " - " + Math.round(window.currentEntry * 1.01);
+            document.getElementById("v5EntryDesc").innerText = ind.entryDesc || "-";
+            document.getElementById("v5EntryStatus").innerText = ind.entryStatus || "-";
+            document.getElementById("v5Sl").innerText = window.currentSL || "-";
+            document.getElementById("v5Tp1").innerText = (data.plan && data.plan.tp) ? data.plan.tp : "-";
+            document.getElementById("v5Tp2").innerText = (data.plan && data.plan.tp2) ? data.plan.tp2 : "-";
+            document.getElementById("v5RR").innerText = (ind.rrRatio || "-") + "R";
+            document.getElementById("v5RiskPct").innerText = (ind.riskPct || "-") + "%";
+            document.getElementById("v5ExitTrigger").innerText = ind.exitTrig || "-";
+
+            baseAnalysis = (result.ai && result.ai.baseAnalysis) ? result.ai.baseAnalysis : "NEXUS Core offline.";
             devilAnalysis = (result.ai && result.ai.devilAnalysis) ? result.ai.devilAnalysis : "Risk parameters unavailable.";
-            isDevilMode = true; toggleDevilMode(); calculateLots();
-        } catch (error) { 
-            let errText = error.name === 'AbortError' ? "SERVER TIMEOUT." : error.message; 
-            showToast("System Error: " + errText, true); 
-            tb.style.display = "none"; 
-        } finally { btn.innerText = "EXECUTE ANALYSIS"; btn.disabled = false; }
+            
+            isDevilMode = false;
+            updateDevilUI();
+            calculateLots();
+
+        } catch (error) {
+            const errText = error.name === 'AbortError' ? "SERVER TIMEOUT." : error.message;
+            showToast("System Error: " + errText, true);
+            tb.style.display = "none";
+        } finally {
+            btn.innerText = "EXECUTE ANALYSIS";
+            btn.disabled = false;
+        }
+    }
+
+    function updateDevilUI() {
+        const btn = document.getElementById('devilBtn');
+        const box = document.getElementById('aiChatConclusion');
+        
+        if (isDevilMode) {
+            btn.innerText = "[ UNDO ]";
+            btn.style.background = "rgba(0,255,157,0.15)";
+            btn.style.color = "var(--buy)";
+            btn.style.borderColor = "var(--buy)";
+            box.style.borderLeftColor = "var(--skip)";
+            box.innerHTML = devilAnalysis;
+        } else {
+            btn.innerText = "STRESS TEST";
+            btn.style.background = "rgba(255,42,95,0.15)";
+            btn.style.color = "var(--skip)";
+            btn.style.borderColor = "var(--skip)";
+            box.style.borderLeftColor = "var(--neon-purple)";
+            box.innerHTML = baseAnalysis;
+        }
     }
 
     function toggleDevilMode() {
         isDevilMode = !isDevilMode;
-        let btn = document.getElementById('devilBtn'), box = document.getElementById('aiChatConclusion');
-        if(isDevilMode) { btn.innerText = "[ UNDO ]"; btn.style.background = "rgba(0,255,157,0.15)"; btn.style.color = "var(--buy)"; btn.style.borderColor = "var(--buy)"; box.style.borderLeftColor = "var(--skip)"; box.innerHTML = devilAnalysis; } 
-        else { btn.innerText = "STRESS TEST"; btn.style.background = "rgba(255,42,95,0.15)"; btn.style.color = "var(--skip)"; btn.style.borderColor = "var(--skip)"; box.style.borderLeftColor = "var(--neon-purple)"; box.innerHTML = baseAnalysis; }
+        updateDevilUI();
     }
 
-    function setRisk(btnEl) { document.querySelectorAll('.risk-btn').forEach(b => b.classList.remove('active')); btnEl.classList.add('active'); currentRiskPercent = parseFloat(btnEl.getAttribute('data-risk')); calculateLots(); }
-    
-    // PERBAIKAN VALIDASI ANGKA NEGATIF
+    function setRisk(btnEl) {
+        document.querySelectorAll('.risk-btn').forEach(b => b.classList.remove('active'));
+        btnEl.classList.add('active');
+        currentRiskPercent = parseFloat(btnEl.getAttribute('data-risk'));
+        calculateLots();
+    }
+
     function calculateLots() {
-        let inputVal = document.getElementById("capitalInput").value;
-        let calcTarget = document.getElementById("calcLot");
-        if(!inputVal || inputVal.trim() === "") { calcTarget.innerText = "Input Funds"; return; }
-        
-        let capital = parseFloat(inputVal);
-        if(isNaN(capital) || capital <= 0) { calcTarget.innerText = "Invalid Num"; return; }
-        if(window.currentEntry === 0) return;
-        
-        let lossPerShare = window.currentEntry - window.currentSL; 
-        if(lossPerShare <= 0) { calcTarget.innerText = "SL Error"; return; }
-        let maxLots = Math.min(Math.floor((capital * currentRiskPercent) / (lossPerShare * 100)), Math.floor(capital / (window.currentEntry * 100)));
-        
-        if (maxLots <= 0) { calcTarget.innerText = "INSUFFICIENT"; } else { calcTarget.innerText = maxLots + " Lot"; }
+        const inputVal = document.getElementById("capitalInput").value;
+        const calcTarget = document.getElementById("calcLot");
+        if (!inputVal || inputVal.trim() === "") {
+            calcTarget.innerText = "Input Funds";
+            return;
+        }
+        const capital = parseFloat(inputVal);
+        if (isNaN(capital) || capital <= 0) {
+            calcTarget.innerText = "Invalid Num";
+            return;
+        }
+        if (window.currentEntry === 0) return;
+
+        const lossPerShare = window.currentEntry - window.currentSL;
+        if (lossPerShare <= 0) {
+            calcTarget.innerText = "SL Error";
+            return;
+        }
+        const maxLots = Math.min(
+            Math.floor((capital * currentRiskPercent) / (lossPerShare * 100)),
+            Math.floor(capital / (window.currentEntry * 100))
+        );
+        calcTarget.innerText = maxLots <= 0 ? "INSUFFICIENT" : maxLots + " Lot";
     }
 
+    // ==================== RADAR ====================
     async function loadTop10() {
         try {
-            let res = await fetchWithTimeout(GAS_URL + "?action=getTop10", { timeout: 15000 });
-            let response = await res.json(); let html = "";
-            if(response.data && response.data.length > 0) {
-                response.data.forEach(d => { 
-                    html += `<div class="radar-card" onclick="document.getElementById('tickerInput').value='${d.ticker}'; startEngine(); navTo('scannerPage', document.querySelectorAll('.nav-item')[2]);"><div style="display:flex; gap:12px; align-items:center;"><div style="width:45px; height:45px; background:rgba(181, 55, 242,0.1); color:var(--neon-purple); border-radius:14px; display:flex; align-items:center; justify-content:center; font-weight:900; font-family:'JetBrains Mono'; border: 1px solid rgba(181,55,242,0.3);">${d.ticker.substring(0,2)}</div><div><div style="font-weight:900; font-size:16px; color:#fff; font-family:'JetBrains Mono';">${d.ticker}</div><div style="font-size:10px; color:var(--text-muted); font-weight:bold; letter-spacing:1px; margin-top:2px;">${d.setup}</div></div></div><div style="text-align:right;"><div style="font-weight:900; font-size:22px; color:var(--buy); font-family:'JetBrains Mono'; text-shadow: 0 0 10px rgba(0,255,157,0.3);">${d.score}</div></div></div>`; 
+            const res = await fetchWithTimeout(GAS_URL + "?action=getTop10&key=" + encodeURIComponent(SECRET_KEY), { timeout: 15000 });
+            const response = await res.json();
+            let html = "";
+
+            if (response.updatedAt) {
+                const dt = new Date(response.updatedAt);
+                document.getElementById("radarUpdated").innerText = "Last sync: " + dt.toLocaleString("id-ID");
+            } else {
+                document.getElementById("radarUpdated").innerText = "Belum ada data sync.";
+            }
+
+            if (response.data && response.data.length > 0) {
+                response.data.forEach(d => {
+                    html += `<div class="radar-card" onclick="document.getElementById('tickerInput').value='${d.ticker}'; startEngine(); navTo('scannerPage', document.querySelectorAll('.nav-item')[2]);">
+                        <div style="display:flex; gap:12px; align-items:center;">
+                            <div style="width:45px; height:45px; background:rgba(181, 55, 242,0.1); color:var(--neon-purple); border-radius:14px; display:flex; align-items:center; justify-content:center; font-weight:900; font-family:'JetBrains Mono'; border: 1px solid rgba(181,55,242,0.3);">${d.ticker.substring(0,2)}</div>
+                            <div>
+                                <div style="font-weight:900; font-size:16px; color:#fff; font-family:'JetBrains Mono';">${d.ticker}</div>
+                                <div style="font-size:10px; color:var(--text-muted); font-weight:bold; letter-spacing:1px; margin-top:2px;">${d.setup || ""}</div>
+                            </div>
+                        </div>
+                        <div style="text-align:right;">
+                            <div style="font-weight:900; font-size:22px; color:var(--buy); font-family:'JetBrains Mono'; text-shadow: 0 0 10px rgba(0,255,157,0.3);">${d.score}</div>
+                        </div>
+                    </div>`;
                 });
-            } else { html = "<div class='glass-card' style='text-align:center;'>No nodes synchronized today.</div>"; }
+            } else {
+                html = "<div class='glass-card' style='text-align:center;'>Belum ada data radar hari ini.</div>";
+            }
             document.getElementById('fullWatchlistGrid').innerHTML = html;
-        } catch (e) { document.getElementById('fullWatchlistGrid').innerHTML = "<div class='glass-card' style='text-align:center; color:var(--skip);'>Sync failed.</div>"; }
-    }
-    
-    async function forceUpdateRadar() { 
-        let btn = document.getElementById("btnUpdateRadar"); btn.innerText = "PROCESSING..."; btn.disabled = true;
-        try { let res = await fetchWithTimeout(GAS_URL + "?action=forceRunEOD", { timeout: 30000 }); let response = await res.json(); showToast(response.message); loadTop10(); } 
-        catch(e) { showToast("Update failed/timeout.", true); } finally { btn.innerText = "🔄 SYNC DATA"; btn.disabled = false; }
+        } catch (e) {
+            document.getElementById('fullWatchlistGrid').innerHTML = "<div class='glass-card' style='text-align:center; color:var(--skip);'>Sync failed.</div>";
+        }
     }
 
-    async function sendGeneralChat() {
-        let inputEl = document.getElementById("aiChatInput"), btnEl = document.getElementById("btnSendChat"), text = inputEl.value.trim(), historyBox = document.getElementById("aiChatHistory");
-        if(!text) return;
-        inputEl.disabled = true; btnEl.disabled = true;
-        let hasQuota = await deductUserQuota(); if(!hasQuota) { inputEl.disabled = false; btnEl.disabled = false; return; }
-        historyBox.innerHTML += `<div class="user-msg">${text}</div><div class="bot-msg chat-typing" id="typingMsg">Processing node...</div>`;
-        inputEl.value = ""; historyBox.scrollTop = historyBox.scrollHeight;
+    async function forceUpdateRadar() {
+        if (!sessionToken) {
+            showToast("Sesi tidak valid.", true);
+            return;
+        }
+        const btn = document.getElementById("btnUpdateRadar");
+        btn.innerText = "PROCESSING...";
+        btn.disabled = true;
         try {
-            let res = await fetchWithTimeout(`${GAS_URL}?action=chat&message=${encodeURIComponent(text)}&_t=${Date.now()}`, { timeout: 25000 });
-            let data = await res.json(); document.getElementById("typingMsg").remove(); historyBox.innerHTML += `<div class="bot-msg">${data.reply || "ERROR 404: Null response."}</div>`;
-        } catch(e) { document.getElementById("typingMsg").remove(); let errText = e.name === 'AbortError' ? "CONNECTION LOST." : "NETWORK ERROR."; historyBox.innerHTML += `<div class="bot-msg" style="color:var(--skip)">${errText}</div>`; } 
-        finally { inputEl.disabled = false; btnEl.disabled = false; inputEl.focus(); historyBox.scrollTop = historyBox.scrollHeight; }
+            const res = await fetchWithTimeout(GAS_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({
+                    action: "forceRunEOD",
+                    token: sessionToken,
+                    key: SECRET_KEY
+                }),
+                timeout: 120000
+            });
+            const response = await res.json();
+            if (response.status === "success") {
+                showToast(response.message || "Updated");
+                loadTop10();
+            } else {
+                showToast(response.message || "Gagal", true);
+            }
+        } catch (e) {
+            showToast("Update failed/timeout.", true);
+        } finally {
+            btn.innerText = "🔄 SYNC DATA";
+            btn.disabled = false;
+        }
+    }
+
+    // ==================== CHAT ====================
+    async function sendGeneralChat() {
+        const inputEl = document.getElementById("aiChatInput");
+        const btnEl = document.getElementById("btnSendChat");
+        const text = inputEl.value.trim();
+        const historyBox = document.getElementById("aiChatHistory");
+        if (!text) return;
+        if (!sessionToken) {
+            showToast("Sesi tidak valid.", true);
+            doLogout();
+            return;
+        }
+
+        inputEl.disabled = true;
+        btnEl.disabled = true;
+
+        const userDiv = document.createElement("div");
+        userDiv.className = "user-msg";
+        userDiv.textContent = text;
+        historyBox.appendChild(userDiv);
+
+        const typingDiv = document.createElement("div");
+        typingDiv.className = "bot-msg";
+        typingDiv.id = "typingMsg";
+        typingDiv.textContent = "Processing node...";
+        historyBox.appendChild(typingDiv);
+
+        inputEl.value = "";
+        historyBox.scrollTop = historyBox.scrollHeight;
+
+        try {
+            const res = await fetchWithTimeout(GAS_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({
+                    action: "chat",
+                    message: text,
+                    token: sessionToken,
+                    key: SECRET_KEY
+                }),
+                timeout: 25000
+            });
+            const data = await res.json();
+
+            document.getElementById("typingMsg").remove();
+
+            if (data.status === "error") {
+                if (data.message && data.message.includes("Sesi tidak valid")) {
+                    showToast("Sesi berakhir.", true);
+                    doLogout();
+                    return;
+                }
+                const errDiv = document.createElement("div");
+                errDiv.className = "bot-msg";
+                errDiv.style.color = "var(--skip)";
+                errDiv.textContent = data.message || "Error";
+                historyBox.appendChild(errDiv);
+            } else {
+                if (data.remaining !== undefined) {
+                    updateLocalQuota(data.remaining, data.saldo);
+                }
+                const botDiv = document.createElement("div");
+                botDiv.className = "bot-msg";
+                botDiv.textContent = data.reply || "Null response.";
+                historyBox.appendChild(botDiv);
+            }
+        } catch (e) {
+            document.getElementById("typingMsg").remove();
+            const errDiv = document.createElement("div");
+            errDiv.className = "bot-msg";
+            errDiv.style.color = "var(--skip)";
+            errDiv.textContent = e.name === 'AbortError' ? "CONNECTION LOST." : "NETWORK ERROR.";
+            historyBox.appendChild(errDiv);
+        } finally {
+            inputEl.disabled = false;
+            btnEl.disabled = false;
+            inputEl.focus();
+            historyBox.scrollTop = historyBox.scrollHeight;
+        }
     }
 </script>
 </body>
