@@ -29,9 +29,11 @@
         .glass-card { background: var(--bg-card); border-radius: 16px; border: 1px solid var(--glass-border); padding: 18px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
         .section-title { font-size: 13px; font-weight: 800; color: #fff; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.5px;}
 
-        /* UI LOGIN & DASHBOARD (Sama seperti sebelumnya) */
-        .login-box { display: flex; flex-direction: column; gap: 15px; margin-top: 50px; }
-        .input-pro { width: 100%; padding: 16px; background: rgba(0, 0, 0, 0.4); color: white; font-size: 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); outline: none; transition: 0.3s; }
+        /* UI LOGIN & REGISTER */
+        .login-box { display: flex; flex-direction: column; gap: 10px; margin-top: 50px; }
+        .auth-tabs { display: flex; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px; }
+        .auth-tab { flex: 1; text-align: center; padding: 12px; cursor: pointer; font-weight: 800; font-size: 12px; transition: 0.3s; }
+        .input-pro { width: 100%; padding: 16px; background: rgba(0, 0, 0, 0.4); color: white; font-size: 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); outline: none; transition: 0.3s; margin-bottom: 10px;}
         .btn-pro { width: 100%; padding: 16px; border: none; border-radius: 12px; font-weight: 800; font-size: 14px; cursor: pointer; color: #fff; background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple)); text-transform: uppercase; }
         
         .profile-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -54,9 +56,7 @@
         .nav-icon { font-size: 22px; }
         .upload-dropzone { border: 2px dashed rgba(255, 255, 255, 0.2); border-radius: 12px; padding: 15px; text-align: center; background: rgba(255,255,255,0.02); cursor: pointer; margin-bottom: 15px; }
 
-        /* -------------------------------------------
-           TAMPILAN UI V5.5 SPESIFIK (SCORING REPLICA)
-        --------------------------------------------- */
+        /* SCORING BOX V5.5 */
         .v5-box { background: rgba(23, 27, 44, 0.9); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 20px; margin-bottom: 15px; }
         .v5-title { font-size: 11px; font-weight: 800; color: var(--neon-cyan); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;}
         .v5-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 12px; }
@@ -67,7 +67,6 @@
         .box-trigger { border: 1px solid var(--wait); background: rgba(245, 158, 11, 0.05); }
         .box-cutloss { border: 1px solid var(--skip); background: rgba(244, 63, 94, 0.05); }
 
-        /* SCORING BOX V5.5 CSS */
         .score-progress-bg { background: rgba(255,255,255,0.1); height: 8px; border-radius: 4px; margin: 20px 0; overflow: hidden; }
         .score-progress-bar { height: 100%; border-radius: 4px; transition: width 1s ease-in-out; }
         .v5-score-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 11px; color: #cbd5e1;}
@@ -98,17 +97,35 @@
 
 <div class="app-wrapper">
 
-    <!-- 1. HALAMAN LOGIN -->
+    <!-- 1. HALAMAN LOGIN / REGISTER -->
     <div id="loginPage" class="view-section view-active">
         <div style="text-align: center; margin-top: 50px; margin-bottom: 30px;">
             <h1 style="font-size: 24px; font-weight: 800; color: var(--neon-cyan);">GACOR HUNTER</h1>
             <p style="color: var(--neon-purple); font-size: 12px; margin-top: 5px; font-weight: bold;">AI-Driven Algorithmic Trading V6.0</p>
         </div>
+        
         <div class="glass-card login-box">
-            <input type="text" id="loginId" class="input-pro" placeholder="Username">
-            <input type="password" id="loginPass" class="input-pro" placeholder="Password">
-            <button onclick="doLogin()" class="btn-pro" id="btnLogin">MASUK SISTEM</button>
-            <div id="loginError" style="color: var(--skip); font-size: 12px; text-align: center; display: none;"></div>
+            <div class="auth-tabs">
+                <div id="tabLogin" class="auth-tab" onclick="switchAuthTab('login')" style="color: var(--neon-cyan); border-bottom: 2px solid var(--neon-cyan);">LOGIN</div>
+                <div id="tabRegister" class="auth-tab" onclick="switchAuthTab('register')" style="color: var(--text-muted); border-bottom: 2px solid transparent;">DAFTAR BARU</div>
+            </div>
+
+            <!-- Form Login -->
+            <div id="formLogin">
+                <input type="text" id="loginId" class="input-pro" placeholder="Username">
+                <input type="password" id="loginPass" class="input-pro" placeholder="Password">
+                <button onclick="doLogin()" class="btn-pro" id="btnLogin">MASUK SISTEM</button>
+            </div>
+
+            <!-- Form Daftar -->
+            <div id="formRegister" style="display: none;">
+                <input type="text" id="regId" class="input-pro" placeholder="Buat Username">
+                <input type="password" id="regPass" class="input-pro" placeholder="Buat Password">
+                <input type="password" id="regPass2" class="input-pro" placeholder="Konfirmasi Password">
+                <button onclick="doRegister()" class="btn-pro" id="btnRegister" style="background: linear-gradient(135deg, var(--buy), var(--neon-cyan));">BUAT AKUN</button>
+            </div>
+            
+            <div id="authMessage" style="font-size: 12px; text-align: center; font-weight: bold; margin-top:10px; display: none;"></div>
         </div>
     </div>
 
@@ -167,7 +184,7 @@
         <div id="fullWatchlistGrid"><div class="glass-card" style="text-align:center; padding:30px; color:var(--text-muted);">Menunggu data bursa...</div></div>
     </div>
 
-    <!-- 4. SCANNER MANUAL -->
+    <!-- 4. SCANNER MANUAL (UI V5.5) -->
     <div id="scannerPage" class="view-section">
         <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
             <div onclick="navTo('homePage', document.querySelectorAll('.nav-item')[0])" style="width:40px; height:40px; border-radius:12px; background:var(--bg-card); border: 1px solid rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; cursor: pointer; color: #fff; font-size: 20px;">&larr;</div>
@@ -193,7 +210,7 @@
                 <div style="font-size:14px; font-weight:bold; letter-spacing:1px; background: rgba(255,255,255,0.1); display:inline-block; padding: 6px 15px; border-radius:20px;" id="outTicker">...</div>
             </div>
 
-            <!-- UI: STRUCTURED SCORING BOX V5.5 (REPLICA) -->
+            <!-- UI: STRUCTURED SCORING BOX V5.5 -->
             <div class="v5-box">
                 <div class="v5-title">⚙️ STRUCTURED SCORING (100)</div>
                 <div style="text-align:center; margin-top: 15px;">
@@ -318,7 +335,7 @@
 <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 <script>
     // 🔴 GANTI URL INI DENGAN WEB APP URL ANDA!
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbzhYUpu3acKrG4kWT_g3o-yL_pNXsXS2lWR_aJAMYoUNqITVjSr0E2JpUfj_BiNT2p7/exec";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbyLK86fpzBJWXolHIEm4PNULPVOmj5K_-Xlp_BumjWvHy1MdmjsnZ35pl3EDMcaIDP2/exec";
 
     window.currentEntry = 0; 
     window.currentSL = 0; 
@@ -342,18 +359,60 @@
         else { document.getElementById("bottomNav").style.display = "none"; navTo('loginPage'); }
     }
 
+    // --- TAB AUTH LOGIC ---
+    function switchAuthTab(tab) {
+        let msg = document.getElementById("authMessage"); msg.style.display = "none";
+        if (tab === 'login') {
+            document.getElementById('formLogin').style.display = 'block';
+            document.getElementById('formRegister').style.display = 'none';
+            document.getElementById('tabLogin').style.color = 'var(--neon-cyan)';
+            document.getElementById('tabLogin').style.borderBottom = '2px solid var(--neon-cyan)';
+            document.getElementById('tabRegister').style.color = 'var(--text-muted)';
+            document.getElementById('tabRegister').style.borderBottom = '2px solid transparent';
+        } else {
+            document.getElementById('formLogin').style.display = 'none';
+            document.getElementById('formRegister').style.display = 'block';
+            document.getElementById('tabRegister').style.color = 'var(--neon-cyan)';
+            document.getElementById('tabRegister').style.borderBottom = '2px solid var(--neon-cyan)';
+            document.getElementById('tabLogin').style.color = 'var(--text-muted)';
+            document.getElementById('tabLogin').style.borderBottom = '2px solid transparent';
+        }
+    }
+
     async function doLogin() {
         let id = document.getElementById("loginId").value.trim(), pass = document.getElementById("loginPass").value.trim();
-        let btn = document.getElementById("btnLogin"), err = document.getElementById("loginError");
-        if(!id || !pass) { err.innerText = "Isi Username dan Password!"; err.style.display = "block"; return; }
-        btn.innerText = "MEMVERIFIKASI..."; err.style.display = "none";
+        let btn = document.getElementById("btnLogin"), msg = document.getElementById("authMessage");
+        if(!id || !pass) { msg.innerText = "Isi Username dan Password!"; msg.style.color = "var(--skip)"; msg.style.display = "block"; return; }
+        btn.innerText = "MEMVERIFIKASI..."; msg.style.display = "none";
         try {
             let res = await fetch(`${GAS_URL}?action=auth&type=login&login_id=${encodeURIComponent(id)}&password=${encodeURIComponent(pass)}`);
             let data = await res.json();
             if(data.status === "success") { localStorage.setItem("gacor_user", JSON.stringify(data)); checkAuth(); } 
-            else { err.innerText = data.message; err.style.display = "block"; }
-        } catch (e) { err.innerText = "Gagal terhubung ke server."; err.style.display = "block"; }
+            else { msg.innerText = data.message; msg.style.color = "var(--skip)"; msg.style.display = "block"; }
+        } catch (e) { msg.innerText = "Gagal terhubung ke server."; msg.style.color = "var(--skip)"; msg.style.display = "block"; }
         btn.innerText = "MASUK SISTEM";
+    }
+
+    async function doRegister() {
+        let user = document.getElementById("regId").value.trim();
+        let pass1 = document.getElementById("regPass").value.trim();
+        let pass2 = document.getElementById("regPass2").value.trim();
+        let btn = document.getElementById("btnRegister"), msg = document.getElementById("authMessage");
+
+        if(!user || !pass1) { msg.innerText = "Isi semua data!"; msg.style.color = "var(--skip)"; msg.style.display = "block"; return; }
+        if(pass1 !== pass2) { msg.innerText = "Konfirmasi Password tidak cocok!"; msg.style.color = "var(--skip)"; msg.style.display = "block"; return; }
+        if(user.length < 4) { msg.innerText = "Username minimal 4 karakter!"; msg.style.color = "var(--skip)"; msg.style.display = "block"; return; }
+
+        btn.innerText = "MEMPROSES..."; msg.style.display = "none";
+        try {
+            let res = await fetch(`${GAS_URL}?action=auth&type=register&username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass1)}`);
+            let data = await res.json();
+            if(data.status === "success") {
+                msg.innerText = data.message; msg.style.color = "var(--buy)"; msg.style.display = "block";
+                setTimeout(() => switchAuthTab('login'), 2000);
+            } else { msg.innerText = data.message; msg.style.color = "var(--skip)"; msg.style.display = "block"; }
+        } catch (e) { msg.innerText = "Gagal terhubung ke server."; msg.style.color = "var(--skip)"; msg.style.display = "block"; }
+        btn.innerText = "BUAT AKUN";
     }
 
     function doLogout() { localStorage.removeItem("gacor_user"); checkAuth(); }
@@ -418,7 +477,6 @@
             let data = result.data, ind = data.indicators, sd = data.scoreDetails;
             document.getElementById("outTicker").innerText = `$${ticker}`; 
             
-            // UI V5.5 SCORING REPLICA
             let scoreVal = document.getElementById("scoreTotalVal");
             let scoreBar = document.getElementById("scoreProgressBar");
             scoreVal.innerText = data.score;
@@ -437,7 +495,6 @@
             document.getElementById("scMom").innerText = sd.mom;
             document.getElementById("scRr").innerText = sd.rr;
 
-            // UI V5.5 LOGICAL PLAN
             document.getElementById("v5Price").innerText = ind.price;
             document.getElementById("v5Arah").innerText = ind.arahDominan;
             document.getElementById("v5Swing").innerText = ind.strukturSwing;
